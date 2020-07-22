@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { ChildComponent } from '../child/child.component';
+import { HelloComponent } from '../../hello/hello.component';
 
 @Component({
   selector: 'app-parent',
@@ -20,6 +21,8 @@ export class ParentComponent implements OnInit, AfterViewInit {
   */
   @ViewChild('accessId', { static: false }) accessId: ElementRef;
 
+  @ViewChildren(HelloComponent) hellos: QueryList<any>;
+
   constructor() { }
   ngAfterViewInit(): void {
     this.accessId.nativeElement.value = 'Tony Stark';
@@ -27,6 +30,10 @@ export class ParentComponent implements OnInit, AfterViewInit {
 
     const value = this.childComponent.greet(this.accessId.nativeElement.value);
     console.log('value:', value);
+
+    this.hellos.forEach(hello => {
+      console.log(hello.name);
+    });
   }
 
   greet() {
