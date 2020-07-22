@@ -12,4 +12,8 @@ export class ChildComponent implements OnInit {
   logGreet() {
     console.log('Greetings People!');
   }
+
+  greet(name: string) {
+    return `Hello ${name} :)`;
+  }
 }

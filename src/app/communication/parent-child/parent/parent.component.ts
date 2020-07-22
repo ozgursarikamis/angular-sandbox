@@ -24,6 +24,14 @@ export class ParentComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.accessId.nativeElement.value = 'Tony Stark';
     this.childComponent.logGreet();
+
+    const value = this.childComponent.greet(this.accessId.nativeElement.value);
+    console.log('value:', value);
+  }
+
+  greet() {
+    const value = this.childComponent.greet(this.accessId.nativeElement.value);
+    console.log('value:', value);
   }
 
   ngOnInit() { }
