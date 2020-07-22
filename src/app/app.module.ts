@@ -7,13 +7,16 @@ import { ParentComponent } from './communication/parent-child/parent/parent.comp
 import { ChildComponent } from './communication/parent-child/child/child.component';
 import { HelloComponent } from './communication/hello/hello.component';
 import { FormsModule } from '@angular/forms';
+import { Child2Component } from './communication/parent-child/child2/child2.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ParentComponent,
     ChildComponent,
-    HelloComponent
+    HelloComponent,
+    ChildComponent,
+    Child2Component
   ],
   imports: [
     BrowserModule,

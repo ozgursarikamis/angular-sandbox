@@ -11,7 +11,7 @@ export class ChildComponent implements OnInit {
   ngOnInit() { }
 
   logGreet() {
-    console.log('Greetings People!');
+    // console.log('Greetings People!');
   }
 
   greet(name: string) {

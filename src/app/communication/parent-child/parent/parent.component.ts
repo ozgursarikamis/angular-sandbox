@@ -32,18 +32,18 @@ export class ParentComponent implements OnInit, AfterViewInit {
     this.childComponent.logGreet();
 
     const value = this.childComponent.greet(this.accessId.nativeElement.value);
-    console.log('value:', value);
+    // console.log('value:', value);
 
     this.hellos.forEach(hello => {
-      console.log(hello.name);
+      // console.log(hello.name);
     });
 
-    console.log(this.userInfoReference.length);
+    // console.log(this.userInfoReference.length);
   }
 
   greet() {
     const value = this.childComponent.greet(this.accessId.nativeElement.value);
-    console.log('value:', value);
+    // console.log('value:', value);
   }
 
   updateUserData() {
@@ -52,5 +52,7 @@ export class ParentComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() { }
-
+  handleEmit($event: any) {
+    console.log('$event', $event);
+  }
 }
