@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { ChildComponent } from '../child/child.component';
 import { HelloComponent } from '../../hello/hello.component';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-parent',
@@ -23,6 +24,8 @@ export class ParentComponent implements OnInit, AfterViewInit {
 
   @ViewChildren(HelloComponent) hellos: QueryList<any>;
 
+  @ViewChildren('userName, userAge, userDesignation') userInfoReference: QueryList<NgModel>;
+
   constructor() { }
   ngAfterViewInit(): void {
     this.accessId.nativeElement.value = 'Tony Stark';
@@ -34,11 +37,18 @@ export class ParentComponent implements OnInit, AfterViewInit {
     this.hellos.forEach(hello => {
       console.log(hello.name);
     });
+
+    console.log(this.userInfoReference.length);
   }
 
   greet() {
     const value = this.childComponent.greet(this.accessId.nativeElement.value);
     console.log('value:', value);
+  }
+
+  updateUserData() {
+    this.childComponent.userName = 'updated user name';
+    this.childComponent.updateUserName();
   }
 
   ngOnInit() { }

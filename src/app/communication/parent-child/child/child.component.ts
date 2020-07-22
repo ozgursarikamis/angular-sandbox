@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./child.component.scss']
 })
 export class ChildComponent implements OnInit {
+  userName: string;
   constructor() { }
   ngOnInit() { }
 
@@ -15,5 +16,9 @@ export class ChildComponent implements OnInit {
 
   greet(name: string) {
     return `Hello ${name} :)`;
+  }
+
+  updateUserName(): void {
+    this.userName = 'Mayank';
   }
 }

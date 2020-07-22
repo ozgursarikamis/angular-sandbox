@@ -2,9 +2,20 @@
 
 <button (click)="greet()" #parentButton>Click!</button>
 
-<app-child></app-child>
-
 <app-hello name="Angular 6"></app-hello>
 <app-hello name="Angular 7"></app-hello>
 <app-hello name="Angular 8"></app-hello>
 <app-hello name="Angular 9"></app-hello>
+
+<div>
+  <input type="text" #userName />
+  <input type="text" #userAge />
+  <input type="text" #userDesignation />
+</div>
+
+
+<div>
+  <b>This is the Parent Component Accessing Child Component</b>
+  <app-child #userInformation></app-child>
+  <input type="button" value="Update User Name" (click)="updateUserData()" />
+</div>
