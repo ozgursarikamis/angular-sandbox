@@ -14,7 +14,5 @@
   </ng-template>
 </div>
 <ng-template #indicator>
-  <img height="40px" *ngIf="loading"
-    src="assets/images/globe.gif"
-    alt="Loading..." class="loading">
+  <app-loading *ngIf="loading"></app-loading>
 </ng-template>

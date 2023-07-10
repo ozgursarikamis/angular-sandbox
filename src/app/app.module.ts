@@ -2,21 +2,20 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { WithLoadingPipe } from './pipes/with-loading.pipe';
 import { ApiService } from './services/api.service';
 import { HttpClientModule } from '@angular/common/http';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    WithLoadingPipe
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule
   ],
   providers: [
-    WithLoadingPipe,
     ApiService
   ],
   bootstrap: [AppComponent]
