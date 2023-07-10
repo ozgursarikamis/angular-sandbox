@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Observable, finalize, of } from 'rxjs';
+import { ApiService } from './services/api.service';
+import { IPost } from './models/post';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +10,17 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-scratchpad';
+  observable$: Observable<IPost[]> | undefined;
+  loading = false;
+  
+  constructor(private apiService: ApiService) { }
+
+  loadFromServer() {
+    this.loading = true;
+    this.observable$ = this.apiService
+    .loadFromServer()
+    .pipe(
+      finalize(() => (this.loading = false))
+    );
+  }
 }
