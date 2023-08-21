@@ -1,0 +1,66 @@
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  #map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+</style>
+
+
+<div style="display: flex;">
+  <div>
+    Logo
+  </div>
+  <div>
+    <dx-button class="menu-button" icon="menu" (click)="isDrawerOpen = !isDrawerOpen"></dx-button>
+  </div>
+</div>
+<dx-drawer [openedStateMode]="selectedOpenMode" [position]="selectedPosition" [revealMode]="selectedRevealMode"
+  template="template" [(opened)]="isDrawerOpen" [height]="400" [closeOnOutsideClick]="true">
+  <div *dxTemplate="let data of 'template'" style="width: 200px">
+    <dx-list class="panel-list dx-theme-accent-as-background-color" [dataSource]="navigation"
+      [hoverStateEnabled]="false" [activeStateEnabled]="false" [focusStateEnabled]="false">
+    </dx-list>
+  </div>
+  <div id="content" class="dx-theme-background-color">
+    <app-map></app-map>
+  </div>
+</dx-drawer>
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="options-container">
+    <div class="option">
+      <label>Opened state mode</label>
+      <dx-radio-group [(value)]="selectedOpenMode" [items]="showModes" layout="horizontal">
+      </dx-radio-group>
+    </div>
+    <div class="option">
+      <label>Position</label>
+      <dx-radio-group [(value)]="selectedPosition" [items]="positionModes" layout="horizontal">
+      </dx-radio-group>
+    </div>
+    <div *ngIf="selectedOpenMode !== 'push'" class="option">
+      <label>Reveal mode</label>
+      <dx-radio-group [(value)]="selectedRevealMode" [items]="showSubmenuModes" layout="horizontal">
+      </dx-radio-group>
+    </div>
+  </div>
+</div>
+
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1Ijoib3pndXItc2FyaWthbWlzIiwiYSI6ImNsMWp5c2h4ODExaTczb281OTI3aHcxODgifQ.XIL7JpEDHDqVCPYjZcMRFA';
+  const map = new mapboxgl.Map({
+    container: 'map',
+    // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+    style: 'mapbox://styles/mapbox/streets-v12',
+    center: [0, 0],
+    zoom: 0.4,
+    projection: 'naturalEarth' // starting projection
+  });
+</script>
