@@ -1,4 +1,10 @@
 <br><br>
 
 <button (click)="routeClicked()">Route</button> <br><br>
-<button (click)="relativeToClicked()">Relative To</button> <br>
+<button (click)="relativeToClicked()">Relative To</button> <br><br>
+<hr>
+<button 
+	routerLink="./"
+	[queryParams]="{ page: 1, order: 'newest' }"
+	queryParamsHandling="merge"
+(click)="mergeQueryString()">Merge Query String</button> <br><br>

@@ -7,12 +7,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./about.component.css']
 })
 export class AboutComponent {
+  mergeQueryString() {
+    
+  }
 
   readonly activatedRoute = inject(ActivatedRoute);
   readonly router = inject(Router);
 
   constructor() { }
-  
+
   relativeToClicked() {
     console.log('relativeToClicked');
   }
