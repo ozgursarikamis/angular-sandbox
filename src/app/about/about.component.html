@@ -8,3 +8,5 @@
 	[queryParams]="{ page: 1, order: 'newest' }"
 	queryParamsHandling="merge"
 (click)="mergeQueryString()">Merge Query String</button> <br><br>
+
+{{ pageQueryParam$ | async }}

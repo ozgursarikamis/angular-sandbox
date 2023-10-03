@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-about',
@@ -13,6 +14,11 @@ export class AboutComponent {
 
   readonly activatedRoute = inject(ActivatedRoute);
   readonly router = inject(Router);
+  
+  readonly pageQueryParam$ = this.activatedRoute.queryParamMap.pipe(
+    map(queryParamMap => queryParamMap.get('page'))
+  );
+
 
   constructor() { }
 
