@@ -1,4 +1,23 @@
-<a routerLink="/home">Home</a>  <br> <a routerLink="/about">About</a> <br>
-<hr>
-<a routerLink="/home" [queryParams]="{ page: 1, order: 'newest' }" queryParamsHandling="merge">Home</a> <br>
-<router-outlet></router-outlet>
+<nav>
+	<ul>
+		<li>
+			<a [routerLink]="['/component-one']">Component One</a>
+		</li>
+		<li>
+			<a [routerLink]="['/component-two']">Component Two</a>
+		</li>
+		<li>
+			<a [routerLink]="[{ outlets: { 'sidebar': ['component-aux'] } }]">Component Aux</a>
+		</li>
+	</ul>
+</nav>
+
+<div style="color: green; margin-top: 1rem;">Outlet:</div>
+<div style="border: 2px solid green; padding: 1rem;">
+	<router-outlet></router-outlet>
+</div>
+
+<div style="color: green; margin-top: 1rem;">Sidebar Outlet:</div>
+<div style="border: 2px solid blue; padding: 1rem;">
+	<router-outlet name="sidebar"></router-outlet>
+</div>
