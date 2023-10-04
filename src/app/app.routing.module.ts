@@ -10,7 +10,11 @@ const routes: Routes = [
 	{ path: '', component: HomeComponent },
 	{ path: 'component-one', component: ComponentOneComponent },
 	{ path: 'component-two', component: ComponentTwoComponent },
-	{ path: 'component-aux', component: ComponentAuxComponent, outlet: 'bottom-outlet' }
+	{ path: 'component-aux', component: ComponentAuxComponent, outlet: 'bottom-outlet' },
+  {
+    path: 'standalone',
+    loadComponent: () => import('./standalone/standalone.component').then(m => m.StandaloneComponent)
+  },
 ];
 
 @NgModule({

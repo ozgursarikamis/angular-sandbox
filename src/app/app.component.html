@@ -1,5 +1,8 @@
 <nav>
 	<ul>
+    <li>
+      <a [routerLink]="['/']">Home</a>
+    </li>
 		<li>
 			<a [routerLink]="['/component-one']">Component One</a>
 		</li>
@@ -9,6 +12,9 @@
 		<li>
 			<a [routerLink]="[{ outlets: { 'bottom-outlet': ['component-aux'] } }]">Component Aux</a>
 		</li>
+    <li>
+      <a [routerLink]="['/standalone']">STANDALONE</a>
+    </li>
 	</ul>
 </nav>
 
