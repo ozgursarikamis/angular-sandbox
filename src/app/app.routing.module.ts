@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, provideRouter, RouterModule, Routes, withPreloading } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 
 import { ComponentTwoComponent } from './component-two/component-two.component';
 import { ComponentOneComponent } from './component-one/component-one.component';
 import { ComponentAuxComponent } from './component-aux/component-aux.component';
+import { ApplicationConfig } from "@angular/platform-browser";
 
-const routes: Routes = [
+
+export const routes: Routes = [
 	{ path: '', component: HomeComponent },
 	{ path: 'component-one', component: ComponentOneComponent },
 	{ path: 'component-two', component: ComponentTwoComponent },
@@ -15,11 +17,22 @@ const routes: Routes = [
     path: 'standalone',
     loadComponent: () => import('./standalone/standalone.component').then(m => m.StandaloneComponent)
   },
+  {
+    path: 'lazy',
+    loadChildren: () => import('./lazy/lazy.module').then(m => m.LazyModule)
+  }
 ];
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes, withPreloading(PreloadAllModules))
+  ],
+}
+
 
 @NgModule({
 	imports: [
-		RouterModule.forRoot(routes)
+		RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
 	],
 	exports: [],
 })
