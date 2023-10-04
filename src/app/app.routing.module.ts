@@ -10,7 +10,7 @@ const routes: Routes = [
 	{ path: '', component: HomeComponent },
 	{ path: 'component-one', component: ComponentOneComponent },
 	{ path: 'component-two', component: ComponentTwoComponent },
-	{ path: 'component-aux', component: ComponentAuxComponent, outlet: 'sidebar' }
+	{ path: 'component-aux', component: ComponentAuxComponent, outlet: 'bottom-outlet' }
 ];
 
 @NgModule({
