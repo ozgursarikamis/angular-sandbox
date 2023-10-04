@@ -1,2 +1,4 @@
 <a routerLink="/home">Home</a>  <br> <a routerLink="/about">About</a> <br>
+<hr>
+<a routerLink="/home" [queryParams]="{ page: 1, order: 'newest' }" queryParamsHandling="merge">Home</a> <br>
 <router-outlet></router-outlet>
