@@ -10,6 +10,9 @@ import { HttpClientModule }   from "@angular/common/http";
 import { FeatureFlagService } from "./feature-flag.service";
 import { FeatureComponent } from './feature/feature.component';
 import { FeatureNewComponent } from './feature-new/feature-new.component';
+import { NotReadyYetComponent } from './not-ready-yet/not-ready-yet.component';
+import { ProfileComponent } from './profile/profile.component';
+import { NotAuthorisedComponent } from './not-authorised/not-authorised.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +20,10 @@ import { FeatureNewComponent } from './feature-new/feature-new.component';
     AboutComponent,
     HomeComponent,
     FeatureComponent,
-    FeatureNewComponent
+    FeatureNewComponent,
+    NotReadyYetComponent,
+    ProfileComponent,
+    NotAuthorisedComponent
   ],
   imports: [
     HttpClientModule,

@@ -12,4 +12,8 @@ export class FeatureFlagService {
     // return of(false);
     return of(true);
   }
+
+  showStandalone() {
+    return of(false);
+  }
 }
