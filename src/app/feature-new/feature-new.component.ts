@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-feature-new',
@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class FeatureNewComponent {
 
+  @Input() userInfo: { Name: string, Age: number } | undefined;
 }

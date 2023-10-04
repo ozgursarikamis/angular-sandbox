@@ -13,6 +13,7 @@ import { map }                   from "rxjs";
 import { AuthService }           from "./auth.service";
 import { ProfileComponent }      from "./profile/profile.component";
 import { NotAuthorisedComponent } from "./not-authorised/not-authorised.component";
+import { PreloadService } from "./preload.service";
 
 const ROUTE_TOKENS = {
   NotReadyYet: 'not-ready-yet',
@@ -40,7 +41,13 @@ export const routes: Routes = [
     canMatch: [() => {
       const featureService = inject(FeatureFlagService);
       return featureService.showNewerVersion(); // has to return actual boolean instead of truthy/falsy!
-    }]
+    }],
+    resolve: {
+      userInfo: () => { // userInfo is an @Input in the FeatureNewComponent !
+        const preloadService = inject(PreloadService);
+        return preloadService.someData();
+      }
+    }
   },
   {
     path: 'feature',
@@ -82,7 +89,7 @@ export const routes: Routes = [
 
 @NgModule({
 	imports: [
-		RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+		RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, bindToComponentInputs: true })
 	],
 	exports: [],
 })
