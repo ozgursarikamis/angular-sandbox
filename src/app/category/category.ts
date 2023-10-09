@@ -3,6 +3,6 @@ export class Category {
     Object.assign(this, init);
   }
 
-  categoryId: number = 0;
-  categoryName: string = "";
+  CategoryId: number = 0;
+  CategoryName: string = "";
 }
