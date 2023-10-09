@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ConfigurationService } from './shared/configuration/configuration.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = undefined;
+  title = "JWT | Angular";
+
+  constructor(
+    private configService: ConfigurationService,
+  ) { }
+
+  ngOnInit() {
+    this.configService.getSettings().subscribe(
+      settings => this.configService.settings = settings
+    );
+  }
+
+  logOut() {
+    
+  }
 }

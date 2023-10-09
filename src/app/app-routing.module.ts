@@ -9,11 +9,16 @@ import { ValidIdGuard } from './shared/guards/valid-id.guard';
 import { NotSavedGuard } from './shared/guards/not-saved.guard';
 import { LogMaintenanceComponent } from './shared/logging/log-maintenance.component';
 import { ConfigurationComponent } from './shared/configuration/configuration.component';
+import { LoginComponent } from './shared/security/login/login.component';
 
 const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: 'categories',

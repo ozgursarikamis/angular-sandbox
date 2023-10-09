@@ -15,6 +15,7 @@ import { ConfigurationComponent } from './shared/configuration/configuration.com
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
+import { LoginComponent } from './shared/security/login/login.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { AppRoutingModule } from './app-routing.module';
     ExceptionMessageComponent,
     ValidationMessageComponent,
     LogMaintenanceComponent,
-    ConfigurationComponent
+    ConfigurationComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
