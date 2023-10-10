@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ConfigurationService } from './shared/configuration/configuration.service';
+import { AppUserAuth } from './security/app-user-auth';
+import { SecurityService } from './shared/security/security.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +10,14 @@ import { ConfigurationService } from './shared/configuration/configuration.servi
 })
 export class AppComponent {
   title = "JWT | Angular";
+  securityObject: AppUserAuth | undefined;
 
   constructor(
     private configService: ConfigurationService,
-  ) { }
+    private securityService: SecurityService
+  ) {
+    this.securityObject = this.securityService.securityObject;
+  }
 
   ngOnInit() {
     this.configService.getSettings().subscribe(
@@ -20,6 +26,7 @@ export class AppComponent {
   }
 
   logOut() {
-    
+    this.securityService.logout();
+    this.securityObject = this.securityService.securityObject;
   }
 }

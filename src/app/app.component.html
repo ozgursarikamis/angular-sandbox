@@ -11,14 +11,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navItems">
       <div class="navbar-nav">
-        <a class="nav-item nav-link" routerLink="/products">Products</a>
-        <a class="nav-item nav-link" routerLink="/categories">Categories</a>
-        <a class="nav-item nav-link" routerLink="/settings">Settings</a>
-        <a class="nav-item nav-link" routerLink="/logmaintenance">Logs</a>
+        <a class="nav-item nav-link" *ngIf="securityObject!.canAccessProducts" routerLink="/products">Products</a>
+        <a class="nav-item nav-link" *ngIf="securityObject!.canAccessCategories" routerLink="/categories">Categories</a>
+        <a class="nav-item nav-link" *ngIf="securityObject!.canAccessSettings" routerLink="/settings">Settings</a>
+        <a class="nav-item nav-link" *ngIf="securityObject!.canAccessLogs" routerLink="/logmaintenance">Logs</a>
       </div>
     </div>
     <div class="navbar-nav ml-auto">
-      <a class="nav-item nav-link" routerLink="/login">Login</a>
+      <a class="nav-item nav-link" *ngIf="!securityObject!.isAuthenticated" routerLink="/login">Login</a>
+      <a class="nav-item nav-link" *ngIf="securityObject!.isAuthenticated" href="#" (click)="logOut()"> 
+        Logout {{ securityObject!.userName }}
+      </a>
       <a class="nav-item nav-link" routerLink="/register">Register</a>
     </div>
   </nav>
