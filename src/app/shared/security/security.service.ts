@@ -32,6 +32,7 @@ export class SecurityService {
             .pipe(
                 tap(resp => {
                     Object.assign(this.securityObject, resp);
+                    localStorage.setItem('AuthObject', resp ? JSON.stringify(resp) : '');
                 }),
                 catchError(this.handleError<AppUserAuth>('login', 'Invalid user id/password', new AppUserAuth()))
             )
