@@ -21,7 +21,7 @@ export class SecurityService {
         private httpClient: HttpClient,
         private messageService: MessageService,
         private configService: ConfigurationService
-    ) { 
+    ) {
         this.apiUrl = this.configService.settings?.apiUrl + API_ENDPOINT;
     }
 
