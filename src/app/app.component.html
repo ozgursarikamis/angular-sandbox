@@ -11,7 +11,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navItems">
       <div class="navbar-nav">
-        <a class="nav-item nav-link" *ngIf="securityObject?.CanAccessProducts" routerLink="/products">Products</a>
+        <a class="nav-item nav-link" routerLink="/products">Products</a>
         <a class="nav-item nav-link" *ngIf="securityObject?.CanAccessCategories" routerLink="/categories">Categories</a>
         <a class="nav-item nav-link" *ngIf="securityObject?.CanAccessSettings" routerLink="/settings">Settings</a>
         <a class="nav-item nav-link" *ngIf="securityObject?.CanAccessLogs" routerLink="/logmaintenance">Logs</a>
