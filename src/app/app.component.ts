@@ -12,6 +12,11 @@ export class AppComponent {
   title = "JWT | Angular";
   securityObject: AppUserAuth | undefined;
 
+  canAccessProducts: boolean = false;
+  canAccessCategories: boolean = false;
+  canAccessSettings: boolean = false;
+  canAccessLogs: boolean = false;
+
   constructor(
     private configService: ConfigurationService,
     private securityService: SecurityService

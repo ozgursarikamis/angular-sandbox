@@ -87,4 +87,32 @@ export class SecurityService {
       return of(result as T);
     };
   }
+
+  hasClaim(claimType: any, claimValue?: any): boolean {
+    return this.isClaimValid(claimType, claimValue);
+  }
+
+  private isClaimValid(claimType: string, claimValue?: string): boolean {
+      let ret: boolean = false;
+      let auth: AppUserAuth | undefined;
+
+      auth = this.securityObject;
+      if (auth) {
+        // see if claimType has a value
+        // *hasClaim='claimType:value'
+
+        if (claimType.indexOf(':') > 0) {
+          let words: string[] = claimType.split(':');
+          claimType = words[0].toLowerCase();
+          claimValue = words[1].toLowerCase();
+        } else {
+          claimType = claimType.toLowerCase();
+          claimValue = claimValue ? claimValue : "true";
+
+        }
+      }
+
+      ret = auth?.claims?.find(c => c.claimType.toLowerCase() == claimType && c.claimValue.toLowerCase() == claimValue) ? true : false;
+      return ret;
+  }
 }
