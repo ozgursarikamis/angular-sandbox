@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './shared/security/login/login.component';
 import { httpInterceptorProviders } from "./shared/interceptors/interceptor-providers";
+import { HasClaimDirective }        from './shared/security/directives/has-claim.directive';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { httpInterceptorProviders } from "./shared/interceptors/interceptor-prov
     ValidationMessageComponent,
     LogMaintenanceComponent,
     ConfigurationComponent,
-    LoginComponent
+    LoginComponent,
+    HasClaimDirective
   ],
   imports: [
     BrowserModule,

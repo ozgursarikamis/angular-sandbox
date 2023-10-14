@@ -17,7 +17,7 @@
     <div class="form-group">
       <label for="productName">
         Search for Product Name</label>
-      <input id="productName" name="productName" 
+      <input id="productName" name="productName"
              type="text" class="form-control"
              [(ngModel)]="searchProduct.ProductName" />
     </div>
@@ -29,7 +29,7 @@
     <button class="btn btn-primary" (click)="reset()">
       Reset
     </button>
-    <button class="btn btn-primary" (click)="addProduct()">
+    <button class="btn btn-primary" (click)="addProduct()" *hasClaim="'CanAddProduct'">
       Add New Product
     </button>
   </div>
@@ -60,10 +60,10 @@
         <td>{{product.Url}}</td>
         <td>
           <button class="btn btn-danger"
-                  (click)="deleteProduct(product.ProductId)">          
+                  (click)="deleteProduct(product.ProductId)">
             Del
           </button>
-        </td>        
+        </td>
       </tr>
     </tbody>
   </table>
