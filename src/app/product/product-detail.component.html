@@ -29,8 +29,8 @@
 
     <div class="form-group">
       <label for="categories">Category</label>
-      <select id="categories" 
-              name="categories" 
+      <select id="categories"
+              name="categories"
               class="form-control"
               [(ngModel)]="product.CategoryId">
         <option *ngFor="let category of categories"
@@ -41,8 +41,8 @@
     </div>
   </div>
   <div class="card-footer">
-    <button class="btn btn-primary" 
-            (click)="saveData()">
+    <button class="btn btn-primary"
+            (click)="saveData()" *hasClaim="'CanSaveProduct'">
       Save
     </button>
     <button class="btn btn-default" (click)="goBack()">

@@ -29,7 +29,7 @@
     <button class="btn btn-primary" (click)="reset()">
       Reset
     </button>
-    <button class="btn btn-primary" (click)="addProduct()" *hasClaim="'CanAddProduct'">
+    <button class="btn btn-primary" (click)="addProduct()" *hasClaim="['CanAddProduct', 'CanAccessCategories']">
       Add New Product
     </button>
   </div>

@@ -96,7 +96,25 @@ export class SecurityService {
   }
 
   hasClaim(claimType: any, claimValue?: any): boolean {
-    return this.isClaimValid(claimType, claimValue);
+      let ret: boolean = false;
+
+      if (typeof claimType === 'string') {
+          ret = this.isClaimValid(claimType, claimValue);
+      } else {
+          let claims: string[] = claimType;
+          if (claims) {
+              for (let index = 0; index < claims.length; index++) {
+                  ret = this.isClaimValid(claims[index]);
+
+                  // if one is successful, let them in:
+                  if (ret) {
+                      break;
+                  }
+              }
+          }
+      }
+
+      return ret;
   }
 
   private isClaimValid(claimType: string, claimValue?: string): boolean {
