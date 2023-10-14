@@ -3,7 +3,7 @@ import { AppUserClaims } from "../shared/security/app-user-claims";
 
 export class AppUserAuth extends UserAuthBase {
 
-  claims: AppUserClaims[] = [];
+  UserClaims: AppUserClaims[] = [];
 
   override init(): void {
     super.init();

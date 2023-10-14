@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, catchError, of, tap } from 'rxjs';
-import { AppUser } from 'src/app/security/app-user';
+import { Injectable }                                       from '@angular/core';
+import { Observable, catchError, of, tap, BehaviorSubject } from 'rxjs';
+import { AppUser }                                          from 'src/app/security/app-user';
 import { AppUserAuth } from 'src/app/security/app-user-auth';
 import { MessageService } from '../messaging/message.service';
 import { ConfigurationService } from '../configuration/configuration.service';
@@ -17,6 +17,9 @@ const httpOptions = {
 export class SecurityService {
     securityObject: AppUserAuth = new AppUserAuth();
     apiUrl: string = "";
+    private hasChanged = new BehaviorSubject<number>(0);
+    securityReset$ = this.hasChanged.asObservable();
+
     constructor(
         private httpClient: HttpClient,
         private messageService: MessageService,
@@ -33,6 +36,9 @@ export class SecurityService {
                 tap(resp => {
                     Object.assign(this.securityObject, resp);
                     localStorage.setItem('AuthObject', resp ? JSON.stringify(resp) : '');
+
+                    // Inform everyone that security object has changed:
+                    this.hasChanged.next(1); // any number works.
                 }),
                 catchError(this.handleError<AppUserAuth>('login', 'Invalid user id/password', new AppUserAuth()))
             )
@@ -40,6 +46,7 @@ export class SecurityService {
 
     logout(): void {
         this.securityObject.init();
+        this.hasChanged.next(0); // any number works.
     }
 
 
@@ -93,26 +100,31 @@ export class SecurityService {
   }
 
   private isClaimValid(claimType: string, claimValue?: string): boolean {
-      let ret: boolean = false;
-      let auth: AppUserAuth | undefined;
+    let ret: boolean = false;
+    let auth: AppUserAuth | undefined;
 
-      auth = this.securityObject;
-      if (auth) {
-        // see if claimType has a value
-        // *hasClaim='claimType:value'
-
-        if (claimType.indexOf(':') > 0) {
-          let words: string[] = claimType.split(':');
-          claimType = words[0].toLowerCase();
-          claimValue = words[1].toLowerCase();
-        } else {
-          claimType = claimType.toLowerCase();
-          claimValue = claimValue ? claimValue : "true";
-
-        }
+    // Retrieve security object
+    auth = this.securityObject;
+    if (auth) {
+      // See if the claim type has a value
+      // *hasClaim="'claimType:value'"
+      if (claimType.indexOf(":") >= 0) {
+        let words: string[] = claimType.split(":");
+        claimType = words[0].toLowerCase();
+        claimValue = words[1];
       }
+      else {
+        claimType = claimType.toLowerCase();
+        // Either get the claim value, or assume 'true'
+        claimValue = claimValue ? claimValue : "true";
+      }
+      // Attempt to find the claim
+      ret = auth.UserClaims.find(c =>
+        c.ClaimType.toLowerCase() === claimType &&
+        c.ClaimValue === claimValue) != null;
+    }
 
-      ret = auth?.claims?.find(c => c.claimType.toLowerCase() == claimType && c.claimValue.toLowerCase() == claimValue) ? true : false;
-      return ret;
+    console.log("Claim Type: " + claimType + " - Claim Value: " + claimValue + " - Has Claim: " + ret);
+    return ret;
   }
 }

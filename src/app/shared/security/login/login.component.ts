@@ -14,13 +14,13 @@ export class LoginComponent {
   securityObject: AppUserAuth | undefined;
 
   constructor(
-    private securitService: SecurityService,
+    private securityService: SecurityService,
     private messageService: MessageService,
   ) { }
 
   login() {
     this.securityObject?.init();
-    this.securitService.login(this.user)
+    this.securityService.login(this.user)
       .subscribe(resp =>  this.securityObject = resp);
   }
 }

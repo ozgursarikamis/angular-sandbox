@@ -9,7 +9,7 @@
       aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navItems">
+    <div class="collapse navbar-collapse" id="navItems" *ngIf="securityReset$ | async">
       <div class="navbar-nav">
         <a class="nav-item nav-link" *ngIf="canAccessProducts" routerLink="/products">Products</a>
         <a class="nav-item nav-link" *ngIf="canAccessCategories" routerLink="/categories">Categories</a>
