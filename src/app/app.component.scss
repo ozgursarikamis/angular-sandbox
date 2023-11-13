@@ -1,3 +1,16 @@
 .title {
   font-size: 1rem;
 }
+
+.nav-link {
+  font-size: large;
+  cursor: pointer;
+}
+
+.navbar-light .navbar-nav .nav-link.active {
+  color: #007ACC
+}
+
+.navbar-brand {
+  margin-left: 10px;
+}
