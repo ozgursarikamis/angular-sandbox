@@ -1,47 +1,30 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
-import { NgIf, NgFor, CurrencyPipe } from '@angular/common';
+import { NgIf, NgFor, CurrencyPipe, AsyncPipe } from '@angular/common';
 import { Product } from '../product';
-import { EMPTY, Subscription, catchError } from 'rxjs';
 import { ProductService } from '../product.service';
+import { EMPTY, catchError } from 'rxjs';
 
 @Component({
-    selector: 'pm-product-detail',
-    templateUrl: './product-detail.component.html',
-    standalone: true,
-    imports: [NgIf, NgFor, CurrencyPipe]
+  selector: 'pm-product-detail',
+  templateUrl: './product-detail.component.html',
+  standalone: true,
+  imports: [AsyncPipe, NgIf, NgFor, CurrencyPipe]
 })
-export class ProductDetailComponent implements OnChanges, OnDestroy {
-  @Input() productId: number = 0;
+export class ProductDetailComponent {
   errorMessage = '';
-  sub: Subscription | undefined;
   private productService = inject(ProductService);
-
-  // Product to display
-  product: Product | null = null;
+  product$ = this.productService.product$
+    .pipe(
+      catchError(error => {
+        this.errorMessage = error
+        return EMPTY;
+      })
+    );
 
   // Set the page title
-  pageTitle = this.product ? `Product Detail for: ${this.product.productName}` : 'Product Detail';
-
+  // pageTitle = this.product ? `Product Detail for: ${this.product.productName}` : 'Product Detail';
+  pageTitle = 'Product Detail';
+  
   addToCart(product: Product) { }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    const id = changes['productId'].currentValue;
-    if (id) {
-      this.sub = this.productService.getProduct(id)
-        .pipe(
-          catchError(error => {
-            this.errorMessage = error
-            return EMPTY;
-          })
-        )
-        .subscribe((product) => this.product = product);
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
-  }
 }

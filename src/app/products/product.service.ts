@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, shareReplay, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, filter, map, of, shareReplay, switchMap, tap, throwError } from 'rxjs';
 import { Product } from './product';
 import { HttpErrorService } from '../utilities/http-error.service';
 import { ReviewService } from '../reviews/review.service';
@@ -22,7 +22,20 @@ export class ProductService {
     // private http: HttpClient
   ) {}
 
-  readonly products$: Observable<Product[]> = this.http.get<Product[]>(this.productsUrl)
+  public readonly product$ = this.productSelected$
+    .pipe(
+      filter(Boolean),
+      switchMap(selectedProductId => {
+        const productUrl = `${this.productsUrl}/${selectedProductId}`;
+        return this.http.get<Product>(productUrl)
+          .pipe(
+            switchMap(product => this.getProductsWithReviews(product)),
+            catchError(error => this.handleError(error))
+          )
+      })
+    );
+
+  public readonly products$: Observable<Product[]> = this.http.get<Product[]>(this.productsUrl)
   .pipe(
     tap(data => console.log(JSON.stringify(data))),
     shareReplay(1),
