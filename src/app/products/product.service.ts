@@ -25,9 +25,10 @@ export class ProductService {
   }
 
   getProduct(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.productsUrl}/${id}`)
+    return this.http.get<Product>(`${this.productsUrl}s/${id}`)
       .pipe(
-        tap(data => console.log(data))
+        tap(data => console.log(data)),
+        catchError(error => this.handleError(error))
       );
   }
 
