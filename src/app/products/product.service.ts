@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, catchError, map, of, switchMap, tap, throwError } from 'rxjs';
+import { Observable, catchError, map, of, shareReplay, switchMap, tap, throwError } from 'rxjs';
 import { Product } from './product';
 import { HttpErrorService } from '../utilities/http-error.service';
 import { ReviewService } from '../reviews/review.service';
@@ -21,7 +21,9 @@ export class ProductService {
 
   readonly products$: Observable<Product[]> = this.http.get<Product[]>(this.productsUrl)
   .pipe(
-    tap(data => console.log(data)),
+    tap(data => console.log(JSON.stringify(data))),
+    shareReplay(1),
+    tap(() => console.log('AFTER `shareReplay`')),
     catchError(error => this.handleError(error))
   );
 
