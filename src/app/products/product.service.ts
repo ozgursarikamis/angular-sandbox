@@ -19,13 +19,11 @@ export class ProductService {
     // private http: HttpClient
   ) {}
 
-  getProdcuts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.productsUrl)
-      .pipe(
-        tap(data => console.log(data)),
-        catchError(error => this.handleError(error))
-      );
-  }
+  readonly products$: Observable<Product[]> = this.http.get<Product[]>(this.productsUrl)
+  .pipe(
+    tap(data => console.log(data)),
+    catchError(error => this.handleError(error))
+  );
 
   getProduct(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.productsUrl}/${id}`)

@@ -1,26 +1,25 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
-import { NgIf, NgFor, NgClass } from '@angular/common';
+import { NgIf, NgFor, NgClass, AsyncPipe } from '@angular/common';
 import { Product } from '../product';
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
 import { ProductService } from '../product.service';
-import { EMPTY, Subscription, catchError, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, tap } from 'rxjs';
 
 @Component({
     selector: 'pm-product-list',
     templateUrl: './product-list.component.html',
     standalone: true,
-  imports: [NgIf, NgFor, NgClass, ProductDetailComponent]
+  imports: [AsyncPipe, NgIf, NgFor, NgClass, ProductDetailComponent]
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent implements OnInit {
   pageTitle = 'Products';
   errorMessage = '';
-  sub: Subscription | undefined;
 
   private productService = inject(ProductService);
 
   // Products
-  products: Product[] = [];
+  products$: Observable<Product[]> | undefined;
 
   // Selected product id to highlight the entry
   selectedProductId: number = 0;
@@ -30,21 +29,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.sub = this.productService.getProdcuts()
+    this.products$  = this.productService.products$
     .pipe(
       tap(data => console.log("in component pipe", data)),
       catchError(error => {
         this.errorMessage = error
         return EMPTY;
       })
-    )
-    .subscribe(products => {
-      this.products = products;
-    });
-    console.log(this.products); // this is logged before the data is returned from the service
-  }
-
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe();
+    ) // this is logged before the data is returned from the service
   }
 }
