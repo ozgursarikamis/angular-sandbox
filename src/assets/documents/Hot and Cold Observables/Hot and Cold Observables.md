@@ -1,0 +1,1 @@
+![Hot & Cold Observables](hot-cold.png)
