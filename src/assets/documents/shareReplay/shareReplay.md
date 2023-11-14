@@ -1,1 +1,1 @@
-![Alt text](shareReplay.png)
+![shareReplay](shareReplay.png)
