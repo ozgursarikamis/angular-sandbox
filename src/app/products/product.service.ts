@@ -20,4 +20,11 @@ export class ProductService {
         tap(data => console.log(data))
       );
   }
+
+  getProduct(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.productsUrl}/${id}`)
+      .pipe(
+        tap(data => console.log(data))
+      );
+  }
 }
