@@ -4,7 +4,7 @@ import { NgIf, NgFor, NgClass } from '@angular/common';
 import { Product } from '../product';
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
 import { ProductService } from '../product.service';
-import { Subscription, tap } from 'rxjs';
+import { EMPTY, Subscription, catchError, tap } from 'rxjs';
 
 @Component({
     selector: 'pm-product-list',
@@ -33,13 +33,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.sub = this.productService.getProdcuts()
     .pipe(
       tap(data => console.log("in component pipe", data)),
+      catchError(error => {
+        this.errorMessage = error
+        return EMPTY;
+      })
     )
-    .subscribe({
-      next: products => {
-        this.products = products;
-        console.log("in component", this.products);
-      },
-      error: err => this.errorMessage = err
+    .subscribe(products => {
+      this.products = products;
     });
     console.log(this.products); // this is logged before the data is returned from the service
   }

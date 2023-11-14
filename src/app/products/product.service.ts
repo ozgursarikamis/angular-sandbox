@@ -8,7 +8,7 @@ import { HttpErrorService } from '../utilities/http-error.service';
   providedIn: 'root'
 })
 export class ProductService {
-  private productsUrl = 'api/productss';
+  private productsUrl = 'api/products';
   private http = inject(HttpClient);
   private httpErrorService = inject(HttpErrorService);
 
