@@ -32,11 +32,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.productService.getProdcuts()
     .pipe(
-      tap(data => console.log("in component pipe")),
+      tap(data => console.log("in component pipe", data)),
     )
-    .subscribe(products => {
-      this.products = products;
-      console.log("in component subscribe", this.products);
+    .subscribe({
+      next: products => {
+        this.products = products;
+        console.log("in component", this.products);
+      },
+      error: err => this.errorMessage = err
     });
     console.log(this.products); // this is logged before the data is returned from the service
   }

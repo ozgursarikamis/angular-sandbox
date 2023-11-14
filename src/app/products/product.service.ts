@@ -33,7 +33,6 @@ export class ProductService {
 
   private handleError(err: any): Observable<never> {
     const formattedError = this.httpErrorService.formatError(err);
-    console.error(formattedError);
     return throwError(() => formattedError);
     // OR:
     // throw formattedError;
