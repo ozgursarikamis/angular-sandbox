@@ -16,7 +16,7 @@ export class CartTotalComponent {
   subTotal = this.cartService.subTotal;
   deliveryFee = this.cartService.deliveryFee;
   tax = this.cartService.tax;
-  totalPrice = this.subTotal() + this.deliveryFee() + this.tax();
+  totalPrice = this.cartService.totalPrice;
 
   // each variable is now a signal, so we need to call them as functions
 }
