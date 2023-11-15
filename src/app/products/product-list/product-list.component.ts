@@ -20,7 +20,6 @@ export class ProductListComponent {
 
   // Products
   products$: Observable<Product[]> | undefined;
-
   products = this.productService.products;
 
   // Selected product id to highlight the entry

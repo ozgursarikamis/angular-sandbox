@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, combineLatest, filter, map, of, shareReplay, switchMap, tap, throwError } from 'rxjs';
 import { Product } from './product';
 import { HttpErrorService } from '../utilities/http-error.service';
@@ -32,9 +32,16 @@ export class ProductService {
       catchError(error => this.handleError(error))
     );
 
-  products = toSignal(this.products$, { initialValue: [] as Product[] });
+  // products = toSignal(this.products$, { initialValue: [] as Product[] });
+  products = computed(() => {
+    try {
+      return toSignal(this.products$, { initialValue: [] as Product[] })();
+    } catch (error) {
+      return [];
+    }
+  });
 
-  product1$ = combineLatest([
+  product$ = combineLatest([
     this.productSelected$,
     this.products$
   ]).pipe(
