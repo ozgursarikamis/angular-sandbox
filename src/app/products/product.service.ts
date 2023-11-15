@@ -6,7 +6,7 @@ import { HttpErrorService } from '../utilities/http-error.service';
 import { ReviewService } from '../reviews/review.service';
 import { Review } from '../reviews/review';
 
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 import { IResult } from '../utilities/IResult';
 
@@ -19,8 +19,6 @@ export class ProductService {
   private httpErrorService = inject(HttpErrorService);
   private reviewService = inject(ReviewService);
 
-  private productSelectedSubject = new BehaviorSubject<number | undefined>(undefined);
-  readonly productSelected$ = this.productSelectedSubject.asObservable();
   selectedProductId = signal<number | undefined>(undefined);
   constructor(
     // private http: HttpClient
@@ -56,7 +54,7 @@ export class ProductService {
   //   catchError(error => this.handleError(error))
   // );
 
-  product$ = this.productSelected$
+  product$ = toObservable(this.selectedProductId)
     .pipe(
       filter(Boolean),
       switchMap(id => {
@@ -70,7 +68,6 @@ export class ProductService {
     );
 
   productSelected(selectedProductId: number): void {
-    this.productSelectedSubject.next(selectedProductId);
     this.selectedProductId.set(selectedProductId);
   }
 
