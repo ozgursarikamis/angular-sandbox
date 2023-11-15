@@ -42,7 +42,7 @@ export class ProductService {
     { initialValue: ({ data: [] } as IResult<Product[]>) });
 
   products = computed(() => this.productsResult().data);
-  productError = computed(() => this.productsResult().error);
+  productsError = computed(() => this.productsResult().error);
 
   // product$ = combineLatest([
   //   this.productSelected$,
@@ -54,7 +54,7 @@ export class ProductService {
   //   catchError(error => this.handleError(error))
   // );
 
-  product$ = toObservable(this.selectedProductId)
+  private productResult$ = toObservable(this.selectedProductId)
     .pipe(
       filter(Boolean),
       switchMap(id => {
@@ -62,10 +62,18 @@ export class ProductService {
         return this.http.get<Product>(productUrl)
           .pipe(
             switchMap(product => this.getProductsWithReviews(product)),
-            catchError(error => this.handleError(error))
+            catchError(error => of({
+              data: undefined,
+              error: this.httpErrorService.formatError(error)
+            } as IResult<Product>))
           );
-      })
+      }),
+      map(product => ({ data: product } as IResult<Product>)),
     );
+
+  private productResult = toSignal(this.productResult$);
+  product = computed(() => this.productResult()?.data);
+  productError = computed(() => this.productResult()?.error);
 
   productSelected(selectedProductId: number): void {
     this.selectedProductId.set(selectedProductId);
