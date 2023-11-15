@@ -1,4 +1,4 @@
-import { Injectable, effect, signal } from "@angular/core";
+import { Injectable, computed, effect, signal } from "@angular/core";
 import { CartItem } from "./cart";
 import { Product } from "../products/product";
 
@@ -7,6 +7,26 @@ import { Product } from "../products/product";
 })
 export class CartService {
   cartItems = signal<CartItem[]>([]);
+
+  cartCount = computed(() => {
+    return this.cartItems().reduce((acc, item) => acc + item.quantity, 0);
+  });
+
+  subTotal = computed(() => {
+    return this.cartItems().reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+  });
+
+  deliveryFee = computed(() => {
+    return this.subTotal() < 50 ? 5.99 : 0;
+  });
+
+  tax = computed(() => {
+    return Math.round(this.subTotal() * 10.75) / 100;
+  });
+
+  totalPrice = computed(() => {
+    return this.subTotal() + this.deliveryFee() + this.tax();
+  });
 
   eLengthEffect = effect(() => console.log('Cart array length:', this.cartItems().length));
 

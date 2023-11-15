@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Observable, filter, of, tap } from 'rxjs';
+import { CartService } from './cart/cart.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,9 @@ import { Observable, filter, of, tap } from 'rxjs';
 export class AppComponent {
   title = 'RxJS and Angular Signals';
   of$: Observable<any>;
-  cartCount = 0;
+
+  private cartService = inject(CartService);
+  cartCount = this.cartService.cartCount;
 
   constructor() {
     document.title = this.title;
