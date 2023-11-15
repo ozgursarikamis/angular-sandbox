@@ -6,6 +6,8 @@ import { HttpErrorService } from '../utilities/http-error.service';
 import { ReviewService } from '../reviews/review.service';
 import { Review } from '../reviews/review';
 
+import { toSignal } from '@angular/core/rxjs-interop';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,7 +24,7 @@ export class ProductService {
     // private http: HttpClient
   ) { }
 
-  readonly products$: Observable<Product[]> = this.http.get<Product[]>(this.productsUrl)
+  private products$: Observable<Product[]> = this.http.get<Product[]>(this.productsUrl)
     .pipe(
       tap(data => console.log(JSON.stringify(data))),
       shareReplay(1),
@@ -30,7 +32,9 @@ export class ProductService {
       catchError(error => this.handleError(error))
     );
 
-  product$ = combineLatest([
+  products = toSignal(this.products$, { initialValue: [] as Product[] });
+
+  product1$ = combineLatest([
     this.productSelected$,
     this.products$
   ]).pipe(

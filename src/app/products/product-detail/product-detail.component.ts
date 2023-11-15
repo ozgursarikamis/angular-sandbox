@@ -15,7 +15,7 @@ import { CartService } from 'src/app/cart/cart.service';
 export class ProductDetailComponent {
   errorMessage = '';
   private productService = inject(ProductService);
-  product$ = this.productService.product$
+  product$ = this.productService.product1$
     .pipe(
       catchError(error => {
         this.errorMessage = error
