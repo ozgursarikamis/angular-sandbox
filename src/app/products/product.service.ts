@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, shareReplay, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, filter, map, of, shareReplay, switchMap, tap, throwError } from 'rxjs';
 import { Product } from './product';
 import { HttpErrorService } from '../utilities/http-error.service';
 import { ReviewService } from '../reviews/review.service';
@@ -14,7 +14,7 @@ import { IResult } from '../utilities/IResult';
   providedIn: 'root'
 })
 export class ProductService {
-  private productsUrl = 'api/productss';
+  private productsUrl = 'api/products';
   private http = inject(HttpClient);
   private httpErrorService = inject(HttpErrorService);
   private reviewService = inject(ReviewService);
@@ -56,7 +56,18 @@ export class ProductService {
   //   catchError(error => this.handleError(error))
   // );
 
-  product$ = of({} as Product);
+  product$ = this.productSelected$
+    .pipe(
+      filter(Boolean),
+      switchMap(id => {
+        const productUrl = this.productsUrl + '/' + id;
+        return this.http.get<Product>(productUrl)
+          .pipe(
+            switchMap(product => this.getProductsWithReviews(product)),
+            catchError(error => this.handleError(error))
+          );
+      })
+    );
 
   productSelected(selectedProductId: number): void {
     this.productSelectedSubject.next(selectedProductId);
