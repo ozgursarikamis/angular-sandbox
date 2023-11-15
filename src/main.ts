@@ -1,7 +1,31 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { importProvidersFrom } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 
-import { AppModule } from './app/app.module';
+import { AuthModule } from 'angular-auth-oidc-client';
 
+import { AppComponent } from '../src/app/app.component';
+import { HomeComponent } from './home/home.component';
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+bootstrapApplication(AppComponent, {
+    providers: [
+        importProvidersFrom(BrowserModule, AuthModule.forRoot({
+            config: {
+                authority: 'your issuer', // Enter Issuer
+                redirectUrl: `${window.location.origin}`,
+                postLogoutRedirectUri: window.location.origin,
+                clientId: 'your client id', // Enter ClientID
+                scope: 'openid profile offline_access',
+                responseType: 'code',
+                silentRenew: true,
+                useRefreshToken: true,
+                renewTimeBeforeTokenExpiresInSeconds: 30,
+            }
+        })),
+        provideRouter([
+            { path: '', redirectTo: 'home', pathMatch: 'full' },
+            { path: 'home', component: HomeComponent },
+        ])
+    ]
+})
   .catch(err => console.error(err));
