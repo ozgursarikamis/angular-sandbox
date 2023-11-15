@@ -14,14 +14,14 @@ import { Observable } from 'rxjs';
 })
 export class ProductListComponent {
   pageTitle = 'Products';
-  errorMessage = '';
 
   private productService = inject(ProductService);
 
   // Products
   products$: Observable<Product[]> | undefined;
   products = this.productService.products;
-
+  errorMessage = this.productService.productError;
+  
   // Selected product id to highlight the entry
   readonly selectedProductId$ = this.productService.productSelected$;
 
