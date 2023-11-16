@@ -27,3 +27,10 @@ export const phoneTypeValues = [
   { title: 'Mobile', value: 'mobile' },
   { title: 'Other', value: 'other' },
 ];
+
+export const addressTypeValues = [
+  { title: 'Home', value: 'home' },
+  { title: 'Work', value: 'work' },
+  { title: 'Other', value: 'other' },
+  { title: 'Other 2', value: 'other 2' },
+];

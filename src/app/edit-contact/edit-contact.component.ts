@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService } from '../contacts/contacts.service';
-import { Contact, phoneTypeValues } from '../contacts/contact.model';
+import { Contact, addressTypeValues, phoneTypeValues } from '../contacts/contact.model';
 
 @Component({
   templateUrl: './edit-contact.component.html',
@@ -11,6 +11,7 @@ import { Contact, phoneTypeValues } from '../contacts/contact.model';
 export class EditContactComponent implements OnInit {
 
   phoneTypes = phoneTypeValues;
+  addressTypes = addressTypeValues;
   
   contactService = inject(ContactsService);
   router = inject(Router);
