@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService } from '../contacts/contacts.service';
 
 @Component({
@@ -17,6 +17,7 @@ export class EditContactComponent implements OnInit {
   });
 
   contactService = inject(ContactsService);
+  router = inject(Router);
   route = inject(ActivatedRoute);
 
   constructor() { }
@@ -37,6 +38,10 @@ export class EditContactComponent implements OnInit {
   saveContact() {
     console.log(this.contactForm.value);
     console.log(this.contactForm.getRawValue()); // The aggregate value of the FormGroup, including any disabled controls.
-    // this.contactService.saveContact();
+
+    this.contactService.saveContact(this.contactForm.value)
+      .subscribe({
+        next: () => this.router.navigate(['/contacts']),
+      });
   }
 }
