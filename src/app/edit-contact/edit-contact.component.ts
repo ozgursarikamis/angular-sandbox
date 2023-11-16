@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -6,14 +7,25 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./edit-contact.component.css']
 })
 export class EditContactComponent implements OnInit {
+  
+  firstName = new FormControl();
+  lastName = new FormControl();
+  dateOfBirth = new FormControl();
+  favoritesRanking = new FormControl();
+
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     const contactId = this.route.snapshot.params['id'];
-    if (!contactId) return
+    if (!contactId) return;
   }
 
   saveContact() {
-
+    console.log({
+      firstName: this.firstName.value,
+      lastName: this.lastName.value,
+      dateOfBirth: this.dateOfBirth.value,
+      favoritesRanking: this.favoritesRanking.value,
+    });
   }
 }
