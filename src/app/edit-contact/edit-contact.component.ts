@@ -36,5 +36,7 @@ export class EditContactComponent implements OnInit {
 
   saveContact() {
     console.log(this.contactForm.value);
+    console.log(this.contactForm.getRawValue()); // The aggregate value of the FormGroup, including any disabled controls.
+    // this.contactService.saveContact();
   }
 }
