@@ -1,0 +1,11 @@
+{
+    "domain": "YOUR DOMAIN",
+    "clientId": "CLIENT_ID",
+    "authorizationParams": {
+      "audience": "APIURL"
+    },
+    "apiUri": "http://localhost:3001",
+    "appUri": "http://localhost:4200",
+    "errorPath": "/error"
+  }
+  
