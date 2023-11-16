@@ -10,6 +10,7 @@ import { ContactsService } from '../contacts/contacts.service';
 export class EditContactComponent implements OnInit {
   
   contactForm = new FormGroup({
+    id: new FormControl(),
     firstName: new FormControl(),
     lastName: new FormControl(),
     dateOfBirth: new FormControl(),
@@ -28,6 +29,7 @@ export class EditContactComponent implements OnInit {
 
     this.contactService.getContact(contactId)
       .subscribe(contact => {
+        this.contactForm.controls.id.setValue(contact?.id);
         this.contactForm.controls.firstName.setValue(contact?.firstName);
         this.contactForm.controls.lastName.setValue(contact?.lastName);
         this.contactForm.controls.dateOfBirth.setValue(contact?.dateOfBirth);
