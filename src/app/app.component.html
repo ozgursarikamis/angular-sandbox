@@ -1,3 +1,12 @@
 <div class="title">
   Angular Scratchpad {{ title ? " - " + title : "" }}
 </div>
+<div class="header">
+  <div class="logo" routerLink="/contacts">
+    <img src="/assets/profile-circle.png" class="profile" />
+    <div>My Contacts</div>
+  </div>
+</div>
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
