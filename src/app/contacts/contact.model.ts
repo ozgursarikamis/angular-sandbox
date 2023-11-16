@@ -20,3 +20,10 @@ export interface Address {
   postalCode: string,
   addressType: string,
 }
+
+export const phoneTypeValues = [
+  { title: 'Home', value: 'home' },
+  { title: 'Work', value: 'work' },
+  { title: 'Mobile', value: 'mobile' },
+  { title: 'Other', value: 'other' },
+];
