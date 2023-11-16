@@ -1,0 +1,8 @@
+Profile works!
+
+<div *ngIf="auth.user$ | async as profile">
+    username: {{ profile['username'] }}
+    <pre>
+        {{ profile | json }}
+    </pre>
+</div>
