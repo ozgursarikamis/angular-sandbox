@@ -13,6 +13,12 @@
         {{ contactForm.controls.firstName.errors | json  }} <br>
         Valid?: {{ contactForm.controls.firstName.valid }}
         <input formControlName="lastName" placeholder="Last Name" />
+        
+        <span style="color: red;" *ngIf="lastName.invalid && lastName?.touched">
+          Please enter a valid last name
+        </span>
+        {{ contactForm.controls.lastName.errors | json  }} <br>
+        Valid?: {{ contactForm.controls.lastName.valid }}
         <input formControlName="dateOfBirth" type="date" [value]="contactForm.controls.dateOfBirth.value | date:'yyyy-MM-dd'" placeholder="Date of Birth" />
         <input formControlNam="favoritesRanking" placeholder="Favorites Ranking" />
         <div>

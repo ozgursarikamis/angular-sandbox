@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService } from '../contacts/contacts.service';
 import { Contact, addressTypeValues, phoneTypeValues } from '../contacts/contact.model';
-import { restrictedWordsValidator } from '../validators/restricted-words.validator';
+import { restrictedWords } from '../validators/restricted-words.validator';
 
 @Component({
   templateUrl: './edit-contact.component.html',
@@ -24,8 +24,8 @@ export class EditContactComponent implements OnInit {
   contactForm = this.formBuilder.nonNullable.group({
     id: '',
     personal: false,
-    firstName: ['', [Validators.required, restrictedWordsValidator]],
-    lastName: '',
+    firstName: ['', [Validators.required, restrictedWords()]],
+    lastName: ['', [Validators.required, restrictedWords(['me', 'you', 'us', 'them'])]],
     dateOfBirth: <Date | null>null, // except for dateOfBirth and favoritesRanking
     favoritesRanking: <number | null>null,
     address: this.formBuilder.nonNullable.group({
@@ -45,6 +45,9 @@ export class EditContactComponent implements OnInit {
 
   get firstName() {
     return this.contactForm?.controls?.firstName;
+  }
+  get lastName() {
+    return this.contactForm?.controls?.lastName;
   }
 
   ngOnInit() {
