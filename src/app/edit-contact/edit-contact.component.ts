@@ -64,6 +64,7 @@ export class EditContactComponent implements OnInit {
   }
 
   saveContact() {
+    console.log(this.contactForm.value.dateOfBirth, typeof this.contactForm.value.dateOfBirth);
     const phoneTypesValue = this.contactForm.controls.phone.controls.phoneType?.value;
     console.log(phoneTypesValue);
 

@@ -19,7 +19,7 @@
         </span>
         {{ contactForm.controls.lastName.errors | json  }} <br>
         Valid?: {{ contactForm.controls.lastName.valid }}
-        <input formControlName="dateOfBirth" type="date" [value]="contactForm.controls.dateOfBirth.value | date:'yyyy-MM-dd'" placeholder="Date of Birth" />
+        <input formControlName="dateOfBirth" type="date" placeholder="Date of Birth" />
         <input formControlNam="favoritesRanking" placeholder="Favorites Ranking" />
         <div>
           <input type="checkbox" formControlName="personal" /> Personal

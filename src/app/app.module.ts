@@ -10,10 +10,12 @@ import { ContactListComponent } from './contact-list/contact-list.component';
 import { EditContactComponent } from './edit-contact/edit-contact.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InMemoryContactsApi } from './contacts/in-memory-contacts.service';
+import { DateValueAccessorDirective } from './directives/date-value-accessor.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
+    DateValueAccessorDirective,
     ContactListComponent,
     EditContactComponent
   ],
