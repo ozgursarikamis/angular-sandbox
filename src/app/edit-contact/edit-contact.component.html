@@ -6,7 +6,7 @@
     <section>
       <nav>Name/Info</nav>
       <div>
-        <app-profile-icon-selector></app-profile-icon-selector>
+        <app-profile-icon-selector formControlName="icon"></app-profile-icon-selector>
         <input formControlName="firstName" placeholder="First Name" />
         <span style="color: red;" *ngIf="firstName.invalid && firstName?.touched">
           Please enter a valid name

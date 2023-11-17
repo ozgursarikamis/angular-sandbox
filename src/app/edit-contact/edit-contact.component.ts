@@ -23,6 +23,7 @@ export class EditContactComponent implements OnInit {
   // and will reset to its initial value.
   contactForm = this.formBuilder.nonNullable.group({
     id: '',
+    icon: '',
     personal: false,
     firstName: ['', [Validators.required, restrictedWords()]],
     lastName: ['', [Validators.required, restrictedWords(['me', 'you', 'us', 'them'])]],
