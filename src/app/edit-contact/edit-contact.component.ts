@@ -1,8 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService } from '../contacts/contacts.service';
 import { Contact, addressTypeValues, phoneTypeValues } from '../contacts/contact.model';
+import { restrictedWordsValidator } from '../validators/restricted-words.validator';
 
 @Component({
   templateUrl: './edit-contact.component.html',
@@ -23,7 +24,7 @@ export class EditContactComponent implements OnInit {
   contactForm = this.formBuilder.nonNullable.group({
     id: '',
     personal: false,
-    firstName: ['', Validators.required],
+    firstName: ['', [Validators.required, restrictedWordsValidator]],
     lastName: '',
     dateOfBirth: <Date | null>null, // except for dateOfBirth and favoritesRanking
     favoritesRanking: <number | null>null,
