@@ -36,11 +36,15 @@ export class EditContactComponent implements OnInit {
       postalCode: '',
       addressType: ''
     }),
-    phone: this.formBuilder.nonNullable.group({
+    phones: this.formBuilder.array([this.createPhoneGroup()])
+  });
+
+  createPhoneGroup() {
+    return this.formBuilder.nonNullable.group({
       phoneNumber: '',
       phoneType: ''
-    }),
-  });
+    });
+  }
 
   constructor() { }
 
@@ -66,13 +70,8 @@ export class EditContactComponent implements OnInit {
 
   saveContact() {
     console.log(this.contactForm.value.dateOfBirth, typeof this.contactForm.value.dateOfBirth);
-    const phoneTypesValue = this.contactForm.controls.phone.controls.phoneType?.value;
-    console.log(phoneTypesValue);
-
-    const rawValue = this.contactForm.getRawValue();
-    this.contactService.saveContact(rawValue as Partial<Contact>)
-      .subscribe({
-        next: () => this.router.navigate(['/contacts']),
-      });
+    this.contactService.saveContact(this.contactForm.getRawValue()).subscribe({
+      next: () => this.router.navigate(['/contacts'])
+    });
   }
 }
