@@ -11,13 +11,15 @@ import { EditContactComponent } from './edit-contact/edit-contact.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InMemoryContactsApi } from './contacts/in-memory-contacts.service';
 import { DateValueAccessorDirective } from './directives/date-value-accessor.directive';
+import { ProfileIconSelectorComponent } from './profile-icon-selector/profile-icon-selector.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DateValueAccessorDirective,
     ContactListComponent,
-    EditContactComponent
+    EditContactComponent,
+    ProfileIconSelectorComponent
   ],
   imports: [
     BrowserModule,
