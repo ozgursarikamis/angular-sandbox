@@ -42,7 +42,8 @@ export class EditContactComponent implements OnInit {
   createPhoneGroup() {
     return this.formBuilder.nonNullable.group({
       phoneNumber: '',
-      phoneType: ''
+      phoneType: '', 
+      preferred: false,
     });
   }
 
