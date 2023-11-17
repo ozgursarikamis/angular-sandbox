@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService } from '../contacts/contacts.service';
-import { Contact, addressTypeValues, phoneTypeValues } from '../contacts/contact.model';
+import { addressTypeValues, phoneTypeValues } from '../contacts/contact.model';
 import { restrictedWords } from '../validators/restricted-words.validator';
 
 @Component({
@@ -63,7 +63,10 @@ export class EditContactComponent implements OnInit {
       .subscribe(contact => {
 
          if(!contact) return;
-        
+
+         for (let i = 1; i < contact.phones.length; i++) {
+          this.contactForm.controls.phones.push(this.createPhoneGroup());
+         }
          this.contactForm.setValue(contact);
         });
   }
