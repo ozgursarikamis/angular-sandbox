@@ -33,7 +33,7 @@
         <div *ngFor="let phone of contactForm.controls.phones.controls; let i = index" [formGroupName]="i" class="flex-column">
           <div class="flex-group">
             <input formControlName="phoneNumber" placeholder="Phone" />
-            <img src="/assets/plus-grey-blue.png" class="add" />
+            <img src="/assets/plus-grey-blue.png" class="add" (click)="addPhoneFormElement()" />
           </div>
           <div class="radio">
             <span *ngFor="let phoneType of phoneTypes">

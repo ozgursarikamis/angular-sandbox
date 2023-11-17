@@ -13,7 +13,7 @@ export class EditContactComponent implements OnInit {
 
   phoneTypes = phoneTypeValues;
   addressTypes = addressTypeValues;
-  
+
   contactService = inject(ContactsService);
   router = inject(Router);
   route = inject(ActivatedRoute);
@@ -62,13 +62,13 @@ export class EditContactComponent implements OnInit {
     this.contactService.getContact(contactId)
       .subscribe(contact => {
 
-         if(!contact) return;
+        if (!contact) return;
 
-         for (let i = 1; i < contact.phones.length; i++) {
-          this.contactForm.controls.phones.push(this.createPhoneGroup());
-         }
-         this.contactForm.setValue(contact);
-        });
+        for (let i = 1; i < contact.phones.length; i++) {
+          this.addPhoneFormElement();
+        }
+        this.contactForm.setValue(contact);
+      });
   }
 
   saveContact() {
@@ -76,5 +76,9 @@ export class EditContactComponent implements OnInit {
     this.contactService.saveContact(this.contactForm.getRawValue()).subscribe({
       next: () => this.router.navigate(['/contacts'])
     });
+  }
+
+  addPhoneFormElement() {
+    this.contactForm.controls.phones.push(this.createPhoneGroup());
   }
 }
