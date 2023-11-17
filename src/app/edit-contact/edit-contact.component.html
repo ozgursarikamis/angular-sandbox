@@ -35,6 +35,9 @@
             <input formControlName="phoneNumber" placeholder="Phone" />
             <img src="/assets/plus-grey-blue.png" class="add" (click)="addPhoneFormElement()" />
           </div>
+          <em *ngIf="phone.controls.phoneNumber.invalid">
+            Preferred phone number is required
+          </em>
           <div class="radio">
             <span *ngFor="let phoneType of phoneTypes">
               <input type="radio" formControlName="phoneType" [value]="phoneType.value"> {{ phoneType.title }}

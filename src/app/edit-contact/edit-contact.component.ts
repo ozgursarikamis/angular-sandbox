@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService } from '../contacts/contacts.service';
 import { addressTypeValues, phoneTypeValues } from '../contacts/contact.model';
 import { restrictedWords } from '../validators/restricted-words.validator';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
   templateUrl: './edit-contact.component.html',
@@ -39,12 +40,28 @@ export class EditContactComponent implements OnInit {
     phones: this.formBuilder.array([this.createPhoneGroup()])
   });
 
+  stringifyCompare(a: any, b: any) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  }
+
   createPhoneGroup() {
-    return this.formBuilder.nonNullable.group({
+    const phoneGroup = this.formBuilder.nonNullable.group({
       phoneNumber: '',
       phoneType: '', 
       preferred: false,
     });
+    phoneGroup.controls.preferred.valueChanges
+      .pipe(distinctUntilChanged(this.stringifyCompare)) // to prevent infinite loop
+      .subscribe((value: boolean) => {
+      if (value) {
+        phoneGroup.controls.phoneNumber.addValidators([Validators.required]);
+      } else {
+        phoneGroup.controls.phoneNumber.removeValidators([Validators.required]);
+      }
+
+      phoneGroup.controls.phoneNumber.updateValueAndValidity();
+    });
+    return phoneGroup;
   }
 
   constructor() { }
