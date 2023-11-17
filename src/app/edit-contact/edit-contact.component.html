@@ -7,6 +7,11 @@
       <nav>Name/Info</nav>
       <div>
         <input formControlName="firstName" placeholder="First Name" />
+        <span style="color: red;" *ngIf="contactForm?.controls?.firstName?.invalid && contactForm?.controls?.firstName?.touched">
+          Please enter a valid name
+        </span>
+        {{ contactForm.controls.firstName.errors | json  }} <br>
+        Valid?: {{ contactForm.controls.firstName.valid }}
         <input formControlName="lastName" placeholder="Last Name" />
         <input formControlName="dateOfBirth" type="date" [value]="contactForm.controls.dateOfBirth.value | date:'yyyy-MM-dd'" placeholder="Date of Birth" />
         <input formControlNam="favoritesRanking" placeholder="Favorites Ranking" />
