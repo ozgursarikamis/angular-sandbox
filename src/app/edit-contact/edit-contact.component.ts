@@ -42,6 +42,10 @@ export class EditContactComponent implements OnInit {
 
   constructor() { }
 
+  get firstName() {
+    return this.contactForm?.controls?.firstName;
+  }
+
   ngOnInit() {
     const contactId = this.route.snapshot.params['id'];
     if (!contactId) return;
