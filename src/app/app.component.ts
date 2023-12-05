@@ -9,7 +9,7 @@ import { IPost } from './models/post';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'angular-scratchpad';
+  title = 'Async Pipe & Loading Indicator';
   observable$: Observable<IPost[]> | undefined;
   loading = false;
   
