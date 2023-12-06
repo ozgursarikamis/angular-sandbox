@@ -26,7 +26,7 @@ VOLUME /var/cache/nginx
 
 # copy the build output to replace the default nginx contents.
 # `stage_1` produces a folder called `dist` with the build output.
-COPY --from=stage_1 /app/dist/angular-sandbox /usr/share/nginx/html
+COPY --from=stage_1 /app/dist /usr/share/nginx/html
 
 # Remove default nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
