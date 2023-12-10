@@ -1,5 +1,40 @@
 .title {
   font-size: 1rem;
-  padding: 3px 0;
+  padding: 0.75rem;
   border-bottom: 1px solid rgba(52, 58, 64, 0.5);
+}
+
+main {
+  padding: 1rem 2rem;
+  margin: auto;
+  max-width: 1024px;
+}
+
+.navbar {
+  display: flex;
+  background-color: black;
+  align-items: center;
+}
+
+.navbar > a {
+  font-weight: 700;
+  margin-left: 0.75rem;
+}
+
+.navbar-list {
+  display: flex;
+  list-style-type: none;
+}
+
+a {
+  margin: 0;
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem;
+}
+
+a:hover,
+.active-link {
+  cursor: pointer;
+  text-decoration: underline;
 }
