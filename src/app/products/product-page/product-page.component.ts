@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../product.model';
 import { ProductsService } from '../products.service';
 import { Store } from '@ngrx/store';
-import { selectProductById } from '../state/products.selectors';
+import { selectProductById, selectProductsLoading } from '../state/products.selectors';
 import { ProductsPageActions } from '../state/products.actions';
 
 @Component({
@@ -14,6 +14,7 @@ import { ProductsPageActions } from '../state/products.actions';
 export class ProductPageComponent {
   // product$ = this.store.select(selectProductById(this.activatedRoute.snapshot.params['id']));
   product$ = this.store.select(selectProductById);
+  loading$ =  this.store.select(selectProductsLoading);
 
   constructor(
     // private productsService: ProductsService, // not needed after store dispatch
