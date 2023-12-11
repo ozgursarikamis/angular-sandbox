@@ -1,0 +1,2 @@
+# NgRx Entities
+
