@@ -4,6 +4,7 @@ import { Product } from '../product.model';
 import { ProductsService } from '../products.service';
 import { Store } from '@ngrx/store';
 import { selectProductById } from '../state/products.selectors';
+import { ProductsPageActions } from '../state/products.actions';
 
 @Component({
   selector: 'app-product-page',
@@ -15,23 +16,24 @@ export class ProductPageComponent {
   product$ = this.store.select(selectProductById);
 
   constructor(
-    private productsService: ProductsService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
+    // private productsService: ProductsService, // not needed after store dispatch
+    // private router: Router, // not needed after store dispatch
+    // private activatedRoute: ActivatedRoute, // not needed after store dispatch
     private store: Store
   ) {}
 
   addProduct(product: Product) {
-    this.productsService.add(product).subscribe(this.goToProductsPage);
+    this.store.dispatch(ProductsPageActions.addProduct({ product }));
+    // this.productsService.add(product).subscribe(this.goToProductsPage);
   }
 
   updateProduct(product: Product) {
-    this.productsService.update(product).subscribe(this.goToProductsPage);
+    this.store.dispatch(ProductsPageActions.updateProduct({ product }));
+    // this.productsService.update(product).subscribe(this.goToProductsPage);
   }
 
   deleteProduct(id: number) {
-    this.productsService.delete(id).subscribe(this.goToProductsPage);
+    this.store.dispatch(ProductsPageActions.deleteProduct({ id }));
+    // this.productsService.delete(id).subscribe(this.goToProductsPage);
   }
-
-  goToProductsPage = () => this.router.navigate(['/products']);
 }
