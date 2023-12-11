@@ -11,7 +11,8 @@ import { selectProductById } from '../state/products.selectors';
   styleUrls: ['./product-page.component.css'],
 })
 export class ProductPageComponent {
-  product$ = this.store.select(selectProductById(this.activatedRoute.snapshot.params['id']));
+  // product$ = this.store.select(selectProductById(this.activatedRoute.snapshot.params['id']));
+  product$ = this.store.select(selectProductById);
 
   constructor(
     private productsService: ProductsService,
