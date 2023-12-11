@@ -9,6 +9,7 @@ import { InMemoryDataService } from './in-memory-data.service';
 import { HomeComponent } from './home/home.component';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -26,7 +27,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
       trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
       traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
       connectInZone: true // If set to true, the connection is established within the Angular zone
-    })
+    }),
+    EffectsModule.forRoot([])
   ],
   providers: [],
   bootstrap: [AppComponent],

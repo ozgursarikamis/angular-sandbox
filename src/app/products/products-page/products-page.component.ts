@@ -22,16 +22,7 @@ export class ProductsPageComponent {
   }
 
   ngOnInit() {
-    this.getProducts();
-  }
-
-  getProducts() {
-    this.productsService.getAll().subscribe({
-      next: (products) => {
-        this.store.dispatch(ProductsAPIActions.productsLoadedSuccess({ products }));
-      },
-      error: (error) => (this.errorMessage = error),
-    });
+    this.store.dispatch(ProductsPageActions.loadProducts());
   }
 
   toggleShowProductCode() {
