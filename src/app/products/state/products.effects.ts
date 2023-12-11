@@ -7,6 +7,10 @@ import { catchError, concatMap, exhaustMap, map, mergeMap, of } from "rxjs";
 @Injectable()
 export class ProductEffects {
 
+    ngrxOnInitEffects() {
+        return ProductsPageActions.loadProducts();
+    }
+
     actions$ = inject(Actions);
     productService = inject(ProductsService);
     
