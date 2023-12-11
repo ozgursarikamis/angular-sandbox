@@ -25,3 +25,7 @@ export const selectProductsTotal = createSelector(
     // (products) => sumProducts(products) // or as a shortcut statement:
     sumProducts
 );
+
+export const selectProductById = (id: string) => createSelector(selectProducts, (products) => 
+    products.find((product) => product.id === parseInt(id))
+);
