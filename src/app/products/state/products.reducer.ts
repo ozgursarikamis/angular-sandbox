@@ -5,13 +5,15 @@ import { Product } from "../product.model";
 export interface ProductsState {
     showProductCode: boolean;
     loading: boolean;
-    products: Product[]
+    products: Product[];
+    errorMessage: string;
 }
 
 export const initialState: ProductsState = {
     showProductCode: true,
     loading: false,
-    products: []
+    products: [],
+    errorMessage: ''
 }
 
 export const productsReducer = createReducer(
@@ -29,4 +31,10 @@ export const productsReducer = createReducer(
         loading: false,
         products
     })),
+    on(ProductsAPIActions.productsLoadedFail, (state, { message }) => ({
+        ...state,
+        products: [],
+        errorMessage: message,
+        loading: false,
+    }))
 );

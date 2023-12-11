@@ -16,6 +16,10 @@ export const selectProductsShowProductCode = createSelector(
     selectProductsState,
     (productsState) => productsState.showProductCode
 )
+export const selectProductsErrorMessage = createSelector(
+    selectProductsState,
+    (productsState) => productsState.errorMessage
+)
 export const selectProductsTotal = createSelector(
     selectProducts,
     // (products) => sumProducts(products) // or as a shortcut statement:
