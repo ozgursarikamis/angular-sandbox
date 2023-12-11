@@ -23,15 +23,10 @@ export const selectProductsErrorMessage = createSelector(
 )
 export const selectProductsTotal = createSelector(
     selectProducts,
-    // (products) => sumProducts(products) // or as a shortcut statement:
     sumProducts
 );
 
 export const { selectRouteParams } = getRouterSelectors();
-
-// export const selectProductById = (id: string) => createSelector(selectProducts, (products) => 
-//     products.find((product) => product.id === parseInt(id))
-// );
 
 export const selectProductById = createSelector(
     selectProducts,
