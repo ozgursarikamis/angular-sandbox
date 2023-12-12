@@ -45,7 +45,7 @@ export class ProductEffects {
             ofType(ProductsPageActions.addProduct),
             // concatMap: Wait until the first update finishes.
             concatMap(({ product }) => this.productService.update(product).pipe(
-                map(() => ProductsAPIActions.productUpdatedSuccess({ product }))
+                map(() => ProductsAPIActions.productUpdatedSuccess({ update: { changes: product, id: product.id } }))
             )),
             catchError(err => {
                 return of(ProductsAPIActions.productUpdatedFail({ message: err }))
