@@ -1,3 +1,7 @@
 <div class="title">
   Angular Sandbox {{ title ? " - " + title : "" }}
 </div>
+<app-toolbar></app-toolbar>
+<div class="content" role="main">
+    <router-outlet></router-outlet>
+</div>

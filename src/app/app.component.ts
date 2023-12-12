@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = undefined;
+  title = 'End-to-end Testing with Cypress';
+
+  onFilter(value: string): void {
+    console.log(value);
+  }
 }
