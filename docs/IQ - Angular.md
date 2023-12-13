@@ -90,3 +90,106 @@ Angular supports three types of view encapsulation:
 - **Emulated**: Styles defined in the component only affect the component itself.
 - **Native**: Styles defined in the component only affect the component itself. It uses the Shadow DOM to encapsulate styles.
 - **None**: Styles defined in the component affect the whole application.
+
+## Architectural Diagram of Angular
+
+![Angular Architecture](https://github.com/sudheerj/angular-interview-questions/raw/master/images/architecture.png)
+
+## What are components?
+
+Components are the most basic UI building block of an Angular app. An Angular app contains a tree of Angular components.
+
+## What are the differences between Components and Directives?
+
+- Components have a template, Directives don’t.
+- Components are typically used to create UI widgets, Directives are used to add behavior to an existing <u>**DOM element**</u>.
+
+## What are lifecycle hooks available?
+
+- **ngOnInit**: Called once the component is initialized.
+- **ngOnChanges**: Called after a bound <u>**input property changes**</u>.
+- **ngDoCheck**: Called during <u>**every change detection run**</u>.
+  - **ngAfterContentInit**: Called after content (ng-content) has been projected into view.
+  - **ngAfterContentChecked**: Called every time the projected content has been checked.
+  - **ngAfterViewInit**: Called  <u>**after the component’s view (and child views) has been initialized</u>**.
+  - **ngAfterViewChecked**: Called every time the view (and child views) have been checked.
+- **ngOnDestroy**: Called once the component is **about to be** <u>destroyed</u>.
+
+![Lifecycle Hooks](https://github.com/sudheerj/angular-interview-questions/raw/master/images/lifecycle.png)
+
+## What is the difference between Constructor and ngOnInit?
+
+- **Constructor** is a default method of the class that is executed when the class is instantiated and ensures proper initialization of fields in the class and its subclasses.
+- **ngOnInit** is a life cycle hook called by Angular to indicate that Angular is done creating the component.
+
+## What is metadata?
+
+Metadata is used to decorate a class so that it can configure the expected behavior of the class. The metadata is represented by decorators.
+
+```ts
+@Component({
+  selector: 'my-component',
+  template: '<div>Class decorator</div>',
+})
+
+// or
+@NgModule({
+  imports: [],
+  declarations: [],
+})
+
+// property decorators: @Input, @Output, @HostBinding, @HostListener
+@HostListener('click', ['$event'])
+onHostClick(event: Event) {
+    // clicked, `event` available
+}
+
+@Input() title: string;
+```
+
+## What is Dependency Injection?
+
+- An Angular class requests dependencies from **external sources** rather than creating them.
+- Angular comes with its own dependency injection framework
+
+## How is Dependency Hierarchy formed?
+
+- Angular creates a **hierarchical dependency injector** for each component in the application.
+  - **Module injector**: Creates the root injector that provides services to the entire application.
+```ts
+@NgModule({
+    providers: [
+    Logger,
+    { provide: 'API_URL', useValue: 'http://dev.server.com' }
+    ]
+})
+```
+  - **Component injector**: Creates a child injector of the module injector that is responsible for an individual component.
+
+```ts
+@Component({
+    selector: 'app',
+    templateUrl: 'app.component.html',
+    providers: [UserService]
+})
+```
+  - **Element injector**: Creates a child injector of the component injector that is responsible for a DOM element.
+```ts
+@Component({
+    selector: 'app',
+    templateUrl: 'app.component.html',
+    providers: [UserService]
+})
+  - **Injector**: Creates a child injector of the element injector that is responsible for a directive.
+- The **injector hierarchy** is determined by the **component tree**.
+
+
+## In an Angular service, how can you read the full response?
+
+``ts``
+  import { HttpClient } from '@angular/common/http';
+   
+  getFullResponse() {
+    return this.http.get('https://jsonplaceholder.typicode.com/posts', { observe: 'response' });
+  }
+```
