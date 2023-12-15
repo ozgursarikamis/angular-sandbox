@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SubtitleDirective } from './subtitle.directive';
+import { SubtitleDirective }              from './subtitle.directive';
 
 @Component({
   selector: 'app-root',
@@ -7,8 +7,10 @@ import { SubtitleDirective } from './subtitle.directive';
   styleUrls: ['./app.component.scss'],
   hostDirectives: [
     SubtitleDirective // to import a standalone directive
-  ]
+  ],
+  standalone: false
 })
 export class AppComponent {
   title = "Interview Questions";
+  contacts: boolean | null | undefined;
 }
