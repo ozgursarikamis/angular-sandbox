@@ -2,6 +2,8 @@
   Angular Sandbox {{ title ? " - " + title : "" }}
 </div>
 
+<a routerLink="/">Home</a> | <a routerLink="/about">About</a>
+
 <div>
   <p appSubtitle>This is the first paragraph</p>
   <p appSubtitle>This is the second paragraph</p>
@@ -12,3 +14,6 @@
 <div>
   <p>{{ 2048 | fileSize:'GB': 5 }}</p>
 </div>
+
+
+<router-outlet></router-outlet>
