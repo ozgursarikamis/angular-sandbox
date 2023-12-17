@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-
+import { Component, inject } from '@angular/core';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-about',
   standalone: true,
@@ -8,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './about.component.css'
 })
 export class AboutComponent {
+  location = inject(Location);
 
+  goBack() {
+    this.location.back();
+  }
 }
