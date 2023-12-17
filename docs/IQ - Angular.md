@@ -180,16 +180,204 @@ onHostClick(event: Event) {
     templateUrl: 'app.component.html',
     providers: [UserService]
 })
-  - **Injector**: Creates a child injector of the element injector that is responsible for a directive.
-- The **injector hierarchy** is determined by the **component tree**.
+```
 
+- **Injector**: Creates a child injector of the element injector that is responsible for a directive.
+- The **injector hierarchy** is determined by the **component tree**.
 
 ## In an Angular service, how can you read the full response?
 
-``ts``
+```ts
   import { HttpClient } from '@angular/common/http';
    
   getFullResponse() {
     return this.http.get('https://jsonplaceholder.typicode.com/posts', { observe: 'response' });
   }
+```
+
+
+## What is the difference between `Router` and `ActivatedRoute`?
+
+- **ActivatedRoute** is the service that is used to **read route parameters** in the components of the application.
+- **Router** is the service that is used to **navigate** between components of the application.
+
+## What is the difference between `Router.navigate()` and `Router.navigateByUrl()`?
+
+- **Router.navigate()** takes an array of **path segments**.
+- **Router.navigateByUrl()** takes a **string** that can be a **relative path** or **absolute path**.
+
+## What is `zone`?
+
+- A zone is a **context** that **surrounds the execution** model of the asynchronous operations.
+
+## What is a service worker and its role in Angular?
+
+- A service worker is a script that runs in the web browser and manages caching for an application.
+
+
+Sample usage:
+
+  ```ts
+
+  import { Injectable } from '@angular/core';
+  import { SwUpdate } from '@angular/service-worker';
+
+  @Injectable()
+  export class CheckForUpdateService {
+
+    constructor(updates: SwUpdate) {
+      updates.available.subscribe(event => {
+        updates.activateUpdate().then(() => document.location.reload());
+      });
+    }
+  }
+  ```
+
+## What are Web Workers?
+
+- Web Workers are a simple means for web content to run scripts in <u>**background threads**</u>.
+
+> The Angular CLI does not support running itself in a web worker.
+
+## What is a DI token?
+
+- A DI token is a string that acts as a unique identifier for a dependency that is injected into a class.
+- A DI token can be used to configure the injector to return different types of dependencies based on the runtime condition.
+
+-  A common use case for DI tokens is when you want to inject a non-class dependency like a string or an interface, 
+  or when you want to inject different implementations of a service based on certain conditions.
+
+```ts
+import { InjectionToken } from '@angular/core';
+
+// Define a new DI token
+export const APP_CONFIG = new InjectionToken<AppConfig>('app.config');
+
+export interface AppConfig {
+  appTitle: string;
+  apiEndpoint: string;
+}
+
+// Provide a value for the DI token in your module
+@NgModule({
+  providers: [
+    { provide: APP_CONFIG, useValue: { appTitle: 'My App', apiEndpoint: 'http://localhost:3000' } }
+  ],
+  // ...
+})
+export class AppModule {
+  // Inject the dependency using the DI token in a component
+  constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+    console.log(config.appTitle); // 'My App'
+  }
+}
+```
+
+## What is platform in Angular?
+
+- A platform is a context for the execution of an Angular application on a page.
+- It's usually a browser but can also be a **web worker** or **server-side execution environment**.
+  - While running in a browser, the platform is bootstrapped by importing the `BrowserModule` or `BrowserAnimationsModule` from `@angular/platform-browser`.
+  - When SSR is used, it uses `ServerModule` from `@angular/platform-server`.
+
+## What does `Location` class do in Angular?
+
+- The `Location` class is used to interact with the browser's **URL**.
+- It is used to navigate back and forward in the browser history or to read the URL and query parameters.
+
+## What is the purpose of `innerHTML`?
+
+- The `innerHTML` property is used to set the HTML content of an element.
+- Unfortunately this property could cause `Cross Site Scripting (XSS)` security bugs when improperly handled.
+
+## What is `DOM Sanitization`?
+
+- DOM Sanitization is a security feature of Angular that **sanitizes untrusted values** so that they cannot execute **Cross Site Scripting (XSS)** attacks.
+
+
+## Explain Change Detection in Angular
+
+- Change detection is a core Angular functionality that updates the application's DOM whenever there is a change in the application data.
+- Angular uses `Zone.js` to track all asynchronous operations and when a change occurs, Angular triggers change detection to update the DOM.
+- Angular uses `ChangeDetectorRef` to manually trigger change detection.
+
+## Explain `ElementRef` and its usages
+
+- `ElementRef` is a wrapper around a native DOM element inside of a View.
+- It is used to manipulate DOM elements directly.
+- It is used to create directives that can update DOM elements, such as `Renderer2`.
+
+## What is the purpose of `trackBy` in Angular?
+
+- `trackBy` is used to improve the performance of an Angular application.
+- It is used to tell Angular how to track changes for **items in a collection**.
+  
+  ```ts
+  <div *ngFor="let item of items; trackBy: trackByFn">{{item.name}}</div>
+  ```
+  
+  ```ts
+  trackByFn(index, item) {
+    return item.id;
+  }
+  ```
+
+## Explain `BrowerModule` and `CommonModule`.
+
+- `BrowserModule` is used to run an Angular application in the `browser`.
+- `CommonModule` is used to run an Angular application in a `web worker` or `server-side` rendering.
+- `BrowserModule` exports all the basic directives, pipes, and services for the browser.
+- `CommonModule` exports all the basic directives, pipes, and services for the web worker and server-side rendering.
+
+
+## How do you restrict provider scope to a component / module?
+
+- Using `providedIn` property of `@Injectable` decorator.
+
+```ts
+import { Injectable } from '@angular/core';
+import { LoggerService } from './logger.service';
+
+@Injectable({ providedIn: SomeModule })
+export class SomeService {}
+```
+
+- Declare `provider` for the service in module:
+  
+```ts
+@NgModule({ providers: [SomeService]})
+export class SomeModule {}
+```
+
+## How do you provide a `SINGLETON` service?
+```ts
+@Injectable({ providedIn: 'root' })
+export class SomeService {}
+```
+
+## Explain `@ViewChild` decorator
+
+- `@ViewChild` decorator is used to access a child component, directive, or DOM element from a parent component class.
+- It is used to access the **first element** that matches the selector from the view DOM.
+- It is used to access the **local variable** in the template.
+
+The lifecycle hook that is used to access the `@ViewChild` is `ngAfterViewInit`.
+
+```ts
+@Component({
+  selector: 'app-parent',
+  template: `
+    <app-child #child1></app-child>
+    <app-child #child2></app-child>
+  `
+})
+export class ParentComponent implements AfterViewInit {
+  @ViewChild('child1') child1: ChildComponent;
+  @ViewChild('child2') child2: ChildComponent;
+
+  ngAfterViewInit() {
+    // child1 is set
+    // child2 is set
+  }
+}
 ```
