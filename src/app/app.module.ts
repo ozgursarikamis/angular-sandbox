@@ -6,6 +6,8 @@ import { FileSizePipe } from './pipes/file-size.pipe';
 import { AboutComponent } from './about/about.component';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { OptimizedImagesComponent } from './optimized-images/optimized-images.component';
+import { NgOptimizedImage } from '@angular/common';
 
 // Define a new DI Token:
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config'); // `app.config` is the name of the token
@@ -26,11 +28,13 @@ const routes = [
   declarations: [
     AppComponent,
     HomeComponent,
-    FileSizePipe
+    FileSizePipe,
+    OptimizedImagesComponent
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    NgOptimizedImage
   ],
   providers: [
     {
