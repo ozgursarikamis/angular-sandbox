@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { AboutComponent } from './about/about.component';
 import { RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
 
 // Define a new DI Token:
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config'); // `app.config` is the name of the token
@@ -24,6 +25,7 @@ const routes = [
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     FileSizePipe
   ],
   imports: [
