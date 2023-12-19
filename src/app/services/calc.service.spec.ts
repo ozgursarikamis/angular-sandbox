@@ -1,4 +1,4 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { CalcService }                                    from "./calc.service";
 import { TestBed, waitForAsync }                          from "@angular/core/testing";
 import { ApiUrls }                                        from "../strings";
@@ -37,8 +37,7 @@ describe("CalcService", () => {
         expect(result).toEqual(random1 * random2);
     });
 
-    it('[should fetch users from the API]', () => {
-
+    it('[SHOULD FETCH USERS FROM THE API]', () => {
         waitForAsync(() => {
             const mockUsers: User[] = [{
                 id: 1,
@@ -64,22 +63,25 @@ describe("CalcService", () => {
     });
 
     it('[SHOULD SAVE POST]', () => {
-        waitForAsync(() => {
-            const mockPost: Post = {
-                userId: 1,
-                id: 1,
-                title: 'title',
-                body: 'body',
-            };
+        // let serviceSpy: jasmine.Spy;
+        // let request: TestRequest;
 
-            // savePost method returns an Observable<Post>:
-
-            const serviceSpy = spyOn(service, 'savePost').and.returnValue(of(mockPost));
-            const request = httpTestingController.expectOne(ApiUrls.Posts);
-            expect(request.request.method).toBe('POST');
-            expect(request.request.body).toEqual(mockPost);
-            expect(serviceSpy).toHaveBeenCalledOnceWith(mockPost);
+        const mockPost: Post = {
+            userId: 1,
+            id: 1,
+            title: 'title',
+            body: 'body',
+        };
+        // another way to test a method that returns an Observable
+        service.savePost(mockPost).subscribe((post: Post) => {
+            expect(post).toEqual(mockPost);
         });
+
+        const request = httpTestingController.expectOne(ApiUrls.Posts);
+        expect(request.request.method).toBe('POST');
+        expect(request.request.body).toEqual(mockPost);
+
+        request.flush(mockPost);
     });
 
     beforeEach(() => {
