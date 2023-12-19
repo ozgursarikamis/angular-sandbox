@@ -1,10 +1,10 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { CalcService } from "./calc.service";
-import { TestBed, waitForAsync } from "@angular/core/testing";
-import { ApiUrls } from "./strings";
-import { User } from './models/User';
-import { Post } from './models/Post';
-import { of } from 'rxjs';
+import { CalcService }                                    from "./calc.service";
+import { TestBed, waitForAsync }                          from "@angular/core/testing";
+import { ApiUrls }                                        from "../strings";
+import { User }                                           from '../models/User';
+import { Post }                                           from '../models/Post';
+import { of }                                             from 'rxjs';
 
 describe("CalcService", () => {
     let service: CalcService;
@@ -56,9 +56,9 @@ describe("CalcService", () => {
 
             const request = httpTestingController.expectOne(ApiUrls.Users);
             expect(request.request.method).toBe('GET');
-    
+
             request.flush(mockUsers);
-    
+
             expect(serviceSpy).toHaveBeenCalledOnceWith();
         });
     });
@@ -71,7 +71,7 @@ describe("CalcService", () => {
                 title: 'title',
                 body: 'body',
             };
-            
+
             // savePost method returns an Observable<Post>:
 
             const serviceSpy = spyOn(service, 'savePost').and.returnValue(of(mockPost));
