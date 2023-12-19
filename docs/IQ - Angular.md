@@ -381,3 +381,36 @@ export class ParentComponent implements AfterViewInit {
   }
 }
 ```
+
+# What's New in Angular 15?
+
+- Standalone components
+- NgOptimizedImage
+
+# What's New in Angular 16?
+
+- Angular 16 introduced `signals`!
+- `signals` are a new way to handle asynchronous operations in Angular.
+- SSR Improvements
+- Improved `ivy` compiler
+- `@Input()` decorator now supports `required` value
+
+# What's New in Angular 17?
+
+- Angular 17 introduced `Angular Elements`!
+- `Angular Elements` are a new way to create reusable components that can be used in any other framework or application.
+<br />
+<br />
+- Angular is switching to `vite` as the default build tool.
+- To change the default builder, in `angular.json` file, change the `builder` property to `@angular-devkit/build-angular:browser`.
+<br />
+<br />
+- Built-in control flows `@If`, `@For`, `@Switch`, `@Case`, `@Default`
+- Migration command is: `ng generate @angular/core:control-flow`
+- `@defer`: Defers the initialization of a component until the component is visible in the viewport.
+
+```html
+@defer (on viewport; prefetch on idle) {
+  <comment-list />
+}
+```
