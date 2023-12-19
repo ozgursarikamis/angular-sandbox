@@ -23,4 +23,9 @@ export class CalcService {
     return this.httpClient.post<Post>(this.postsUrl, post);
   }
 
+  // PUT /posts/1
+  updatePost(post: Post): Observable<Post> {
+    return this.httpClient.put<Post>(`${this.postsUrl}/${post.id}`, post);
+  }
+
 }

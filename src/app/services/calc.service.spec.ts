@@ -117,6 +117,25 @@ describe("CalcService", () => {
         request.flush(mockPost);
     });
 
+    it('should update posts', () => {
+        const mockPost: Post = {
+            userId: 1,
+            id: 1,
+            title: 'title',
+            body: 'body',
+        };
+        // another way to test a method that returns an Observable
+        service.updatePost(mockPost).subscribe((post: Post) => {
+            expect(post).toEqual(mockPost);
+        });
+
+        const request = httpTestingController.expectOne(`${ApiUrls.Posts}/${mockPost.id}`);
+        expect(request.request.method).toBe('PUT');
+        expect(request.request.body).toEqual(mockPost);
+
+        request.flush(mockPost);
+    });
+
     beforeEach(() => {
         console.log("beforeEach");
     });
