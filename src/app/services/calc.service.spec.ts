@@ -1,10 +1,10 @@
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { CalcService }                                    from "./calc.service";
-import { TestBed, waitForAsync }                          from "@angular/core/testing";
-import { ApiUrls }                                        from "../strings";
-import { User }                                           from '../models/User';
-import { Post }                                           from '../models/Post';
-import { of }                                             from 'rxjs';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { CalcService } from "./calc.service";
+import { TestBed, inject, waitForAsync } from "@angular/core/testing";
+import { ApiUrls } from "../strings";
+import { User } from '../models/User';
+import { Post } from '../models/Post';
+import { of } from 'rxjs';
 
 describe("CalcService", () => {
     let service: CalcService;
@@ -37,7 +37,7 @@ describe("CalcService", () => {
         expect(result).toEqual(random1 * random2);
     });
 
-    it('[SHOULD FETCH USERS FROM THE API]', () => {
+    it('should fetch users', () => {
         waitForAsync(() => {
             const mockUsers: User[] = [{
                 id: 1,
@@ -55,14 +55,47 @@ describe("CalcService", () => {
 
             const request = httpTestingController.expectOne(ApiUrls.Users);
             expect(request.request.method).toBe('GET');
+            expect(serviceSpy).toHaveBeenCalledOnceWith();
 
             request.flush(mockUsers);
 
-            expect(serviceSpy).toHaveBeenCalledOnceWith();
         });
     });
 
-    it('[SHOULD SAVE POST]', () => {
+    it('should get users from the server 2', inject(
+        [CalcService, HttpTestingController],
+        (service: CalcService, httpMock: HttpTestingController) => {
+            const testData: User[] = [{
+                id: 1,
+                name: 'Bob',
+                username: 'bob',
+                email: '',
+            },
+            {
+                id: 2,
+                name: 'John',
+                username: 'john',
+                email: '',
+            }];
+
+            // Trigger the HTTP request
+            service.getUsers().subscribe(data => {
+                expect(data).toEqual(testData); // Assert that the data returned is as expected
+            });
+
+            // Mock the HTTP request
+            const req = httpMock.expectOne(ApiUrls.Users); // Replace with your actual API endpoint
+            expect(req.request.method).toBe('GET');
+
+            // Provide dummy data for the HTTP response
+            req.flush(testData);
+
+            // Verify that there are no outstanding HTTP requests
+            httpMock.verify();
+        }
+    ));
+
+    it('should save posts', () => {
         // let serviceSpy: jasmine.Spy;
         // let request: TestRequest;
 
@@ -95,5 +128,6 @@ describe("CalcService", () => {
 
     afterAll(() => {
         console.log("afterAll");
+        console.log("========================================================================");
     });
 });
