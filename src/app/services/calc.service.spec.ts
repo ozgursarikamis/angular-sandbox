@@ -62,7 +62,7 @@ describe("CalcService", () => {
         });
     });
 
-    it('should get users from the server 2', inject(
+    it('should get users from the server 2', inject( // <-- inject should be from @angular/core/testing NOT from @angular/core
         [CalcService, HttpTestingController],
         (service: CalcService, httpMock: HttpTestingController) => {
             const testData: User[] = [{
