@@ -3,6 +3,8 @@ import { CalcService } from "./calc.service";
 import { TestBed, waitForAsync } from "@angular/core/testing";
 import { ApiUrls } from "./strings";
 import { User } from './models/User';
+import { Post } from './models/Post';
+import { of } from 'rxjs';
 
 describe("CalcService", () => {
     let service: CalcService;
@@ -50,7 +52,7 @@ describe("CalcService", () => {
                 username: 'john',
                 email: '',
             }];
-            const serviceSpy = spyOn(service, 'getUsers').and.returnValue(mockUsers);
+            const serviceSpy = spyOn(service, 'getUsers').and.returnValue(of(mockUsers));
 
             const request = httpTestingController.expectOne(ApiUrls.Users);
             expect(request.request.method).toBe('GET');
@@ -58,6 +60,25 @@ describe("CalcService", () => {
             request.flush(mockUsers);
     
             expect(serviceSpy).toHaveBeenCalledOnceWith();
+        });
+    });
+
+    it('[SHOULD SAVE POST]', () => {
+        waitForAsync(() => {
+            const mockPost: Post = {
+                userId: 1,
+                id: 1,
+                title: 'title',
+                body: 'body',
+            };
+            
+            // savePost method returns an Observable<Post>:
+
+            const serviceSpy = spyOn(service, 'savePost').and.returnValue(of(mockPost));
+            const request = httpTestingController.expectOne(ApiUrls.Posts);
+            expect(request.request.method).toBe('POST');
+            expect(request.request.body).toEqual(mockPost);
+            expect(serviceSpy).toHaveBeenCalledOnceWith(mockPost);
         });
     });
 
