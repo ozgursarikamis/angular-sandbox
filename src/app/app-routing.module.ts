@@ -9,7 +9,6 @@ const routes: Routes = [
     { path: 'sso/callback/github', component: AuthGithubComponent },
     { path: 'sso/callback/apple', component: AuthAppleComponent },
 ];
-
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]

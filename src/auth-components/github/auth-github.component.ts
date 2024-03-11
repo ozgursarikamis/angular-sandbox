@@ -1,6 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { OAuthService }  from 'angular-oauth2-oidc';
+import { ActivatedRoute } from '@angular/router';
 import { GithubService } from 'src/services/github.service';
 
 @Component({
@@ -9,17 +8,14 @@ import { GithubService } from 'src/services/github.service';
   styleUrl: './auth-github.component.css'
 })
 export class AuthGithubComponent implements OnInit {
-
-  router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
   githubService = inject(GithubService);
-  oauthService = inject(OAuthService);
 
   accessToken$: any;
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit() {
     const authCode = this.activatedRoute.snapshot.queryParams['code'];
-    console.log('authCode', authCode);
-   this.accessToken$ = this.githubService.getAccessToken(authCode);
+    console.log('authCode from Github', authCode);
+    this.githubService.authorizeUser(authCode).subscribe();
   }
 }
