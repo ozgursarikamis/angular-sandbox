@@ -13,7 +13,7 @@ This access token can then be used to make authenticated requests on behalf of t
 export const githubCodeFlowConfig: AuthConfig = {
   loginUrl: 'https://github.com/login/oauth/authorize',
   redirectUri: 'http://localhost:4200/sso/callback/github',
-  clientId: '37d9e8d5f858cb5f7739',
+  clientId: 'YOUR_CLIENT',
   responseType: 'code',
   scope: 'user:email',
   strictDiscoveryDocumentValidation: false,
