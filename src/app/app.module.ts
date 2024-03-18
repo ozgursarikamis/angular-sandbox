@@ -17,12 +17,20 @@ import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { PageHeaderComponent } from './page-header/page-header.component';
+import { NzPageHeaderModule } from "ng-zorro-antd/page-header"
+import { NzBreadCrumbModule } from "ng-zorro-antd/breadcrumb";
+import { InputsComponent } from './inputs/inputs.component';
+import { NzInputModule } from "ng-zorro-antd/input";
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 registerLocaleData(en);
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PageHeaderComponent,
+    InputsComponent
   ],
   imports: [
     BrowserModule,
@@ -34,6 +42,10 @@ registerLocaleData(en);
     NzButtonModule,
     NzDrawerModule,
     NzSpaceModule,
+    NzPageHeaderModule,
+    NzBreadCrumbModule,
+    NzInputModule,
+    NzIconModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_GB },
