@@ -10,7 +10,13 @@ import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient }                 from '@angular/common/http';
 import { NzTabComponent, NzTabSetComponent } from "ng-zorro-antd/tabs";
-import { NzModalComponent, NzModalService }  from "ng-zorro-antd/modal";
+import { NzStepComponent } from "ng-zorro-antd/steps"
+import { NzModalComponent, NzModalService, }  from "ng-zorro-antd/modal";
+
+import { NzStepsModule } from 'ng-zorro-antd/steps';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 registerLocaleData(en);
 
@@ -23,7 +29,11 @@ registerLocaleData(en);
     FormsModule,
     NzTabSetComponent,
     NzTabComponent,
-    NzModalComponent
+    NzModalComponent,
+    NzStepsModule,
+    NzButtonModule,
+    NzDrawerModule,
+    NzSpaceModule,
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_GB },
