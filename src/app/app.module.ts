@@ -8,7 +8,9 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient }                 from '@angular/common/http';
+import { NzTabComponent, NzTabSetComponent } from "ng-zorro-antd/tabs";
+import { NzModalComponent, NzModalService }  from "ng-zorro-antd/modal";
 
 registerLocaleData(en);
 
@@ -18,12 +20,16 @@ registerLocaleData(en);
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    NzTabSetComponent,
+    NzTabComponent,
+    NzModalComponent
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_GB },
     provideAnimationsAsync(),
-    provideHttpClient()
+    provideHttpClient(),
+    NzModalService
   ],
   bootstrap: [AppComponent]
 })
