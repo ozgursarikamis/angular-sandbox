@@ -1,5 +1,5 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { NgModule, isDevMode } from '@angular/core';
+import { NgModule, importProvidersFrom, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 
@@ -12,10 +12,12 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 
-@NgModule({ declarations: [AppComponent, HomeComponent],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+@NgModule({
+    declarations: [AppComponent, HomeComponent],
+    bootstrap: [AppComponent], 
+    imports: [
+        BrowserModule,
         AppRoutingModule,
-        HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService),
         StoreModule.forRoot({ router: routerReducer }),
         StoreDevtoolsModule.instrument({
             name: 'NgRx : Getting Started',
@@ -27,5 +29,11 @@ import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
             connectInZone: true // If set to true, the connection is established within the Angular zone
         }),
         EffectsModule.forRoot([]),
-        StoreRouterConnectingModule.forRoot()], providers: [provideHttpClient(withInterceptorsFromDi())] })
-export class AppModule {}
+        StoreRouterConnectingModule.forRoot()
+    ], 
+    providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        importProvidersFrom(HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService))
+    ]
+})
+export class AppModule { }
