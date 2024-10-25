@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -12,27 +12,20 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 
-@NgModule({
-  declarations: [AppComponent, HomeComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService),
-    StoreModule.forRoot({ router: routerReducer }),
-    StoreDevtoolsModule.instrument({
-      name: 'NgRx : Getting Started',
-      maxAge: 25, // Retains last 25 states
-      logOnly: !isDevMode(),
-      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
-      trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
-      traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
-      connectInZone: true // If set to true, the connection is established within the Angular zone
-    }),
-    EffectsModule.forRoot([]),
-    StoreRouterConnectingModule.forRoot()
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [AppComponent, HomeComponent],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService),
+        StoreModule.forRoot({ router: routerReducer }),
+        StoreDevtoolsModule.instrument({
+            name: 'NgRx : Getting Started',
+            maxAge: 25, // Retains last 25 states
+            logOnly: !isDevMode(),
+            autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+            trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
+            traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
+            connectInZone: true // If set to true, the connection is established within the Angular zone
+        }),
+        EffectsModule.forRoot([]),
+        StoreRouterConnectingModule.forRoot()], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}
