@@ -2,6 +2,6 @@
   Angular Sandbox {{ title ? " - " + title : "" }}
 </div>
 <div #messagesContainer class="chat-box">
-  <div *ngFor="let message of messages">{{ message }}</div>
+  <div #message *ngFor="let message of messages">{{ message }}</div>
 </div>
 <button (click)="addMessage('New Message!')">Send Message</button>

@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, DoCheck, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, DoCheck, ElementRef, OnInit, ViewChild, ViewChildren } from '@angular/core';
 
 // ==== Why Use ngAfterViewChecked() Here? ====
 // Every time Angular adds a new message, the view updates.
@@ -16,11 +16,13 @@ import { AfterViewChecked, Component, DoCheck, ElementRef, OnInit, ViewChild } f
 export class AppComponent implements AfterViewChecked, OnInit, DoCheck {
   title = 'ngAfterViewChecked';
   @ViewChild('messagesContainer') messagesContainer!: ElementRef;
+  @ViewChildren('message') messageElements!: ElementRef[];
   private previousMessageCount = 0;
   messages: string[] = ['Hello!', 'How are you?', 'I am fine!'];
 
   ngOnInit(): void {
     console.log(this.messagesContainer);
+    console.log(this.messageElements);
     this.styleContainer();
   }
   ngDoCheck(): void {
@@ -29,6 +31,7 @@ export class AppComponent implements AfterViewChecked, OnInit, DoCheck {
   
   ngAfterViewChecked(): void {
     console.log(this.messagesContainer);
+    console.log(this.messageElements);
     this.styleContainer();
     if (this.messages.length !== this.previousMessageCount) {
       this.previousMessageCount = this.messages.length;
@@ -36,7 +39,7 @@ export class AppComponent implements AfterViewChecked, OnInit, DoCheck {
       this.previousMessageCount = this.messages.length;
     }
   }
-  
+
   scrollToBottom() {
     const container = this.messagesContainer.nativeElement;
     container.scrollTop = container.scrollHeight;
