@@ -1,9 +1,10 @@
-import { Component, DoCheck, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DoCheck, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-child-component',
   templateUrl: './child-component.component.html',
-  styleUrl: './child-component.component.css'
+  styleUrl: './child-component.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChildComponentComponent implements OnChanges, DoCheck {
   

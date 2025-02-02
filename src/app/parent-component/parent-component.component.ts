@@ -11,7 +11,8 @@ export class ParentComponentComponent {
 
   updateParent() {
     this.parentValue = 'Hello'; // This does NOT change the value, but change detection still runs!
+    this.parentValue = 'Hello again';
   }
-  
+
   parentValue!: string;
 }
