@@ -1,3 +1,19 @@
 <div class="title">
   Angular Sandbox {{ title ? " - " + title : "" }}
 </div>
+
+<form [formGroup]="form" (submit)="formSubmitted()">
+  Name:
+  <input type="text" formControlName="Name" />
+  Last Name:
+  <input type="text" formControlName="LastName" />
+  Is Adult:
+  <input type="checkbox" formControlName="IsAdult" />
+  Selections:
+  <select formControlName="Selections" multiple>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </select>
+  <button type="submit">Submit</button>
+</form>
