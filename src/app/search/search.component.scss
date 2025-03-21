@@ -1,56 +1,51 @@
 .search-container {
-    width: 50%;
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .search-input-wrapper {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 input[type="text"] {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px 0 0 4px;
-    flex-grow: 1;
-    box-sizing: border-box;
-    /* Ensure padding and border are included in width */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  flex-grow: 1;
+  box-sizing: border-box;
 }
 
 button {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    box-sizing: border-box;
-    /* Ensure padding and border are included in width */
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
-.advanced-search,
-.results {
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    margin-top: 4px;
-    z-index: 10;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    /* Ensure padding and border are included in width */
+.advanced-search, .results {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  margin-top: 4px;
+  z-index: 10;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .close-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 ul {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 }

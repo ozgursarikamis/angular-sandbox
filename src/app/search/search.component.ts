@@ -1,11 +1,30 @@
 // search.component.ts
 import { Component, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-search',
   templateUrl: 'search.component.html',
   styleUrl: 'search.component.scss',
   standalone: false,
+  animations: [
+    trigger('fancyDropdown', [
+      state('closed', style({
+        opacity: 0,
+        transform: 'scaleY(0)',
+        transformOrigin: 'top',
+        display: 'none'
+      })),
+      state('open', style({
+        opacity: 1,
+        transform: 'scaleY(1)',
+        transformOrigin: 'top',
+        display: 'block'
+      })),
+      transition('closed => open', animate('1300ms cubic-bezier(0.175, 0.885, 0.320, 1.275)')),
+      transition('open => closed', animate('1200ms ease-out'))
+    ])
+  ]
 })
 export class SearchComponent {
   searchTerm: string = '';
