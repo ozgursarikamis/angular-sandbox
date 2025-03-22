@@ -1,0 +1,20 @@
+<div class="search-container">
+    <div class="search-input-wrapper">
+        <input type="text" [(ngModel)]="searchTerm" (focus)="onFocus()" (input)="onInput()" placeholder="Search..." />
+        <button (click)="toggleAdvancedSearch($event)" class="advanced-btn">Filters</button>
+    </div>
+
+    <div *ngIf="showAdvancedSearch" class="advanced-search" [@fadeSlide]>
+        <button (click)="closeAdvancedSearch()" class="close-btn">✕</button>
+        <!-- Additional options go here -->
+
+        
+        <button (click)="applyAdvancedFilters()" class="apply-btn">Apply</button>
+    </div>
+
+    <div *ngIf="showResults && !showAdvancedSearch" class="results" [@fadeSlide]>
+        <!-- Search results go here -->
+         Results for {{ searchTerm }}
+         <hr>
+    </div>
+</div>
