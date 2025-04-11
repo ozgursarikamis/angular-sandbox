@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
 import { SocketService } from "./services/socket.service";
 import { Subscription } from "rxjs";
 
@@ -9,6 +9,11 @@ import { Subscription } from "rxjs";
     standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
+
+  // Other properties and methods remain unchanged
+  @ViewChildren('messageItem') messageItems!: QueryList<ElementRef>;
+  private renderer: Renderer2 = inject(Renderer2);
+
   title = undefined;
   socketService: SocketService = inject(SocketService);
   newMessage: string = '';
@@ -27,6 +32,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.messageSubscription = this.socketService.onMessage().subscribe(message => {
       this.messages.push(message);
+
+      // Wait for the DOM to update, then apply the flash effect
+      setTimeout(() => {
+        const lastItem = this.messageItems.first;
+        if (lastItem) {
+          this.renderer.addClass(lastItem.nativeElement, 'flash');
+          setTimeout(() => {
+            this.renderer.removeClass(lastItem.nativeElement, 'flash');
+          }, 500); // Match the duration of the animation
+        }
+      });
     });
 
     this.disconnectSubscription = this.socketService.onDisconnect().subscribe(x => {

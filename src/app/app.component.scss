@@ -3,3 +3,36 @@
   padding: 3px 0;
   border-bottom: 1px solid rgba(52, 58, 64, 0.5);
 }
+
+.flash {
+  animation: flash 0.5s ease-in-out;
+}
+
+ul {
+  list-style-type: none;
+    padding: 0;
+}
+
+@keyframes flash {
+  0% {
+    //background-color: orangered;
+    position: relative;
+    left: 1rem;
+    transform: scale(1);
+    box-shadow: 0 0 1px orangered;
+  }
+  50% {
+    position: relative;
+    left: 0;
+    background-color: yellow;
+    transform: scale(1.01);
+    box-shadow: 0 0 2px yellow;
+  }
+  100% {
+    position: relative;
+    left: 0;
+    background-color: transparent;
+    transform: scale(1);
+    box-shadow: 0 0 0 transparent;
+  }
+}

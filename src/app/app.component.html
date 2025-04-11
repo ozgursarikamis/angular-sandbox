@@ -8,6 +8,6 @@
 </div>
 <div>
   <ul>
-    <li *ngFor="let msg of messages">{{ msg }}</li>
+    <li #messageItem *ngFor="let msg of messages.reverse()">{{ msg }}</li>
   </ul>
 </div>
