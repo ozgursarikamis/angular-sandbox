@@ -5,6 +5,12 @@ import { OSM } from "ol/source";
 import { View } from "ol";
 import { fromLonLat } from "ol/proj";
 
+import VectorTileLayer from 'ol/layer/VectorTile';
+import VectorTileSource from 'ol/source/VectorTile';
+import MVT from 'ol/format/MVT';
+import { Style, Fill, Stroke } from 'ol/style';
+import { FeatureLike } from "ol/Feature";
+
 @Component({
   selector: 'app-map',
   imports: [],
@@ -17,31 +23,43 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   map!: Map;
 
   ngAfterViewInit() {
+
     if (!this.mapContainer) {
       console.error('Map container not found!');
       return;
     }
 
-    // Create the OpenLayers map instance
-    this.map = new Map({
-      // Set the target element for the map
-      target: this.mapContainer.nativeElement,
-      // Define the layers for the map
-      layers: [
-        new TileLayer({
-          // Use OpenStreetMap (OSM) as the tile source
-          source: new OSM()
-        })
-      ],
-      // Define the initial view of the map
-      view: new View({
-        // Center the map (longitude, latitude)
-        // Use fromLonLat to convert coordinates from EPSG:4326 (LonLat) to EPSG:3857 (Web Mercator)
-        center: fromLonLat([0, 0]), // Centered at [0, 0] (latitude, longitude)
-        // Set the initial zoom level
-        zoom: 2
-      })
+    const regionVectorTileSource = new VectorTileSource({
+      format: new MVT(),
+      url: 'http://localhost:5000/api/VectorLayers/regions/{z}/{x}/{y}.pbf',
     });
+
+    const style = function (feature: FeatureLike): Style {
+      console.log({ feature });
+      const id = feature.get('Id');
+      const color = `rgb(${(id * 37) % 255}, ${(id * 73) % 255}, ${(id * 17) % 255}, 0.5)`;
+      const stroke = new Stroke({ color: 'wheat', width: 1, });
+      const fill = new Fill({ color });
+
+      return new Style({ fill, stroke });
+    };
+    const regionsLayer = new VectorTileLayer({
+      source: regionVectorTileSource,
+      style
+    });
+
+    const osmTileLayerOptions = { source: new OSM() };
+    const osmTileLayer: TileLayer<OSM> = new TileLayer(osmTileLayerOptions);
+
+    const viewOptions = { center: fromLonLat([-2.40, 54.455]), zoom: 7 };
+    const view = new View(viewOptions);
+
+    const mapOptions = {
+      target: this.mapContainer.nativeElement,
+      layers: [osmTileLayer, regionsLayer],
+      view,
+    };
+    this.map = new Map(mapOptions);
   }
 
   ngOnDestroy() {
