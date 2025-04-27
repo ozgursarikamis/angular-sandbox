@@ -35,7 +35,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
 
     const style = function (feature: FeatureLike): Style {
-      console.log({ feature });
+      console.log({ properties: feature?.getProperties()?.['Name'] });
       const id = feature.get('Id');
       const color = `rgb(${(id * 37) % 255}, ${(id * 73) % 255}, ${(id * 17) % 255}, 0.5)`;
       const stroke = new Stroke({ color: 'wheat', width: 1, });
