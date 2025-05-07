@@ -10,6 +10,7 @@ import VectorTileSource from 'ol/source/VectorTile';
 import MVT from 'ol/format/MVT';
 import { Style, Fill, Stroke } from 'ol/style';
 import { FeatureLike } from "ol/Feature";
+import CircleStyle from 'ol/style/Circle';
 
 @Component({
   selector: 'app-map',
@@ -31,7 +32,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     const regionVectorTileSource = new VectorTileSource({
       format: new MVT(),
-      url: 'http://localhost:5000/api/VectorLayers/regions/{z}/{x}/{y}.pbf',
+      url: 'http://localhost:5000/api/polygon/regions/{z}/{x}/{y}.pbf',
+    });
+    const pointVectorTileSource = new VectorTileSource({
+      format: new MVT(),
+      url: 'http://localhost:5000/api/points/organisations/{z}/{x}/{y}.pbf',
     });
 
     const style = function (feature: FeatureLike): Style {
@@ -48,6 +53,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       style
     });
 
+    const pointsLayer = new VectorTileLayer({
+      source: pointVectorTileSource,
+      style: function () {
+        return new Style({
+          image: new CircleStyle({
+            radius: 3,
+            fill: new Fill({ color: 'blue' }),
+            stroke: new Stroke({ color: 'white', width: 1 }),
+          }),
+        });
+      }
+    });
+
     const osmTileLayerOptions = { source: new OSM() };
     const osmTileLayer: TileLayer<OSM> = new TileLayer(osmTileLayerOptions);
 
@@ -56,7 +74,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     const mapOptions = {
       target: this.mapContainer.nativeElement,
-      layers: [osmTileLayer, regionsLayer],
+      layers: [osmTileLayer, regionsLayer, pointsLayer],
       view,
     };
     this.map = new Map(mapOptions);
