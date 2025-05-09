@@ -2,6 +2,8 @@ import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { GeolocateControl, LngLatLike, Map, MapOptions, Marker, NavigationControl, ProjectionSpecification } from 'mapbox-gl';
 import { environment } from 'src/environments/environment';
 
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
+
 const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike
 
 @Component({
@@ -41,6 +43,9 @@ export class MapComponent implements AfterViewInit {
     this.map.on('style.load', () => {
       // this.add3DBuildings();
     });
+
+    var Draw = new MapboxDraw();
+    this.map.addControl(Draw, 'top-left');
 
     return this.map;
   }
