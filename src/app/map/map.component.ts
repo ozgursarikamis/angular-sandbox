@@ -21,7 +21,16 @@ export class MapComponent implements AfterViewInit {
   width!: string;
   style = 'mapbox://styles/mapbox/outdoors-v12';
   zoomToMarker: Marker | undefined;
-  Draw: MapboxDraw = new MapboxDraw();
+   Draw: MapboxDraw = new MapboxDraw({
+    controls: {
+      point: false,
+      line_string: false,
+      polygon: true,
+      trash: true,
+      combine_features: false,
+      uncombine_features: false
+    }
+  });
 
   constructor() {
     this.map?.remove();
