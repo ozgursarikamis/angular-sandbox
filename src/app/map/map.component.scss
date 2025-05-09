@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+#map {
+  height: 100vh;
+}
+
+.zoom-to-default-location {
+  padding-top: 4px;
+  height: 32px;
+  width: 32px;
+  text-align: center;
+  span {
+    border: 1px solid red !important;
+  }
+}
+
+.mapboxgl-ctrl > .mapboxgl-ctrl-logo {
+  display: none;
+}
