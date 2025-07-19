@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 
 @Component({
     selector: 'app-root',
@@ -7,5 +7,10 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class AppComponent {
-  title = undefined;
+  title = "Signals";
+
+  z = computed(() => this.x() + this.y());
+
+  x = computed(() => 1);
+  y = computed(() => 2)
 }

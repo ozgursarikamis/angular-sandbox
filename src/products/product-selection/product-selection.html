@@ -1,0 +1,23 @@
+<div class="content">
+  <div class="title">
+    {{ pageTitle }}
+  </div>
+</div>
+
+<div class="grid">
+  <div class="row">
+    <div class="cellFull">
+      <select>
+        <option [value]="undefined" selected>--Select a Product--</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="cellLeft">
+      <label for="quantity">Quantity:</label>
+    </div>
+    <div class="cellRight">
+      <input [(ngModel)]="quantity" type="number" class="quantityInput" id="quantity" placeholder="0">
+    </div>
+  </div>
+</div>
