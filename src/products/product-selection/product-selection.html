@@ -31,7 +31,7 @@
       <label for="price">Price:</label>
     </div>
     <div class="cellRight">
-      {{ selectedProduct()?.price }}
+      {{ selectedProduct()?.price | currency:'GBP' }}
     </div>
   </div>
   <div class="row">
@@ -44,6 +44,14 @@
         <input [(ngModel)]="quantity" type="number" class="quantityInput" id="quantity" placeholder="0">
         <button class="qtyButton qtyButtonRight" (click)="onIncrease()">+</button>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="cellLeft">
+      <label for="total">Total:</label>
+    </div>
+    <div class="cellRight" [style.color]="color()">
+      {{ total() | currency:'GBP' }}
     </div>
   </div>
 </div>
