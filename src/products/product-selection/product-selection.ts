@@ -1,4 +1,4 @@
-import { Component, computed, effect, EffectRef, signal } from '@angular/core';
+import { Component, computed, effect, EffectRef, linkedSignal, signal } from '@angular/core';
 import { ProductData } from '../product-data';
 import { Product } from '../product';
 
@@ -10,7 +10,6 @@ import { Product } from '../product';
 })
 export class ProductSelection {
   pageTitle = 'Product Selection';
-  quantity = signal(1);
   products = signal(ProductData.products);
   selectedProduct = signal<Product | undefined>(undefined);
 
@@ -36,5 +35,15 @@ export class ProductSelection {
 
   color = computed(() => {
     return this.total() >= 100 ? 'green' : 'red';
+  });
+
+  // A `linkedSignal()` creates a writable signal
+  // that automatically resets when dependant signals change.
+  quantity = linkedSignal({
+    source: this.selectedProduct,
+    computation: (product) => {
+      console.log(`selection changed to`, product);
+      return 1;
+    } // reset the quantity if selected product changes
   });
 }
