@@ -11,7 +11,9 @@ import { ProductService } from '../product.service';
 export class ProductSelection {
   private productService = inject(ProductService);
   pageTitle = 'Product Selection';
-  products = this.productService.productResource.value;
+
+  private productResource = this.productService.createProducts();
+  products = this.productResource.value;
   selectedProduct = signal<Product | undefined>(undefined);
 
   onDecrease() {

@@ -9,5 +9,9 @@ export class ProductService {
   private productsUrl = 'api/products';
 
   // productResource = httpResource<Product[]>(() => this.productsUrl); // HttpResourceRef<Product[] | undefined>
-  productResource: HttpResourceRef<Product[]> = httpResource<Product[]>(() => this.productsUrl, { defaultValue: [] }); // HttpResourceRef<Product[]>
+  // productResource: HttpResourceRef<Product[]> = httpResource<Product[]>(() => this.productsUrl, { defaultValue: [] }); // HttpResourceRef<Product[]>
+
+  createProducts() {
+    return httpResource<Product[]>(() => this.productsUrl, { defaultValue: [] });
+  }
 }
