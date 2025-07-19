@@ -14,6 +14,9 @@ export class ProductSelection {
 
   private productResource = this.productService.createProducts();
   products = this.productResource.value;
+  isLoading = this.productResource.isLoading;
+  error = this.productResource.error;
+  
   selectedProduct = signal<Product | undefined>(undefined);
 
   onDecrease() {

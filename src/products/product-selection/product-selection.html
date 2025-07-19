@@ -4,6 +4,10 @@
   </div>
 </div>
 
+@if (isLoading()) {
+<div>Products are being loaded</div>
+} @else {
+
 <div class="grid">
   <div class="row">
     <div class="cellFull">
@@ -55,3 +59,4 @@
     </div>
   </div>
 </div>
+}
