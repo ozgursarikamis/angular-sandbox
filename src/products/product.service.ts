@@ -6,7 +6,7 @@ import { Product } from './product';
   providedIn: 'root'
 })
 export class ProductService {
-  private productsUrl = 'api/products';
+  private productsUrl = 'api/product';
 
   // productResource = httpResource<Product[]>(() => this.productsUrl); // HttpResourceRef<Product[] | undefined>
   // productResource: HttpResourceRef<Product[]> = httpResource<Product[]>(() => this.productsUrl, { defaultValue: [] }); // HttpResourceRef<Product[]>

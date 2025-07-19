@@ -6,57 +6,64 @@
 
 @if (isLoading()) {
 <div>Products are being loaded</div>
-} @else {
-
-<div class="grid">
-  <div class="row">
-    <div class="cellFull">
-      <select [(ngModel)]="selectedProduct">
-        <option [value]="undefined" selected>--Select a Product--</option>
-        @for (product of products(); track product.id) {
-        <option [ngValue]="product">{{ product.productName }}</option>
-        }
-        @empty {
-        <option>--No Products--</option>
-        }
-      </select>
-    </div>
+} 
+@else if (errorMessage()) {
+  <div style="color: wheat; padding: 0.25rem; background-color: red;">
+    Error: {{ errorMessage() }} <br>
+    Name: {{ this.error()?.name }} <br>
+    Stack: {{ this.error()?.stack }}
   </div>
-  <div class="row">
-    <div class="cellLeft">
-      <label for="price">Name:</label>
+}
+@else {
+  <div class="grid">
+    <div class="row">
+      <div class="cellFull">
+        <select [(ngModel)]="selectedProduct">
+          <option [value]="undefined" selected>--Select a Product--</option>
+          @for (product of products(); track product.id) {
+          <option [ngValue]="product">{{ product.productName }}</option>
+          }
+          @empty {
+          <option>--No Products--</option>
+          }
+        </select>
+      </div>
     </div>
-    <div class="cellRight">
-      {{ selectedProduct()?.productName }}
+    <div class="row">
+      <div class="cellLeft">
+        <label for="price">Name:</label>
+      </div>
+      <div class="cellRight">
+        {{ selectedProduct()?.productName }}
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="cellLeft">
-      <label for="price">Price:</label>
+    <div class="row">
+      <div class="cellLeft">
+        <label for="price">Price:</label>
+      </div>
+      <div class="cellRight">
+        {{ selectedProduct()?.price | currency:'GBP' }}
+      </div>
     </div>
-    <div class="cellRight">
-      {{ selectedProduct()?.price | currency:'GBP' }}
+    <div class="row">
+      <div class="cellLeft">
+        <label for="quantity">Quantity:</label>
+      </div>
+      <div class="cellRight">
+        <div class="inputContainer">
+          <button class="qtyButton qtyButtonLeft" (click)="onDecrease()">-</button>
+          <input [(ngModel)]="quantity" type="number" class="quantityInput" id="quantity" placeholder="0">
+          <button class="qtyButton qtyButtonRight" (click)="onIncrease()">+</button>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="cellLeft">
-      <label for="quantity">Quantity:</label>
-    </div>
-    <div class="cellRight">
-      <div class="inputContainer">
-        <button class="qtyButton qtyButtonLeft" (click)="onDecrease()">-</button>
-        <input [(ngModel)]="quantity" type="number" class="quantityInput" id="quantity" placeholder="0">
-        <button class="qtyButton qtyButtonRight" (click)="onIncrease()">+</button>
+    <div class="row">
+      <div class="cellLeft">
+        <label for="total">Total:</label>
+      </div>
+      <div class="cellRight" [style.color]="color()">
+        {{ total() | currency:'GBP' }}
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="cellLeft">
-      <label for="total">Total:</label>
-    </div>
-    <div class="cellRight" [style.color]="color()">
-      {{ total() | currency:'GBP' }}
-    </div>
-  </div>
-</div>
 }

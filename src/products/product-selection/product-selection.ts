@@ -16,7 +16,9 @@ export class ProductSelection {
   products = this.productResource.value;
   isLoading = this.productResource.isLoading;
   error = this.productResource.error;
-  
+  errorMessage = computed(() => this.error()?.message ?? '');
+
+
   selectedProduct = signal<Product | undefined>(undefined);
 
   onDecrease() {
