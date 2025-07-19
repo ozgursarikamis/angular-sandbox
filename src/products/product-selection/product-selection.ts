@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { ProductData } from '../product-data';
 
 @Component({
   selector: 'app-product-selection',
@@ -8,4 +9,7 @@ import { Component } from '@angular/core';
 })
 export class ProductSelection {
   pageTitle = 'Product Selection';
+  quantity = signal(1);
+  products = signal(ProductData.products);
+  selectedProduct = signal(undefined);
 }

@@ -9,6 +9,12 @@
     <div class="cellFull">
       <select>
         <option [value]="undefined" selected>--Select a Product--</option>
+        @for (product of products(); track product.id) {
+          <option [ngValue]="product.id">{{ product.productName }}</option>
+        }
+        @empty {
+          <option>--No Products--</option>
+        }
       </select>
     </div>
   </div>
