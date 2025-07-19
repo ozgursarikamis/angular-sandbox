@@ -1,6 +1,6 @@
-import { Component, computed, effect, EffectRef, linkedSignal, signal } from '@angular/core';
-import { ProductData } from '../product-data';
+import { Component, computed, effect, EffectRef, inject, linkedSignal, signal } from '@angular/core';
 import { Product } from '../product';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'app-product-selection',
@@ -9,8 +9,9 @@ import { Product } from '../product';
   styleUrl: './product-selection.css'
 })
 export class ProductSelection {
+  private productService = inject(ProductService);
   pageTitle = 'Product Selection';
-  products = signal(ProductData.products);
+  products = this.productService.productResource.value;
   selectedProduct = signal<Product | undefined>(undefined);
 
   onDecrease() {
