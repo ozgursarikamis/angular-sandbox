@@ -11,7 +11,10 @@ import {
   TerraDrawCircleMode,
   TerraDrawSelectMode,
   TerraDrawFreehandLineStringMode,
-  TerraDrawFreehandMode
+  TerraDrawFreehandMode,
+  TerraDrawSectorMode,
+  TerraDrawAngledRectangleMode,
+  TerraDrawSensorMode,
 } from 'terra-draw';
 import { TerraDrawMapLibreGLAdapter } from 'terra-draw-maplibre-gl-adapter';
 import type { Feature } from 'geojson';
@@ -151,6 +154,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             // snapping: true
           }),
           new TerraDrawFreehandMode(),
+          new TerraDrawSectorMode(),
+          new TerraDrawAngledRectangleMode(),
+          new TerraDrawSensorMode(),
         ],
       });
 
@@ -202,7 +208,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   setMode(
-    mode: 'select' | 'point' | 'linestring' | 'polygon' | 'rectangle' | 'circle' | 'freehand' | 'freehand-linestring'
+    mode: 'select' | 'point' | 'linestring' | 'polygon' | 'rectangle' | 'circle' | 'freehand' | 'freehand-linestring' | 'sector'
+    | 'angled-rectangle' | 'sensor'
   ): void {
     if (this.draw) {
       this.draw.setMode(mode);
