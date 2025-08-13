@@ -1,1 +1,19 @@
 <div #mapContainer class="map-container"></div>
+<div class="controls">
+  <button (click)="setMode('select')">Select</button>
+  <button (click)="setMode('point')">Point</button>
+  <button (click)="setMode('linestring')">Line</button>
+  <button (click)="setMode('polygon')">Polygon</button>
+  <button (click)="setMode('rectangle')">Rectangle</button>
+  <button (click)="setMode('circle')">Circle</button>
+  <button (click)="setMode('freehand')">Freehand</button>
+  <button (click)="setMode('freehand-linestring')">Freehand LS</button>
+</div>
+
+<div class="geojson-info">
+  <h3>Created Features: {{ createdFeatures.length }}</h3>
+</div>
+
+<pre>
+  {{ createdFeatures | json }}
+</pre>
