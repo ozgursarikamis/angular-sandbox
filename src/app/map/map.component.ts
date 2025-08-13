@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import maplibregl, { Map } from 'maplibre-gl';
+import maplibregl, { Map, MapMouseEvent } from 'maplibre-gl';
 import { environment } from 'src/environment/environment';
 import {
   TerraDraw,
@@ -172,6 +172,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       this.draw.start();
     });
+
+    this.map.on('mousemove', (event: MapMouseEvent) => {
+      const { lng, lat } = event.lngLat;
+      console.log({ lng, lat });
+    })
   }
 
   ngOnDestroy(): void {
