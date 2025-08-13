@@ -9,6 +9,7 @@ import { AppData } from 'app-data';
 import { ReviewList } from 'src/reviews/review-list/review-list';
 import { FormsModule } from '@angular/forms';
 import { provideHttpClient } from '@angular/common/http';
+import { ReviewService } from 'src/reviews/review.service';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { provideHttpClient } from '@angular/common/http';
   providers: [
     provideHttpClient(),
     ProductService,
+    ReviewService,
     importProvidersFrom(
       InMemoryWebApiModule.forRoot(AppData, { delay: 1000, passThruUnknownUrl: true })
     )

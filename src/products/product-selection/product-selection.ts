@@ -18,8 +18,7 @@ export class ProductSelection {
   error = this.productResource.error;
   errorMessage = computed(() => this.error()?.message ?? '');
 
-
-  selectedProduct = signal<Product | undefined>(undefined);
+  selectedProduct =this.productService.selectedProduct;
 
   onDecrease() {
     this.quantity.update(value => value <= 0 ? 0 : value - 1);
