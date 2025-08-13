@@ -16,6 +16,7 @@ import {
 import { TerraDrawMapLibreGLAdapter } from 'terra-draw-maplibre-gl-adapter';
 import type { Feature } from 'geojson';
 import { FeatureId } from 'terra-draw/dist/extend';
+import { OnChangeContext } from 'terra-draw/dist/common';
 
 const MAPTILER_KEY = environment.mapTilerKey;
 
@@ -153,7 +154,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         ],
       });
 
-      this.draw.on('change', (ids: FeatureId[], event: string) => {
+      // If you are interested if the event was triggered by the Terra Draw API (i.e. addFeatures, removeFeatures), 
+      // there is a third optional parameter ('context') that will have a property called origin,
+      // which is of type api if it has come from the API.
+      this.draw.on('change', (ids: FeatureId[], event: string, context: OnChangeContext | undefined) => {
         console.log({ ids, event });
         // const features = this.draw.getFeatures();
         const snapshot = this.draw.getSnapshot();
@@ -163,6 +167,15 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
         // Store the features in our component property
         this.createdFeatures = snapshot;
+
+        //Done editing
+        if (event === 'change') {
+          if (context && context.origin === 'api') {
+            console.log('this was changed via the API!')
+          } else {
+            console.log('this change did not originate from the API!')
+          }
+        }
       });
 
       this.draw.on('select', (id: FeatureId) => {
@@ -175,7 +188,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.map.on('mousemove', (event: MapMouseEvent) => {
       const { lng, lat } = event.lngLat;
-      console.log({ lng, lat });
+      // console.log({ lng, lat });
     })
   }
 
