@@ -51,6 +51,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         adapter,
         modes: [
           new TerraDrawSelectMode({
+            styles: {
+              selectedPolygonColor: "#000000ff",
+              selectedPolygonFillOpacity: 0.27,
+              selectedPolygonOutlineColor: "#ff9500ff",
+              selectedPolygonOutlineWidth: 2,
+            },
             allowManualDeselection: true,
             flags: {
               point: {
@@ -130,6 +136,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             snapping: {
               toLine: true,
               toCoordinate: true,
+            },
+            styles: {
+              fillColor: ({ properties }) => properties['currentlyDrawing'] ? "#dd3333ff" : "#3777dd",
+              fillOpacity: 0.25,
+              outlineColor: '#fff',
+              outlineWidth: 4
             },
           }),
           new TerraDrawRectangleMode(),
