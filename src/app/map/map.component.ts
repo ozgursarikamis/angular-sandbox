@@ -42,8 +42,17 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       container: this.mapContainer.nativeElement,
       style: `https://api.maptiler.com/maps/streets/style.json?key=${MAPTILER_KEY}`,
       center: [0, 0],
-      zoom: 0
+      zoom: 0,
+      hash: true,
     });
+
+    this.map.addControl(new maplibregl.NavigationControl());
+    this.map.addControl(new maplibregl.FullscreenControl());
+    this.map.addControl(new maplibregl.ScaleControl());
+    this.map.addControl(new maplibregl.TerrainControl({
+      source: 'mapbox-terrain-v2'
+    }));
+    // this.map.addControl(new maplibregl.LogoControl());
 
     this.map.on('load', () => {
       const adapter = new TerraDrawMapLibreGLAdapter({
