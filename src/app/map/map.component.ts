@@ -61,6 +61,23 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         coordinatePrecision: 9,
       });
 
+      this.map.addSource('osm-xyz', {
+        type: 'vector',
+        tiles: [
+          'http://localhost:5000/api/polygon/counties-unit-auths/{z}/{x}/{y}.pbf',
+        ],
+        // tileSize: 256,
+        attribution: 'OpenStreetMap contributors',
+        maxzoom: 19,
+      });
+
+      this.map.addLayer({
+        id: 'parishes-layer',
+        type: 'line',
+        source: 'osm-xyz',
+        "source-layer": 'source_layer_counties_unit_auth'
+      });
+
       this.draw = new TerraDraw({
         adapter,
         modes: [
