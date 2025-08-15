@@ -41,11 +41,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map = new maplibregl.Map({
       container: this.mapContainer.nativeElement,
       style: `https://api.maptiler.com/maps/streets/style.json?key=${MAPTILER_KEY}`,
-      center: [0, 0],
-      zoom: 0,
+      center: [54.494,  -3.854],
+      zoom: 5,
       hash: true,
     });
 
+    // Controls
     this.map.addControl(new maplibregl.NavigationControl());
     this.map.addControl(new maplibregl.FullscreenControl());
     this.map.addControl(new maplibregl.ScaleControl());
@@ -169,7 +170,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         ],
       });
 
-      // If you are interested if the event was triggered by the Terra Draw API (i.e. addFeatures, removeFeatures), 
+      // If you are interested if the event was triggered by the Terra Draw API (i.e. addFeatures, removeFeatures),
       // there is a third optional parameter ('context') that will have a property called origin,
       // which is of type api if it has come from the API.
       this.draw.on('change', (ids: FeatureId[], event: string, context: OnChangeContext | undefined) => {
