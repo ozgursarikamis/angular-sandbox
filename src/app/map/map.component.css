@@ -20,3 +20,7 @@
   font-family: sans-serif;
   z-index: 1;
 }
+
+.custom-control {
+  border: 2px solid red;
+}

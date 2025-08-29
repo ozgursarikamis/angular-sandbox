@@ -20,6 +20,7 @@ import { TerraDrawMapLibreGLAdapter } from 'terra-draw-maplibre-gl-adapter';
 import type { Feature } from 'geojson';
 import { FeatureId } from 'terra-draw/dist/extend';
 import { OnChangeContext } from 'terra-draw/dist/common';
+import { CustomControl } from "../controls/CustomControl";
 
 const MAPTILER_KEY = environment.mapTilerKey;
 
@@ -52,6 +53,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map.addControl(new maplibregl.TerrainControl({
       source: 'mapbox-terrain-v2'
     }));
+    this.map.addControl(new CustomControl(), 'bottom-right');
     // this.map.addControl(new maplibregl.LogoControl());
 
     this.map.on('load', () => {
@@ -169,7 +171,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         ],
       });
 
-      // If you are interested if the event was triggered by the Terra Draw API (i.e. addFeatures, removeFeatures), 
+      // If you are interested if the event was triggered by the Terra Draw API (i.e. addFeatures, removeFeatures),
       // there is a third optional parameter ('context') that will have a property called origin,
       // which is of type api if it has come from the API.
       this.draw.on('change', (ids: FeatureId[], event: string, context: OnChangeContext | undefined) => {
