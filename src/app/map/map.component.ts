@@ -42,11 +42,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map = new maplibregl.Map({
       container: this.mapContainer.nativeElement,
       style: `https://api.maptiler.com/maps/streets/style.json?key=${MAPTILER_KEY}`,
-      center: [0, 0],
-      zoom: 0,
+      center: [54.494,  -3.854],
+      zoom: 5,
       hash: true,
     });
 
+    // Controls
     this.map.addControl(new maplibregl.NavigationControl());
     this.map.addControl(new maplibregl.FullscreenControl());
     this.map.addControl(new maplibregl.ScaleControl());
@@ -60,6 +61,23 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       const adapter = new TerraDrawMapLibreGLAdapter({
         map: this.map,
         coordinatePrecision: 9,
+      });
+
+      this.map.addSource('osm-xyz', {
+        type: 'vector',
+        tiles: [
+          'http://localhost:5000/api/polygon/counties-unit-auths/{z}/{x}/{y}.pbf',
+        ],
+        // tileSize: 256,
+        attribution: 'OpenStreetMap contributors',
+        maxzoom: 19,
+      });
+
+      this.map.addLayer({
+        id: 'parishes-layer',
+        type: 'line',
+        source: 'osm-xyz',
+        "source-layer": 'source_layer_counties_unit_auth'
       });
 
       this.draw = new TerraDraw({
