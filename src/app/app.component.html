@@ -1,3 +1,17 @@
 <div class="title">
   Angular Sandbox {{ title ? " - " + title : "" }}
 </div>
+<div>
+      <div style="text-align: center; font-family: sans-serif; margin-top: 50px;">
+      <h1>NgRx SignalStore Counter</h1>
+
+      <h2>Count: {{ countStore.count() }}</h2>
+      <h3>Double Count: {{ countStore.doubleCount() }}</h3>
+
+      <div style="margin-top: 20px;">
+        <button (click)="countStore.increment()">Increment</button>
+        <button (click)="countStore.decrement()">Decrement</button>
+        <button (click)="countStore.set(0)">Reset</button>
+      </div>
+    </div>
+</div>
