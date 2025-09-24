@@ -18,21 +18,33 @@
 <hr>
 <div>
   <h2>Users</h2>
-    <!-- Show loading indicator -->
+
+  @let error = userStore.error();
+  @let users = userStore.users();
+
+  <!-- Show loading indicator -->
   <div *ngIf="userStore.isLoading()">
     <img style="height: 2rem;" src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-18-223_512.gif" alt="">
   </div>
 
   <!-- Show error message -->
-  <div *ngIf="userStore.error()">
-    <p style="color: red;">Error: {{ userStore.error() }}</p>
-  </div>
+  @if (error) {
+  <p style="color: red;">Error: {{ userStore.error() }}</p>
+  }
 
   <!-- Display the list of users -->
-  <ul *ngIf="userStore.users().length > 0">
-    <li *ngFor="let user of userStore.users()">
-      {{ user.name }} ({{ user.email }})
+  @if (users.length > 0) {
+  <ul>
+    @for (user of users; track user.id) {
+    <li>
+      <span class="company">
+        <small>{{ user.company.name }}</small>
+      </span>
+      <a [routerLink]="['/', user.email]" routerLinkActive="router-link-active">
+        {{ user.name }} ({{ user.email }})
+      </a>
     </li>
+    }
   </ul>
-
+  }
 </div>
