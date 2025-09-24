@@ -2,16 +2,37 @@
   Angular Sandbox {{ title ? " - " + title : "" }}
 </div>
 <div>
-      <div style="text-align: center; font-family: sans-serif; margin-top: 50px;">
-      <h1>NgRx SignalStore Counter</h1>
+  <div style="text-align: center; font-family: sans-serif; margin-top: 50px;">
+    <h1>NgRx SignalStore Counter</h1>
 
-      <h2>Count: {{ countStore.count() }}</h2>
-      <h3>Double Count: {{ countStore.doubleCount() }}</h3>
+    <h2>Count: {{ countStore.count() }}</h2>
+    <h3>Double Count: {{ countStore.doubleCount() }}</h3>
 
-      <div style="margin-top: 20px;">
-        <button (click)="countStore.increment()">Increment</button>
-        <button (click)="countStore.decrement()">Decrement</button>
-        <button (click)="countStore.set(0)">Reset</button>
-      </div>
+    <div style="margin-top: 20px;">
+      <button (click)="countStore.increment()">Increment</button>
+      <button (click)="countStore.decrement()">Decrement</button>
+      <button (click)="countStore.set(0)">Reset</button>
     </div>
+  </div>
+</div>
+<hr>
+<div>
+  <h2>Users</h2>
+    <!-- Show loading indicator -->
+  <div *ngIf="userStore.isLoading()">
+    <img style="height: 2rem;" src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-18-223_512.gif" alt="">
+  </div>
+
+  <!-- Show error message -->
+  <div *ngIf="userStore.error()">
+    <p style="color: red;">Error: {{ userStore.error() }}</p>
+  </div>
+
+  <!-- Display the list of users -->
+  <ul *ngIf="userStore.users().length > 0">
+    <li *ngFor="let user of userStore.users()">
+      {{ user.name }} ({{ user.email }})
+    </li>
+  </ul>
+
 </div>
