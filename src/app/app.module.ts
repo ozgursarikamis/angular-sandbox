@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { UserService } from './services/user.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { UsersComponent } from "./users/users.component";
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { RouterModule } from '@angular/router';
   imports: [
     BrowserModule,
     RouterModule.forRoot([]),
-  ],
+    UsersComponent
+],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     UserService

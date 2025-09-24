@@ -1,0 +1,33 @@
+<h2>Users</h2>
+
+@let error = userStore.error();
+@let users = userStore.users();
+@let isLoading = userStore.isLoading();
+
+<!-- Show loading indicator -->
+@if (isLoading) {
+<div>
+    <img style="height: 2rem;" src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-18-223_512.gif" alt="">
+</div>
+}
+
+<!-- Show error message -->
+@if (error) {
+<p style="color: red;">Error: {{ userStore.error() }}</p>
+}
+
+<!-- Display the list of users -->
+@if (users.length > 0) {
+<ul>
+    @for (user of users; track user.id) {
+    <li>
+        <span class="company">
+            <small>{{ user.company.name }}</small>
+        </span>
+        <a [routerLink]="['/', user.email]" routerLinkActive="router-link-active">
+            {{ user.name }} ({{ user.email }})
+        </a>
+    </li>
+    }
+</ul>
+}
