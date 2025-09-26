@@ -6,7 +6,7 @@ import {
 import { environment } from 'src/environments/environment';
 import { TerraDraw, TerraDrawPolygonMode, TerraDrawRectangleMode, TerraDrawSelectMode, ValidateMaxAreaSquareMeters, ValidateNotSelfIntersecting } from 'terra-draw';
 import { TerraDrawMapboxGLAdapter } from 'terra-draw-mapbox-gl-adapter';
-import { OnFinishContext } from 'terra-draw/dist/common';
+import { OnFinishContext, TerraDrawMouseEvent } from 'terra-draw/dist/common';
 import { FeatureId } from 'terra-draw/dist/extend';
 
 const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike
@@ -57,10 +57,14 @@ export class MapComponent implements AfterViewInit {
         map: this.map,
         coordinatePrecision: 9
       });
+      const r = new TerraDrawRectangleMode();
+      r.onClick = (e: TerraDrawMouseEvent) => {
+        console.log('onClick', e);
+      }
       this.draw = new TerraDraw({
         adapter,
         modes: [
-          new TerraDrawRectangleMode(),
+          new RectangleModeWithClick(),
           new TerraDrawPolygonMode({
             snapping: {
               toLine: true,
@@ -138,6 +142,10 @@ export class MapComponent implements AfterViewInit {
         } else {
           console.log('change', event, context, ids)
         }
+
+          if (event === 'update') {
+            console.log('rectangle update', { ids, context });
+          }
       });
       this.draw.on('finish', (featureId: FeatureId, context: OnFinishContext) => {
         const { action, mode } = context;
@@ -190,4 +198,12 @@ export class MapComponent implements AfterViewInit {
       this.draw.setMode(mode);
     }
   }
+}
+
+class RectangleModeWithClick extends TerraDrawRectangleMode {
+  public override onClick = (e: TerraDrawMouseEvent) => {
+    // Delegate to the base implementation so drawing works
+    super.onClick?.(e);
+    console.log('onClick', e);
+  };
 }
