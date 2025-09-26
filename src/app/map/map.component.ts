@@ -28,7 +28,7 @@ export class MapComponent implements AfterViewInit {
     const center = CENTER_COORDINATES as LngLatLike;
     const projection = 'globe' as unknown as ProjectionSpecification;
 
-    const mapOptions: MapOptions = {
+    this.map = new Map({
       accessToken: environment.MapboxAccessToken,
       container: this.mapContainer.nativeElement,
       style: 'mapbox://styles/mapbox/outdoors-v12',
@@ -38,8 +38,7 @@ export class MapComponent implements AfterViewInit {
       attributionControl: false,
       maxPitch: 60,
       hash: true
-    };
-    this.map = new Map(mapOptions);
+    });
     this.addControls();
 
     this.map.on('style.load', () => {
