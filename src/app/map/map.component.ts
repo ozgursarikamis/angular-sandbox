@@ -4,8 +4,9 @@ import {
   FullscreenControl
 } from 'mapbox-gl';
 import { environment } from 'src/environments/environment';
-import { TerraDraw, TerraDrawPolygonMode, TerraDrawRectangleMode, TerraDrawSelectMode, ValidateNotSelfIntersecting } from 'terra-draw';
+import { TerraDraw, TerraDrawPolygonMode, TerraDrawRectangleMode, TerraDrawSelectMode, ValidateMaxAreaSquareMeters, ValidateNotSelfIntersecting } from 'terra-draw';
 import { TerraDrawMapboxGLAdapter } from 'terra-draw-mapbox-gl-adapter';
+import { OnFinishContext } from 'terra-draw/dist/common';
 import { FeatureId } from 'terra-draw/dist/extend';
 
 const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike
@@ -90,7 +91,8 @@ export class MapComponent implements AfterViewInit {
               closingPointWidth: 5,
               closingPointOutlineColor: '#FFF',
               closingPointOutlineWidth: 1,
-            }
+            },
+            validation: ValidateNotSelfIntersecting
           }),
           new TerraDrawSelectMode({
             allowManualDeselection: true,
@@ -125,15 +127,23 @@ export class MapComponent implements AfterViewInit {
 
       this.draw.on('select', (id: FeatureId) => {
         this.selectedFeature = id;
-        console.log('id', id);
+        // console.log('id', id);
+        console.log('getSnapshotFeature', this.draw.getSnapshotFeature(id));
       });
       this.draw.on('change', (ids: FeatureId[], event: string) => {
-        console.log(`
-              event: ${event}
-              Ids: ${ids}
-          `);
-          console.log(this.draw.getSnapshot());
-          
+
+      });
+      this.draw.on('finish', (featureId: FeatureId, context: OnFinishContext) => {
+        const { action, mode } = context;
+        console.log({ action, mode, featureId });
+        const feature = this.draw.getSnapshotFeature(featureId);
+        console.log({ 
+          id: feature?.id, 
+          geometry: feature?.geometry, 
+          bbox: feature?.bbox,
+          properties: feature?.properties,
+          feature
+        });
       });
       this.draw.start();
     });
@@ -170,5 +180,15 @@ export class MapComponent implements AfterViewInit {
     if (this.draw) {
       this.draw.setMode(mode);
     }
+  }
+}
+class CompositeValidation {
+  constructor(private readonly rules: any[]) {}
+  validate(feature: any) {
+    for (const r of this.rules) {
+      const res = r.validate(feature);
+      if (res && res.valid === false) return res;
+    }
+    return { valid: true };
   }
 }
