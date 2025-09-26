@@ -130,8 +130,14 @@ export class MapComponent implements AfterViewInit {
         // console.log('id', id);
         console.log('getSnapshotFeature', this.draw.getSnapshotFeature(id));
       });
-      this.draw.on('change', (ids: FeatureId[], event: string) => {
-
+      this.draw.on('change', (ids: FeatureId[], event: string, context) => {        // console.log({featureIds, type, context });
+        if(event === 'delete') {
+          console.log(event, context, ids);
+        } else if(event === 'update') {
+          console.log(event, context, ids)          
+        } else {
+          console.log('change', event, context, ids)
+        }
       });
       this.draw.on('finish', (featureId: FeatureId, context: OnFinishContext) => {
         const { action, mode } = context;
@@ -144,6 +150,9 @@ export class MapComponent implements AfterViewInit {
           properties: feature?.properties,
           feature
         });
+      });
+      this.draw.on('ready', () => {
+        console.log('Drawing is ready');
       });
       this.draw.start();
     });
@@ -180,15 +189,5 @@ export class MapComponent implements AfterViewInit {
     if (this.draw) {
       this.draw.setMode(mode);
     }
-  }
-}
-class CompositeValidation {
-  constructor(private readonly rules: any[]) {}
-  validate(feature: any) {
-    for (const r of this.rules) {
-      const res = r.validate(feature);
-      if (res && res.valid === false) return res;
-    }
-    return { valid: true };
   }
 }
