@@ -1,11 +1,12 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import {
-  GeolocateControl, LngLatLike, Map, MapOptions, NavigationControl, ProjectionSpecification,
+  GeolocateControl, LngLatLike, Map, NavigationControl, ProjectionSpecification,
   FullscreenControl
 } from 'mapbox-gl';
 import { environment } from 'src/environments/environment';
 import { TerraDraw, TerraDrawPolygonMode, TerraDrawRectangleMode, TerraDrawSelectMode } from 'terra-draw';
 import { TerraDrawMapboxGLAdapter } from 'terra-draw-mapbox-gl-adapter';
+import { FeatureId } from 'terra-draw/dist/extend';
 
 const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike
 
@@ -21,6 +22,7 @@ export class MapComponent implements AfterViewInit {
   map!: Map;
   draw!: TerraDraw;
   width!: string;
+  public selectedFeature: FeatureId | null = null;
 
   constructor() {
     this.map?.remove();
@@ -56,12 +58,43 @@ export class MapComponent implements AfterViewInit {
       this.draw = new TerraDraw({
         adapter,
         modes: [
-          new TerraDrawSelectMode(),
+          new TerraDrawSelectMode({
+            allowManualDeselection: true,
+            flags: {
+              rectangle: {
+                feature: {
+                  draggable: false,
+                  coordinates: {
+                    draggable: true,
+                    deletable: true,
+                    snappable: true,
+                    midpoints: true,
+                    resizable: 'center',
+                  },
+                },
+              },
+              polygon: {
+                feature: {
+                  draggable: false,
+                  coordinates: {
+                    draggable: true,
+                    deletable: true,
+                    snappable: true,
+                    midpoints: true,
+                  },
+                },
+              },
+            }
+          }),
           new TerraDrawRectangleMode(),
           new TerraDrawPolygonMode()
         ]
       });
 
+      this.draw.on('select', (id: FeatureId) => {
+        this.selectedFeature = id;
+        console.log('id', id);
+      });
       this.draw.start();
     });
 
