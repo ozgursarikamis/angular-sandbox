@@ -1,2 +1,6 @@
-<div id="calculated-area"></div>
+<div class="controls">
+  <button (click)="setMode('select')">Select</button>
+  <button (click)="setMode('polygon')">Polygon</button>
+  <button (click)="setMode('rectangle')">Rectangle</button>
+</div>
 <div class="map" #mapContainer id="map"></div>

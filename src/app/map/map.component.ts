@@ -4,6 +4,8 @@ import {
   FullscreenControl
 } from 'mapbox-gl';
 import { environment } from 'src/environments/environment';
+import { TerraDraw, TerraDrawPolygonMode, TerraDrawRectangleMode, TerraDrawSelectMode } from 'terra-draw';
+import { TerraDrawMapboxGLAdapter } from 'terra-draw-mapbox-gl-adapter';
 
 const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike
 
@@ -17,6 +19,7 @@ export class MapComponent implements AfterViewInit {
   @ViewChild('mapContainer', { static: true }) mapContainer!: ElementRef;
 
   map!: Map;
+  draw!: TerraDraw;
   width!: string;
 
   constructor() {
@@ -45,6 +48,23 @@ export class MapComponent implements AfterViewInit {
       console.log('style loaded');
     });
 
+    this.map.on('load', () => {
+      const adapter = new TerraDrawMapboxGLAdapter({
+        map: this.map,
+        coordinatePrecision: 9
+      });
+      this.draw = new TerraDraw({
+        adapter,
+        modes: [
+          new TerraDrawSelectMode(),
+          new TerraDrawRectangleMode(),
+          new TerraDrawPolygonMode()
+        ]
+      });
+
+      this.draw.start();
+    });
+
     return this.map;
   }
 
@@ -68,5 +88,14 @@ export class MapComponent implements AfterViewInit {
       this.mapContainer.nativeElement.removeChild(mapContent);
 
     this.createMap();
+  }
+
+
+  setMode(
+    mode: 'select' | 'point' | 'linestring' | 'polygon' | 'rectangle' | 'circle' | 'freehand' | 'freehand-linestring'
+  ): void {
+    if (this.draw) {
+      this.draw.setMode(mode);
+    }
   }
 }
