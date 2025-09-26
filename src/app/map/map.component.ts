@@ -4,11 +4,12 @@ import {
   FullscreenControl
 } from 'mapbox-gl';
 import { environment } from 'src/environments/environment';
-import { TerraDraw, TerraDrawPolygonMode, TerraDrawRectangleMode, TerraDrawSelectMode } from 'terra-draw';
+import { TerraDraw, TerraDrawPolygonMode, TerraDrawRectangleMode, TerraDrawSelectMode, ValidateNotSelfIntersecting } from 'terra-draw';
 import { TerraDrawMapboxGLAdapter } from 'terra-draw-mapbox-gl-adapter';
 import { FeatureId } from 'terra-draw/dist/extend';
 
 const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike
+export type Color_Hex = `#${string}`;
 
 @Component({
   selector: 'app-map',
@@ -58,6 +59,39 @@ export class MapComponent implements AfterViewInit {
       this.draw = new TerraDraw({
         adapter,
         modes: [
+          new TerraDrawRectangleMode(),
+          new TerraDrawPolygonMode({
+            snapping: {
+              toLine: true,
+              toCoordinate: true,
+            },
+            pointerDistance: 100,
+            editable: true,
+            showCoordinatePoints: true, // Set to true to see coordinate point styling
+            keyEvents: {
+              cancel: 'c',
+              finish: 'f'
+            },
+            cursors: {
+              start: 'crosshair',
+              close: 'pointer',
+            },
+            styles: {
+              fillColor: '#F00',
+              fillOpacity: .5,
+              outlineColor: '#DDD',
+              outlineWidth: 2,
+              snappingPointOutlineColor: '#ee0053ff',
+              coordinatePointWidth: 5,
+              coordinatePointColor: '#FFF',
+              coordinatePointOutlineColor: '#4D90FC',
+              coordinatePointOutlineWidth: 1,
+              closingPointColor: '#4D90FC',
+              closingPointWidth: 5,
+              closingPointOutlineColor: '#FFF',
+              closingPointOutlineWidth: 1,
+            }
+          }),
           new TerraDrawSelectMode({
             allowManualDeselection: true,
             flags: {
@@ -85,10 +119,8 @@ export class MapComponent implements AfterViewInit {
                 },
               },
             }
-          }),
-          new TerraDrawRectangleMode(),
-          new TerraDrawPolygonMode()
-        ]
+          })
+        ],
       });
 
       this.draw.on('select', (id: FeatureId) => {
