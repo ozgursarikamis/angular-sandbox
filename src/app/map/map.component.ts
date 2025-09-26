@@ -95,6 +95,14 @@ export class MapComponent implements AfterViewInit {
         this.selectedFeature = id;
         console.log('id', id);
       });
+      this.draw.on('change', (ids: FeatureId[], event: string) => {
+        console.log(`
+              event: ${event}
+              Ids: ${ids}
+          `);
+          console.log(this.draw.getSnapshot());
+          
+      });
       this.draw.start();
     });
 
