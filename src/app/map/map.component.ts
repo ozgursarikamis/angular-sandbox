@@ -1,15 +1,14 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import {
-  GeolocateControl, LngLatLike, Map, MapOptions, NavigationControl, ProjectionSpecification,
+  GeolocateControl, LngLatLike, Map, NavigationControl, ProjectionSpecification,
   FullscreenControl,
-  SourceSpecification,
   LayerSpecification,
-  MapMouseEvent,
   Popup
 } from 'mapbox-gl';
 import { environment } from 'src/environments/environment';
+import { BORDER_LAYER, REGIONS_LAYER, REGIONS_SOURCE } from '../layers.config';
 
-const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike
+const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike;
 
 @Component({
   selector: 'app-map',
@@ -47,35 +46,19 @@ export class MapComponent implements AfterViewInit {
     this.addControls();
 
     this.map.on('style.load', () => {
-      console.log('style loaded');
+      // console.log('style loaded');
     });
 
     this.map.on('load', idleListener => {
       const { type, target } = idleListener;
 
-      // add polygon MVT layer:
-      const source = {
-        type: 'vector',
-        tiles: ['http://localhost:5000/api/polygon/regions/{z}/{x}/{y}.pbf']
-      } as SourceSpecification
-      this.map.addSource('regionSource', source);
-
-      const layer = {
-        id: 'regions_layer',
-        type: 'fill',
-        source: 'regionSource',
-        'source-layer': 'source_layer_regions',
-        'layout': {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
-        'paint': {
-          'fill-color': 'rgba(0, 0, 0, 0.4)',
-        },
-        slot: 'middle' // middle slot in Mapbox Standard style
-      } as LayerSpecification;
-
-      this.map.addLayer(layer);
+      if (REGIONS_LAYER.source && REGIONS_LAYER.id) {
+        // add polygon MVT layer:
+        if (!this.map.getSource(REGIONS_LAYER.source) && !this.map.getLayer(REGIONS_LAYER.id)) {
+          this.map.addSource(REGIONS_LAYER.source ?? '', REGIONS_SOURCE);
+          this.map.addLayer(REGIONS_LAYER);
+        }
+      }
 
       this.map.on('mousemove', (e) => {
         const features = this.map.queryRenderedFeatures(e.point, { layers: ['regions_layer'] });
@@ -89,7 +72,7 @@ export class MapComponent implements AfterViewInit {
             if (!this.popup) {
               this.popup = new Popup({ offset: 1, anchor: 'top', closeButton: false, closeOnMove: true });
             }
-            
+
             this.popup
               .setLngLat(e.lngLat)
               .setHTML(`<h3>${Id} - ${Name}</h3>`);
@@ -106,21 +89,7 @@ export class MapComponent implements AfterViewInit {
           }
         }
       });
-
-      const borderLayer: LayerSpecification = {
-        id: 'regions_layer_borders',
-        type: 'line',
-        source: 'regionSource',
-        'source-layer': 'source_layer_regions',
-        paint: {
-          'line-color': '#000',
-          'line-width': 2,
-          "line-opacity": .9,
-          "line-dasharray": [1, 1]
-        },
-        slot: 'middle'
-      };
-      this.map.addLayer(borderLayer);
+      this.map.addLayer(BORDER_LAYER);
     });
 
     return this.map;
