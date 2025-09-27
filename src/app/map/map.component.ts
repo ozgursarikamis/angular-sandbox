@@ -75,27 +75,52 @@ export class MapComponent implements AfterViewInit {
         slot: 'middle' // middle slot in Mapbox Standard style
       } as LayerSpecification;
 
-      this.map.addLayer(layer)
-        .on('mouseenter', 'regions_layer', (e: MapMouseEvent) => {
-          // console.log(e);
-          const {
-            features, type, target, point,
-            lngLat
-          } = e;
-          const properties = features?.at(0)?.properties;
+      this.map.addLayer(layer);
 
-          const Name = properties!["Name"];
-          const Id = properties!["Id"];
+      this.map.on('mousemove', (e) => {
+        const features = this.map.queryRenderedFeatures(e.point, { layers: ['regions_layer'] });
+        if (features.length > 0) {
+          this.map.getCanvas().style.cursor = 'pointer';
+          const properties = features[0].properties;
+          if (properties) {
+            const Name = properties['Name'];
+            const Id = properties['Id'];
 
-          this.popup = new Popup({ offset: 1, anchor: 'top', closeButton: false, closeOnMove: true });
-          this.popup.setLngLat(lngLat);
-          this.popup.setHTML(`<h3>${Id} - ${Name}</h3>`);
+            if (!this.popup) {
+              this.popup = new Popup({ offset: 1, anchor: 'top', closeButton: false, closeOnMove: true });
+            }
+            
+            this.popup
+              .setLngLat(e.lngLat)
+              .setHTML(`<h3>${Id} - ${Name}</h3>`);
 
-          this.popup.addTo(this.map);
-        })
-        .on('mouseleave', 'regions_layer', (e: any) => {
-          this.popup?.remove();
-        });
+            if (!this.popup.isOpen()) {
+              this.popup.addTo(this.map);
+            }
+          }
+        } else {
+          this.map.getCanvas().style.cursor = '';
+          if (this.popup) {
+            this.popup.remove();
+            this.popup = undefined;
+          }
+        }
+      });
+
+      const borderLayer: LayerSpecification = {
+        id: 'regions_layer_borders',
+        type: 'line',
+        source: 'regionSource',
+        'source-layer': 'source_layer_regions',
+        paint: {
+          'line-color': '#000',
+          'line-width': 2,
+          "line-opacity": .9,
+          "line-dasharray": [1, 1]
+        },
+        slot: 'middle'
+      };
+      this.map.addLayer(borderLayer);
     });
 
     return this.map;
