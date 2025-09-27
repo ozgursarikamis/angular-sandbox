@@ -1,12 +1,15 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, ViewChild } from '@angular/core';
 import {
   GeolocateControl, LngLatLike, Map, NavigationControl, ProjectionSpecification,
   FullscreenControl,
-  LayerSpecification,
-  Popup
+  Popup,
+  MapMouseEvent,
+  MapEvent,
+  GeoJSONFeature
 } from 'mapbox-gl';
 import { environment } from 'src/environments/environment';
-import { BORDER_LAYER, REGIONS_LAYER, REGIONS_SOURCE } from '../layers.config';
+import { RegionLayerProperties, BORDER_LAYER as REGIONS_BORDER_LAYER, REGIONS_LAYER, REGIONS_SOURCE } from '../layers.config';
+import { MapStore } from '../state/MapStore';
 
 const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike;
 
@@ -18,7 +21,7 @@ const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike;
 })
 export class MapComponent implements AfterViewInit {
   @ViewChild('mapContainer', { static: true }) mapContainer!: ElementRef;
-
+  private mapStore = inject(MapStore);
   map!: Map;
   width!: string;
   popup: Popup | undefined;
@@ -28,7 +31,7 @@ export class MapComponent implements AfterViewInit {
     this.mapContainer?.nativeElement.removeChild(this);
   }
 
-  createMap() {
+  createMap(): mapboxgl.Map {
     const center = CENTER_COORDINATES as LngLatLike;
     const projection = 'globe' as unknown as ProjectionSpecification;
 
@@ -49,50 +52,44 @@ export class MapComponent implements AfterViewInit {
       // console.log('style loaded');
     });
 
-    this.map.on('load', idleListener => {
-      const { type, target } = idleListener;
-
-      if (REGIONS_LAYER.source && REGIONS_LAYER.id) {
-        // add polygon MVT layer:
-        if (!this.map.getSource(REGIONS_LAYER.source) && !this.map.getLayer(REGIONS_LAYER.id)) {
-          this.map.addSource(REGIONS_LAYER.source ?? '', REGIONS_SOURCE);
-          this.map.addLayer(REGIONS_LAYER);
-        }
-      }
-
-      this.map.on('mousemove', (e) => {
-        const features = this.map.queryRenderedFeatures(e.point, { layers: ['regions_layer'] });
-        if (features.length > 0) {
-          this.map.getCanvas().style.cursor = 'pointer';
-          const properties = features[0].properties;
-          if (properties) {
-            const Name = properties['Name'];
-            const Id = properties['Id'];
-
-            if (!this.popup) {
-              this.popup = new Popup({ offset: 1, anchor: 'top', closeButton: false, closeOnMove: true });
-            }
-
-            this.popup
-              .setLngLat(e.lngLat)
-              .setHTML(`<h3>${Id} - ${Name}</h3>`);
-
-            if (!this.popup.isOpen()) {
-              this.popup.addTo(this.map);
-            }
-          }
-        } else {
-          this.map.getCanvas().style.cursor = '';
-          if (this.popup) {
-            this.popup.remove();
-            this.popup = undefined;
-          }
-        }
-      });
-      this.map.addLayer(BORDER_LAYER);
+    this.map.on('load', (event: MapEvent) => {
+      this.RegionLayerEvents();
     });
 
     return this.map;
+  };
+
+  RegionLayerEvents() {
+    if (REGIONS_LAYER.source && REGIONS_LAYER.id) {
+      // add polygon MVT layer:
+      if (!this.map.getSource(REGIONS_LAYER.source) && !this.map.getLayer(REGIONS_LAYER.id)) {
+        this.map.addSource(REGIONS_LAYER.source ?? '', REGIONS_SOURCE);
+        this.map.addLayer(REGIONS_LAYER);
+        this.map.addLayer(REGIONS_BORDER_LAYER);
+      }
+    }
+
+    this.map.on('mousemove', this.regionLayerMouseMove);
+  }
+
+  private regionLayerMouseMove = (e: MapMouseEvent) => {
+    this.map.queryRenderedFeatures(e.point, { layers: [REGIONS_LAYER.id, REGIONS_BORDER_LAYER.id] })
+      .forEach((feature: GeoJSONFeature) => {
+      const { geometry, properties, layer } = feature;
+      const { Name, Id } = properties as RegionLayerProperties;
+
+      if (!this.popup) {
+        this.popup = new Popup({ offset: 1, anchor: 'top', closeButton: false, closeOnMove: true });
+      }
+
+      this.popup
+        .setLngLat(e.lngLat)
+        .setHTML(`<span>${layer?.id}: ${Id} - ${Name}</span>`);
+
+      if (!this.popup.isOpen()) {
+        this.popup.addTo(this.map);
+      }
+    });
   }
 
   private addControls() {
@@ -114,6 +111,6 @@ export class MapComponent implements AfterViewInit {
     if (mapContent)
       this.mapContainer.nativeElement.removeChild(mapContent);
 
-    this.createMap();
+    this.mapStore.setMap(this.createMap());
   }
 }
