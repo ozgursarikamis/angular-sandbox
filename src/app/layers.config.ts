@@ -13,7 +13,7 @@ export const REGIONS_LAYER: LayerSpecification = {
   'paint': {
     'fill-color': 'rgba(0, 0, 0, 0.4)',
   },
-  slot: 'middle' // middle slot in Mapbox Standard style
+  slot: 'middle'
 };
 
 export const BORDER_LAYER: LayerSpecification = {
@@ -27,5 +27,7 @@ export const BORDER_LAYER: LayerSpecification = {
     "line-opacity": 1,
     "line-dasharray": [1, 1]
   },
-  slot: 'top' // middle slot in Mapbox Standard style
+  slot: 'top'
 };
+
+export type RegionLayerProperties = { Name?: string, Id: number };
