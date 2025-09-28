@@ -1,11 +1,10 @@
 import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
-import { Map, Popup } from "mapbox-gl";
+import * as mapbox from "mapbox-gl";
 
 export type MapState = {
-    map: Map | null;
-    popups?: {
-        [id: string]: Popup;
-    }[];
+    map: mapbox.Map | null;
+    regionsLayer?: mapbox.LayerSpecification;
+    regionsSource?: mapbox.VectorSourceSpecification;
 }
 
 export const initialState: MapState = {
@@ -16,11 +15,14 @@ export const MapStore = signalStore(
     { providedIn: 'root' },
     withState(initialState),
     withMethods((store) => ({
-        setMap: (map: Map) => {
+        setMap: (map: mapbox.Map) => {
             return patchState(store, { map })
         },
-        getMap() {
-            return store.map;
+        setRegionsLayer: (layer: mapbox.LayerSpecification) => {
+            return patchState(store, { regionsLayer: layer })
+        },
+        setRegionsSource: (source: mapbox.VectorSourceSpecification) => {
+            return patchState(store, { regionsSource: source })
         }
     }))
 );
