@@ -4,27 +4,28 @@ import {
   FullscreenControl,
   Popup,
   MapMouseEvent,
-  MapEvent,
-  GeoJSONFeature
+  GeoJSONFeature,
+  LngLatBoundsLike
 } from 'mapbox-gl';
+
 import { environment } from 'src/environments/environment';
-import { RegionLayerProperties, BORDER_LAYER as REGIONS_BORDER_LAYER, REGIONS_LAYER, REGIONS_SOURCE } from '../layers.config';
+import { RegionLayerProperties, REGIONS_BORDER_LAYER, REGIONS_LAYER, REGIONS_SOURCE } from '../layers.config';
 import { MapStore } from '../state/MapStore';
 
 const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike;
 
 @Component({
   selector: 'app-map',
-  imports: [],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss'
 })
 export class MapComponent implements AfterViewInit {
+
   @ViewChild('mapContainer', { static: true }) mapContainer!: ElementRef;
   private mapStore = inject(MapStore);
   map!: Map;
   width!: string;
-  popup: Popup | undefined;
+  regionLayerInfoPopup: Popup | undefined;
 
   constructor() {
     this.map?.remove();
@@ -48,48 +49,51 @@ export class MapComponent implements AfterViewInit {
     });
     this.addControls();
 
-    this.map.on('style.load', () => {
-      // console.log('style loaded');
-    });
-
-    this.map.on('load', (event: MapEvent) => {
-      this.RegionLayerEvents();
-    });
+    this.map.on('style.load', () => { });
+    this.map.on('load', () => { this.LoadRegionLayer(); });
+    this.map.on('mousemove', REGIONS_LAYER.id, this.regionLayerMouseMove);
+    this.map.on('mouseleave', REGIONS_LAYER.id, this.regionLayerMouseLeave);
 
     return this.map;
   };
 
-  RegionLayerEvents() {
+  LoadRegionLayer() {
+    const map = this.mapStore.map()!;
     if (REGIONS_LAYER.source && REGIONS_LAYER.id) {
-      // add polygon MVT layer:
-      if (!this.map.getSource(REGIONS_LAYER.source) && !this.map.getLayer(REGIONS_LAYER.id)) {
-        this.map.addSource(REGIONS_LAYER.source ?? '', REGIONS_SOURCE);
-        this.map.addLayer(REGIONS_LAYER);
-        this.map.addLayer(REGIONS_BORDER_LAYER);
+      if (!map.getSource(REGIONS_LAYER.source) && !map.getLayer(REGIONS_LAYER.id)) {
+        map.addSource(REGIONS_LAYER.source ?? '', REGIONS_SOURCE);
+        map.addLayer(REGIONS_LAYER);
+        map.addLayer(REGIONS_BORDER_LAYER);
       }
     }
+  }
 
-    this.map.on('mousemove', this.regionLayerMouseMove);
+  private regionLayerMouseLeave = (e: MapMouseEvent) => {
+    if (this.regionLayerInfoPopup) {
+      this.regionLayerInfoPopup.remove();
+    }
   }
 
   private regionLayerMouseMove = (e: MapMouseEvent) => {
-    this.map.queryRenderedFeatures(e.point, { layers: [REGIONS_LAYER.id, REGIONS_BORDER_LAYER.id] })
+    const map = this.mapStore.map()!;
+
+    map.queryRenderedFeatures(e.point, { layers: [REGIONS_LAYER.id, REGIONS_BORDER_LAYER.id] })
       .forEach((feature: GeoJSONFeature) => {
-      const { geometry, properties, layer } = feature;
-      const { Name, Id } = properties as RegionLayerProperties;
+        const { geometry, properties, layer } = feature;
+        const { Name, Id } = properties as RegionLayerProperties;
 
-      if (!this.popup) {
-        this.popup = new Popup({ offset: 1, anchor: 'top', closeButton: false, closeOnMove: true });
-      }
+        if (!this.regionLayerInfoPopup) {
+          this.regionLayerInfoPopup = new Popup({ offset: 1, anchor: 'top', closeButton: false, closeOnMove: true });
+        }
 
-      this.popup
-        .setLngLat(e.lngLat)
-        .setHTML(`<span>${layer?.id}: ${Id} - ${Name}</span>`);
+        this.regionLayerInfoPopup
+          .setLngLat(e.lngLat)
+          .setHTML(`<span>${layer?.id}: ${Id} - ${Name}</span>`);
 
-      if (!this.popup.isOpen()) {
-        this.popup.addTo(this.map);
-      }
-    });
+        if (!this.regionLayerInfoPopup.isOpen()) {
+          this.regionLayerInfoPopup.addTo(map);
+        }
+      });
   }
 
   private addControls() {
@@ -112,5 +116,13 @@ export class MapComponent implements AfterViewInit {
       this.mapContainer.nativeElement.removeChild(mapContent);
 
     this.mapStore.setMap(this.createMap());
+  }
+
+  zoomToLayerBounds() {
+    const map = this.mapStore.map();
+    if (!map) return;
+
+    const bounds = REGIONS_SOURCE.bounds as LngLatBoundsLike;
+    map.fitBounds(bounds, { padding: 50 });
   }
 }
