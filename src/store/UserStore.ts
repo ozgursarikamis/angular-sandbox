@@ -1,5 +1,5 @@
 import { inject } from "@angular/core";
-import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
+import { patchState, signalStore, withHooks, withMethods, withState } from "@ngrx/signals";
 import { UserService } from "src/app/services/user.service";
 
 import { rxMethod } from "@ngrx/signals/rxjs-interop"
@@ -17,6 +17,14 @@ export const UserStore = signalStore(
         users: [],
         isLoading: false,
         error: null,
+    }),
+    withHooks({
+        onInit({ users }) { // Runs once the store is initialized. Useful for loading initial data.
+            console.log(users());
+        },
+        onDestroy() {
+            console.log('onDestroy');
+        }
     }),
     withMethods((store, userService = inject(UserService)) => ({
         loadUsers: rxMethod<void>(
