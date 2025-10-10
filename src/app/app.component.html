@@ -1,3 +1,17 @@
 <div class="title">
   Angular Sandbox {{ title ? " - " + title : "" }}
 </div>
+
+<div class="app-container">
+  <div class="header">
+    <h1>Company Directory</h1>
+    <p>Browse our featured companies</p>
+  </div>
+
+  <div class="cards-container">
+    @for(company of companies; track company) {
+    <app-company-card [company]="company"></app-company-card>
+    }
+  </div>
+
+</div>
