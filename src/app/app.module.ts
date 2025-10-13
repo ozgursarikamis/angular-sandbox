@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { PracticeOneComponent } from "./practice-one/practice-one.component";
 import { PracticeTwoComponent } from "./practice-two/practice-two.component";
+import { PracticeThreeComponent } from "./practice-three/practice-three.component";
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { PracticeTwoComponent } from "./practice-two/practice-two.component";
   imports: [
     BrowserModule,
     PracticeOneComponent,
-    PracticeTwoComponent
+    PracticeTwoComponent,
+    PracticeThreeComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
