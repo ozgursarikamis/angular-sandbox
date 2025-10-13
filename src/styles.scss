@@ -3,3 +3,9 @@
 body {
   font-family: 'Baloo Da 2', cursive;
 }
+
+@layer components {
+  .responsive-grid {
+    @apply grid gap-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-12;
+  }
+}
