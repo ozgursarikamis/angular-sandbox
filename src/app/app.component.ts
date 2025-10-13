@@ -8,8 +8,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Tailwind CSS';
-
-  constructor() {
-    console.log('AppComponent constructor');
-  }
 }
