@@ -1,1 +1,8 @@
-<p>practice-five works!</p>
+<div class="flex flex-wrap">
+  @for (n of [].constructor(24); track n; let i = $index) {
+    <div class="bg-orange-100 text-black p-3 border text-center rounded
+           w-full sm:w-1/1 md:w-1/2 lg:w-1/3 xl:w-1/6 2xl:w-1/12">
+      {{ i + 1 }}
+    </div>
+  }
+</div>
