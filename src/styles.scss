@@ -1,3 +1,24 @@
 body {
   font-family: 'Baloo Da 2', cursive;
 }
+
+/* Global styles and reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}

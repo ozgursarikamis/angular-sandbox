@@ -1,0 +1,379 @@
+// 8px grid system for consistent spacing
+$spacing-unit: 8px;
+$spacing-xs: $spacing-unit;
+$spacing-sm: $spacing-unit * 2;
+$spacing-md: $spacing-unit * 3;
+$spacing-lg: $spacing-unit * 4;
+$spacing-xl: $spacing-unit * 6;
+
+// Color palette - modern and minimal
+$primary-color: #2c3e50;
+$secondary-color: #3498db;
+$background-white: #ffffff;
+$text-dark: #2c3e50;
+$text-light: #7f8c8d;
+$border-color: #e0e0e0;
+$shadow-light: rgba(0, 0, 0, 0.08);
+$shadow-medium: rgba(0, 0, 0, 0.12);
+$hover-bg: #f8f9fa;
+
+// Responsive breakpoints
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+// Main container - positioned at top-center with absolute positioning
+.search-bar-container {
+  position: absolute;
+  top: $spacing-sm;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-xs;
+  background: $background-white;
+  // border-radius : 48px;
+  box-shadow: 0 4px 16px $shadow-light, 0 2px 8px $shadow-medium;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  width: 100%;
+  // max-width: 95vw;
+
+  // Responsive width adjustments
+  @media (min-width: $breakpoint-mobile) {
+    max-width: 90vw;
+  }
+
+  @media (min-width: $breakpoint-tablet) {
+    max-width: 700px;
+  }
+
+  @media (min-width: $breakpoint-desktop) {
+    max-width: 800px;
+  }
+}
+
+// Logo section - horizontal rectangle
+.logo-section {
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.logo {
+  // background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+  padding: $spacing-sm $spacing-md;
+  // border-radius : 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 12rem;
+  // box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+
+  @media (max-width: $breakpoint-mobile) {
+    min-width: 360px;
+    padding: $spacing-xs $spacing-sm;
+  }
+}
+
+// Collapsible content wrapper
+.collapsible-content {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+// Search input wrapper with embedded icons
+.search-input-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-input {
+  width: 100%;
+  padding: $spacing-sm $spacing-xl $spacing-sm $spacing-sm;
+  border: 2px solid transparent;
+  // border-radius : 24px;
+  background: $hover-bg;
+  font-size: 15px;
+  color: $text-dark;
+  outline: none;
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: $text-light;
+  }
+
+  &:focus {
+    background: $background-white;
+    border-color: $secondary-color;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    font-size: 14px;
+    padding: $spacing-xs $spacing-lg $spacing-xs $spacing-sm;
+  }
+}
+
+// Icon buttons embedded in input field
+.input-icons {
+  position: absolute;
+  right: $spacing-xs;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: calc($spacing-xs / 2);
+  align-items: center;
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  // border-radius : 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: $text-light;
+  transition: all 0.2s ease;
+  padding: 0;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: $border-color;
+    color: $primary-color;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    width: 28px;
+    height: 28px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+.clear-btn {
+  color: $text-light;
+
+  &:hover {
+    color: #e74c3c;
+  }
+}
+
+// Hamburger menu button with 3-line icon
+.hamburger-btn {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: $spacing-xs;
+  // border-radius : 50%;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background: $hover-bg;
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    width: 36px;
+    height: 36px;
+    gap: 4px;
+  }
+}
+
+.line {
+  width: 24px;
+  height: 2px;
+  background: $primary-color;
+  // border-radius : 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+
+  @media (max-width: $breakpoint-mobile) {
+    width: 20px;
+  }
+}
+
+// Hamburger animation when menu is open
+.hamburger-btn.open {
+  .line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+
+    @media (max-width: $breakpoint-mobile) {
+      transform: translateY(6px) rotate(45deg);
+    }
+  }
+
+  .line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+
+    @media (max-width: $breakpoint-mobile) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+  }
+}
+
+// Collapse/Expand toggle button
+.collapse-toggle-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: $hover-bg;
+  // border-radius : 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: $spacing-xs;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: $primary-color;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  &:hover {
+    background: $border-color;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    width: 32px;
+    height: 32px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// Rotate arrow icon when collapsed (pointing down)
+.collapse-toggle-btn svg.rotated {
+  transform: rotate(180deg);
+}
+
+// Menu overlay - dark background when menu is open
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  cursor: pointer;
+}
+
+// Slide-out menu
+.slide-menu {
+  position: absolute;
+  top: calc(100% + $spacing-sm);
+  right: 0;
+  background: $background-white;
+  // border-radius : 16px;
+  box-shadow: 0 8px 24px $shadow-light, 0 4px 12px $shadow-medium;
+  min-width: 240px;
+  overflow: hidden;
+  z-index: 1001;
+
+  @media (max-width: $breakpoint-mobile) {
+    min-width: 200px;
+    right: -$spacing-sm;
+  }
+}
+
+.menu-nav {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-xs;
+}
+
+// Individual menu items
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  border: none;
+  background: transparent;
+  // border-radius : 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-size: 15px;
+  color: $text-dark;
+
+  &:hover {
+    background: $hover-bg;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    font-size: 14px;
+    padding: $spacing-xs $spacing-sm;
+  }
+}
+
+.menu-icon {
+  font-size: 20px;
+  width: 24px;
+  text-align: center;
+
+  @media (max-width: $breakpoint-mobile) {
+    font-size: 18px;
+    width: 20px;
+  }
+}
+
+.menu-label {
+  flex: 1;
+  font-weight: 500;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible {
+  // outline: 2px solid $secondary-color;
+  // outline-offset: 2px;
+}

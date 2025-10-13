@@ -1,0 +1,121 @@
+<!-- Main container positioned at top-center -->
+<div class="search-bar-container">
+  <!-- Logo section -->
+  <div class="logo-section">
+    <div class="logo">
+      <img src="/assets/logo.svg" />      
+    </div>
+  </div>
+
+  <!-- Collapsible content: search input and hamburger menu -->
+  <div class="collapsible-content" [@collapseExpand]="getCollapseState()">
+    <!-- Search input field with embedded icons -->
+    <div class="search-input-wrapper">
+      <input
+        type="text"
+        class="search-input"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+        placeholder="Search for places, addresses..."
+        aria-label="Search location"
+      />
+
+      <!-- Icon buttons embedded in input field -->
+      <div class="input-icons">
+        <button
+          class="icon-btn save-btn"
+          (click)="onSave()"
+          title="Save location"
+          aria-label="Save location"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </button>
+
+        <button
+          class="icon-btn advanced-btn"
+          (click)="onAdvancedSearch()"
+          title="Advanced search"
+          aria-label="Advanced search"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="M21 21l-4.35-4.35"></path>
+            <path d="M11 8v6"></path>
+            <path d="M8 11h6"></path>
+          </svg>
+        </button>
+
+        <button
+          class="icon-btn clear-btn"
+          (click)="onClear()"
+          *ngIf="searchQuery"
+          title="Clear search"
+          aria-label="Clear search"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hamburger menu button -->
+    <button
+      class="hamburger-btn"
+      [class.open]="isMenuOpen"
+      (click)="toggleMenu()"
+      aria-label="Toggle menu"
+      [attr.aria-expanded]="isMenuOpen"
+    >
+      <span class="line"></span>
+      <span class="line"></span>
+      <span class="line"></span>
+    </button>
+  </div>
+
+  <!-- Collapse/Expand toggle button -->
+  <button
+    class="collapse-toggle-btn"
+    (click)="toggleCollapse()"
+    [title]="isCollapsed ? 'Expand search bar' : 'Collapse search bar'"
+    [attr.aria-label]="isCollapsed ? 'Expand search bar' : 'Collapse search bar'"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      [class.rotated]="isCollapsed"
+    >
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <!-- Slide-out menu overlay -->
+  <div
+    class="menu-overlay"
+    *ngIf="isMenuOpen && !isCollapsed"
+    (click)="toggleMenu()"
+  ></div>
+
+  <!-- Slide-out menu -->
+  <div
+    class="slide-menu"
+    [@menuSlide]="getMenuState()"
+    *ngIf="!isCollapsed"
+  >
+    <nav class="menu-nav" role="navigation" aria-label="Main menu">
+      <button
+        *ngFor="let item of menuItems"
+        class="menu-item"
+        (click)="onMenuItemClick(item)"
+      >
+        <span class="menu-icon">{{item.icon}}</span>
+        <span class="menu-label">{{item.label}}</span>
+      </button>
+    </nav>
+  </div>
+</div>
