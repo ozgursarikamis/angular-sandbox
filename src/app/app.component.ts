@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class AppComponent {
-  title = undefined;
+  title = 'Tailwind CSS';
+
+  constructor() {
+    console.log('AppComponent constructor');
+  }
 }
