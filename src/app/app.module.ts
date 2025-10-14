@@ -7,6 +7,7 @@ import { PracticeTwoComponent } from "./practice-two/practice-two.component";
 import { PracticeThreeComponent } from "./practice-three/practice-three.component";
 import { PracticeFourComponent } from "./practice-four/practice-four.component";
 import { PracticeFiveComponent } from "./practice-five/practice-five.component";
+import { PracticeSixComponent } from './practice-six/practice-six.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { PracticeFiveComponent } from "./practice-five/practice-five.component";
     PracticeTwoComponent,
     PracticeThreeComponent,
     PracticeFourComponent,
-    PracticeFiveComponent
+    PracticeFiveComponent,
+    PracticeSixComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
