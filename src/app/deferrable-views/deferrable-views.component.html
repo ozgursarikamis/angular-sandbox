@@ -1,0 +1,21 @@
+<h2>Angular Deferrable Views Demo</h2>
+
+<!-- This part loads immediately -->
+<p>This part is always visible.</p>
+
+<button #buttonRef>Heavy Chart</button>
+
+<!-- This part is lazy-loaded using @defer -->
+@defer (on timer(2000))
+{
+  <app-heavy-chart />
+}
+@placeholder {
+  <p class="flex flex-row bg-orange-100 shadow-md p-4 w-120">Loading chart...</p>
+}
+@loading {
+  <p>Chart is loading...</p>
+}
+@error {
+  <p style="color: red;">Failed to load chart!</p>
+}
