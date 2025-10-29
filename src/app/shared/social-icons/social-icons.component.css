@@ -1,0 +1,101 @@
+.social-icons {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.social-text {
+  display: block;
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.social-text::before,
+.social-text::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 35%;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.social-text::before {
+  left: 0;
+}
+
+.social-text::after {
+  right: 0;
+}
+
+.icons-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.social-btn {
+  width: 48px;
+  height: 48px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.social-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.social-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.social-btn.linkedin {
+  color: #0077b5;
+}
+
+.social-btn.linkedin:hover {
+  background: #0077b5;
+  color: white;
+  border-color: #0077b5;
+}
+
+.social-btn.google {
+  color: #db4437;
+}
+
+.social-btn.google:hover {
+  background: #db4437;
+  color: white;
+  border-color: #db4437;
+}
+
+.social-btn.github {
+  color: #333;
+}
+
+.social-btn.github:hover {
+  background: #333;
+  color: white;
+  border-color: #333;
+}
+
+.social-btn.microsoft {
+  color: #00a4ef;
+}
+
+.social-btn.microsoft:hover {
+  background: #00a4ef;
+  color: white;
+  border-color: #00a4ef;
+}
