@@ -1,3 +1,11 @@
 <div class="title">
   Angular Sandbox {{ title ? " - " + title : "" }}
 </div>
+<div>
+  <div>Heap size: {{ heapSize }} MB</div>
+  <button [disabled]="buttonDisabled" (click)="doHeavyTask(1)">Do heavy task (1 MB)</button>
+  <button [disabled]="buttonDisabled" (click)="doHeavyTask(10)">Do heavy task (10 MB)</button>
+  <button [disabled]="buttonDisabled" (click)="doHeavyTask(100)">Do heavy task (100 MB)</button>
+  <button [disabled]="buttonDisabled" (click)="doHeavyTask(1024)">Do heavy task (1024 MB)</button>
+  <button [disabled]="buttonDisabled" (click)="doHeavyTask(2048)">Do heavy task (2048 MB)</button>
+</div>
