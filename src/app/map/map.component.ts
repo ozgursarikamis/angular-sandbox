@@ -1,26 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import maplibregl, { Map, MapMouseEvent } from 'maplibre-gl';
-import { environment } from 'src/environment/environment';
-import {
-  TerraDraw,
-  TerraDrawPointMode,
-  TerraDrawLineStringMode,
-  TerraDrawPolygonMode,
-  TerraDrawRectangleMode,
-  TerraDrawCircleMode,
-  TerraDrawSelectMode,
-  TerraDrawFreehandLineStringMode,
-  TerraDrawFreehandMode,
-  TerraDrawSectorMode,
-  TerraDrawAngledRectangleMode,
-  TerraDrawSensorMode,
-} from 'terra-draw';
-import { TerraDrawMapLibreGLAdapter } from 'terra-draw-maplibre-gl-adapter';
+
 import type { Feature } from 'geojson';
-import { FeatureId } from 'terra-draw/dist/extend';
-import { OnChangeContext } from 'terra-draw/dist/common';
+
 import { CustomControl } from "../controls/CustomControl";
+import { environment } from 'src/environment/environment';
 
 const MAPTILER_KEY = environment.mapTilerKey;
 
@@ -34,214 +19,108 @@ const MAPTILER_KEY = environment.mapTilerKey;
 export class MapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('mapContainer') mapContainer!: ElementRef;
   private map!: Map;
-  private draw!: TerraDraw;
   public createdFeatures: Feature[] = [];
-  public selectedFeature: FeatureId | null = null;
 
   ngAfterViewInit(): void {
     this.map = new maplibregl.Map({
       container: this.mapContainer.nativeElement,
       style: `https://api.maptiler.com/maps/streets/style.json?key=${MAPTILER_KEY}`,
-      center: [54.494,  -3.854],
+      center: [35.2433, 38.9637], // Turkey center
       zoom: 5,
       hash: true,
     });
+    this.map.showTileBoundaries = true;
 
     // Controls
     this.map.addControl(new maplibregl.NavigationControl());
     this.map.addControl(new maplibregl.FullscreenControl());
     this.map.addControl(new maplibregl.ScaleControl());
-    this.map.addControl(new maplibregl.TerrainControl({
-      source: 'mapbox-terrain-v2'
-    }));
+    // this.map.addControl(new maplibregl.TerrainControl({
+    //   source: 'mapbox-terrain-v2'
+    // }));
     this.map.addControl(new CustomControl(), 'bottom-right');
     // this.map.addControl(new maplibregl.LogoControl());
 
     this.map.on('load', () => {
-      const adapter = new TerraDrawMapLibreGLAdapter({
-        map: this.map,
-        coordinatePrecision: 9,
-      });
-
-      this.map.addSource('osm-xyz', {
+      // 1. ADD THE SOURCE
+      this.map.addSource('flood_layer-source', {
         type: 'vector',
         tiles: [
-          'http://localhost:5000/api/polygon/counties-unit-auths/{z}/{x}/{y}.pbf',
+          'http://localhost:5026/vector/tiles/{z}/{x}/{y}.pbf',
         ],
-        // tileSize: 256,
-        attribution: 'OpenStreetMap contributors',
-        maxzoom: 19,
+        // Optimization: Only request tiles where you know you have data
+        // minzoom: 3,
+        // maxzoom: 14
       });
 
+      // 2. ADD THE LAYER
       this.map.addLayer({
-        id: 'parishes-layer',
-        type: 'line',
-        source: 'osm-xyz',
-        "source-layer": 'source_layer_counties_unit_auth'
-      });
-
-      this.draw = new TerraDraw({
-        adapter,
-        modes: [
-          new TerraDrawSelectMode({
-            styles: {
-              selectedPolygonColor: "#000000ff",
-              selectedPolygonFillOpacity: 0.27,
-              selectedPolygonOutlineColor: "#ff9500ff",
-              selectedPolygonOutlineWidth: 2,
-            },
-            allowManualDeselection: true,
-            flags: {
-              point: {
-                feature: {
-                  draggable: true,
-                  coordinates: {
-                    draggable: true,
-                    deletable: true,
-                    snappable: true,
-                  },
-                },
-              },
-              linestring: {
-                feature: {
-                  draggable: true,
-                  coordinates: {
-                    draggable: true,
-                    deletable: true,
-                    snappable: true,
-                    midpoints: { draggable: true },
-                  },
-                },
-              },
-              line: {
-                feature: {
-                  draggable: true,
-                  coordinates: {
-                    draggable: true,
-                    deletable: true,
-                    snappable: true,
-                    midpoints: { draggable: true },
-                  },
-                },
-              },
-              polygon: {
-                feature: {
-                  draggable: true,
-                  coordinates: {
-                    draggable: true,
-                    deletable: true,
-                    snappable: {
-                      toLine: true,
-                      toCoordinate: true
-                    },
-                    midpoints: { draggable: true },
-                    // resizable: 'opposite-fixed',
-                  },
-                },
-              },
-              rectangle: {
-                feature: {
-                  draggable: true,
-                  coordinates: {
-                    draggable: true,
-                    deletable: true,
-                    snappable: true,
-                    resizable: 'center',
-                  },
-                },
-              },
-              circle: {
-                feature: {
-                  draggable: true,
-                  coordinates: {
-                    draggable: true,
-                    deletable: true,
-                    snappable: true,
-                    resizable: 'center',
-                  },
-                },
-              },
-            },
-          }),
-          new TerraDrawPointMode(),
-          new TerraDrawLineStringMode(),
-          new TerraDrawPolygonMode({
-            snapping: {
-              toLine: true,
-              toCoordinate: true,
-            },
-            styles: {
-              fillColor: ({ properties }) => properties['currentlyDrawing'] ? "#dd3333ff" : "#3777dd",
-              fillOpacity: 0.25,
-              outlineColor: '#fff',
-              outlineWidth: 4
-            },
-          }),
-          new TerraDrawRectangleMode(),
-          new TerraDrawCircleMode(),
-          new TerraDrawFreehandLineStringMode({
-            // snapping: true
-          }),
-          new TerraDrawFreehandMode(),
-          new TerraDrawSectorMode(),
-          new TerraDrawAngledRectangleMode(),
-          new TerraDrawSensorMode(),
-        ],
-      });
-
-      // If you are interested if the event was triggered by the Terra Draw API (i.e. addFeatures, removeFeatures),
-      // there is a third optional parameter ('context') that will have a property called origin,
-      // which is of type api if it has come from the API.
-      this.draw.on('change', (ids: FeatureId[], event: string, context: OnChangeContext | undefined) => {
-        console.log({ ids, event });
-        // const features = this.draw.getFeatures();
-        const snapshot = this.draw.getSnapshot();
-        const geometries = snapshot.map(features => features.geometry);
-
-        console.log({ event, ids, snapshot, geometries });
-
-        // Store the features in our component property
-        this.createdFeatures = snapshot;
-
-        //Done editing
-        if (event === 'change') {
-          if (context && context.origin === 'api') {
-            console.log('this was changed via the API!')
-          } else {
-            console.log('this change did not originate from the API!')
-          }
+        id: 'flood_layer',
+        type: 'fill',
+        source: 'flood_layer-source',
+        'source-layer': 'flood_layer', // CRITICAL: This must match C# layer.Name
+        'paint': {
+          'fill-color': '#ff0000',
+          'fill-opacity': 0.7,
+          'fill-outline-color': '#000000'
         }
       });
 
-      this.draw.on('select', (id: FeatureId) => {
-        console.log({ id });
-        this.selectedFeature = id;
+      this.map.addLayer({
+        id: 'flood_layer-line',
+        type: 'line', // Lines ignore winding order!
+        source: 'flood_layer-source',
+        'source-layer': 'flood_layer',
+        'paint': {
+          'line-color': '#00ffff',
+          'line-width': 2
+        }
       });
 
-      this.draw.start();
+      // 3. DEBUGGING: Check what's actually rendered
+      this.map.on('sourcedata', (e) => {
+        if (e.sourceId === 'flood_layer-source' && e.isSourceLoaded) {
+          const features = this.map.querySourceFeatures('flood_layer-source', {
+            sourceLayer: 'flood_layer'
+          });
+          console.log(`Features currently in view: ${features.length}`);
+        }
+      });
+
+      // 4. INTERACTIVITY
+      this.map.on('click', 'flood_layer', (e) => {
+        if (e.features && e.features.length > 0) {
+          const props = e.features[0].properties;
+          new maplibregl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(`<b>FID:</b> ${props['fid']}<br><b>DN:</b> ${props['dn']}`)
+            .addTo(this.map);
+        }
+      });
+
+      // Change cursor on hover
+      this.map.on('mouseenter', 'flood_layer', () => this.map.getCanvas().style.cursor = 'pointer');
+      this.map.on('mouseleave', 'flood_layer', () => this.map.getCanvas().style.cursor = '');
     });
 
-    this.map.on('mousemove', (event: MapMouseEvent) => {
-      const { lng, lat } = event.lngLat;
-      // console.log({ lng, lat });
-    })
+    this.map.on('sourcedata', (e) => {
+      if (e.sourceId === 'flood_layer-source' && e.isSourceLoaded) {
+        const features = this.map.querySourceFeatures('flood_layer-source', {
+          sourceLayer: 'flood_layer'
+        });
+        if (features.length > 0) {
+          console.log('Feature Sample:', features[0]);
+          console.log('Geometry Type:', features[0].geometry.type);
+          // console.log('Coordinates (First):', features[0].geometry.coordinates[0][0]);
+          // If coordinates are [35.xxx, 38.xxx] here, your backend is sending Lat/Lng instead of tile units!
+        }
+      }
+    });
   }
 
   ngOnDestroy(): void {
-    if (this.draw) {
-      this.draw.stop();
-    }
     if (this.map) {
       this.map.remove();
-    }
-  }
-
-  setMode(
-    mode: 'select' | 'point' | 'linestring' | 'polygon' | 'rectangle' | 'circle' | 'freehand' | 'freehand-linestring' | 'sector'
-    | 'angled-rectangle' | 'sensor'
-  ): void {
-    if (this.draw) {
-      this.draw.setMode(mode);
     }
   }
 }
