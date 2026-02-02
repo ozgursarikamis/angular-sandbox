@@ -29,7 +29,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       zoom: 5,
       hash: true,
     });
-    this.map.showTileBoundaries = true;
+    this.map.showTileBoundaries = false;
 
     // Controls
     this.map.addControl(new maplibregl.NavigationControl());
@@ -46,11 +46,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.map.addSource('flood_layer-source', {
         type: 'vector',
         tiles: [
-          'http://localhost:5026/vector/tiles/{z}/{x}/{y}.pbf',
+          'http://localhost:8080/data/floods_level_5/{z}/{x}/{y}.pbf',
         ],
-        // Optimization: Only request tiles where you know you have data
-        // minzoom: 3,
-        // maxzoom: 14
+        minzoom: 12,
+        maxzoom: 18
       });
 
       // 2. ADD THE LAYER
@@ -58,7 +57,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         id: 'flood_layer',
         type: 'fill',
         source: 'flood_layer-source',
-        'source-layer': 'flood_layer', // CRITICAL: This must match C# layer.Name
+        'source-layer': 'flood_polygons_level_5', // CRITICAL: This must match C# layer.Name
         'paint': {
           'fill-color': '#ff0000',
           'fill-opacity': 0.7,
@@ -70,10 +69,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         id: 'flood_layer-line',
         type: 'line', // Lines ignore winding order!
         source: 'flood_layer-source',
-        'source-layer': 'flood_layer',
+        'source-layer': 'flood_polygons_level_5',
         'paint': {
           'line-color': '#00ffff',
-          'line-width': 2
+          'line-width': .5
         }
       });
 
@@ -93,7 +92,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           const props = e.features[0].properties;
           new maplibregl.Popup()
             .setLngLat(e.lngLat)
-            .setHTML(`<b>FID:</b> ${props['fid']}<br><b>DN:</b> ${props['dn']}`)
+            .setHTML(`<b>FID:</b> ${props['fid']}<br><b>DN:</b> ${props['DN']}`)
             .addTo(this.map);
         }
       });
