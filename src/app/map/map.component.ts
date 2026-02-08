@@ -29,7 +29,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       zoom: 5,
       hash: true,
     });
-    this.map.showTileBoundaries = true;
+    this.map.showTileBoundaries = false;
 
     // Controls
     this.map.addControl(new maplibregl.NavigationControl());
