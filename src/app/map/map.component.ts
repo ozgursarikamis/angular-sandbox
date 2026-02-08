@@ -63,19 +63,82 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         maxzoom: 16
       });
 
-      // 2. ADD THE LAYER
-
+      // 2. ADD THE LAYERS
+      
       this.map.addLayer({
-        id: 'organisations-layer',
-        type: 'circle',
+        id: 'organisations-heatmap',
+        type: 'heatmap',
         source: 'organisations-source',
         'source-layer': 'Organisation',
-        'paint': {
-          'circle-color': '#ff0000',
-          'circle-opacity': 0.5,
-          'circle-stroke-color': '#000000'
+        paint: {
+          // Increase the heatmap weight based on frequency and property magnitude
+          'heatmap-weight': 1,
+          // Heatmap-intensity is a multiplier on top of heatmap-weight
+          'heatmap-intensity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            0, 1,
+            16, 3
+          ],
+          // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+          // Begin color ramp at 0-stop with a 0-transparency color
+          // to create a blur-like effect.
+          'heatmap-color': [
+            'interpolate',
+            ['linear'],
+            ['heatmap-density'],
+            0, 'rgba(33,102,172,0)',
+            0.2, 'rgb(103,169,207)',
+            0.4, 'rgb(209,229,240)',
+            0.6, 'rgb(253,219,199)',
+            0.8, 'rgb(239,138,98)',
+            1, 'rgb(178,24,43)'
+          ],
+          // Adjust the heatmap radius by zoom level
+          'heatmap-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            0, 2,
+            16, 20
+          ],
+          // Transition from heatmap to circle layer by zoom level
+          'heatmap-opacity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            14, 1,
+            16, 0
+          ],
         }
       });
+
+      // this.map.addLayer({
+      //   id: 'organisations-layer',
+      //   type: 'circle',
+      //   source: 'organisations-source',
+      //   'source-layer': 'Organisation',
+      //   'paint': {
+      //     'circle-color': '#ff0000',
+      //     'circle-opacity': [
+      //       'interpolate',
+      //       ['linear'],
+      //       ['zoom'],
+      //       14, 0,
+      //       16, 0.8
+      //     ],
+      //     'circle-radius': [
+      //       'interpolate',
+      //       ['linear'],
+      //       ['zoom'],
+      //       14, 2,
+      //       16, 6
+      //     ],
+      //     'circle-stroke-color': '#ffffff',
+      //     'circle-stroke-width': 1
+      //   }
+      // });
       // this.map.addLayer({
       //   id: 'countries-layer',
       //   type: 'fill',
@@ -90,40 +153,38 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       // 3. DEBUGGING: Check what's actually rendered
       this.map.on('sourcedata', (e) => {
-        if (e.sourceId === 'flood_layer-source' && e.isSourceLoaded) {
-          const features = this.map.querySourceFeatures('flood_layer-source', {
-            sourceLayer: 'Countries'
+        if (e.sourceId === 'organisations-source' && e.isSourceLoaded) {
+          const features = this.map.querySourceFeatures('organisations-source', {
+            sourceLayer: 'Organisation'
           });
-          console.log(`Features currently in view: ${features.length}`);
+          console.log(`Organisations currently in view: ${features.length}`);
         }
       });
 
       // 4. INTERACTIVITY
-      this.map.on('click', 'flood_layer', (e) => {
+      this.map.on('click', 'organisations-layer', (e) => {
         if (e.features && e.features.length > 0) {
           const props = e.features[0].properties;
           new maplibregl.Popup()
             .setLngLat(e.lngLat)
-            .setHTML(`<b>Name:</b> ${props['Name']}`)
+            .setHTML(`<b>Name:</b> ${props['Name'] || 'N/A'}`)
             .addTo(this.map);
         }
       });
 
       // Change cursor on hover
-      this.map.on('mouseenter', 'flood_layer', () => this.map.getCanvas().style.cursor = 'pointer');
-      this.map.on('mouseleave', 'flood_layer', () => this.map.getCanvas().style.cursor = '');
+      this.map.on('mouseenter', 'organisations-layer', () => this.map.getCanvas().style.cursor = 'pointer');
+      this.map.on('mouseleave', 'organisations-layer', () => this.map.getCanvas().style.cursor = '');
     });
 
     this.map.on('sourcedata', (e) => {
-      if (e.sourceId === 'flood_layer-source' && e.isSourceLoaded) {
-        const features = this.map.querySourceFeatures('flood_layer-source', {
-          sourceLayer: 'Countries'
+      if (e.sourceId === 'organisations-source' && e.isSourceLoaded) {
+        const features = this.map.querySourceFeatures('organisations-source', {
+          sourceLayer: 'Organisation'
         });
         if (features.length > 0) {
-          console.log('Feature Sample:', features[0]);
+          console.log('Organisation Feature Sample:', features[0]);
           console.log('Geometry Type:', features[0].geometry.type);
-          // console.log('Coordinates (First):', features[0].geometry.coordinates[0][0]);
-          // If coordinates are [35.xxx, 38.xxx] here, your backend is sending Lat/Lng instead of tile units!
         }
       }
     });
