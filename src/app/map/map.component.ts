@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import maplibregl, { Map, MapMouseEvent } from 'maplibre-gl';
+import maplibregl, { Map } from 'maplibre-gl';
 
 import type { Feature } from 'geojson';
 
@@ -25,7 +25,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map = new maplibregl.Map({
       container: this.mapContainer.nativeElement,
       style: `https://api.maptiler.com/maps/streets/style.json?key=${MAPTILER_KEY}`,
-      center: [35.2433, 38.9637], // Turkey center
+      center: [54.66, -2.47], // Turkey center
       zoom: 5,
       hash: true,
     });
@@ -43,45 +43,56 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.map.on('load', () => {
       // 1. ADD THE SOURCE
-      this.map.addSource('flood_layer-source', {
+      this.map.addSource('countries-source', {
         type: 'vector',
         tiles: [
-          'http://localhost:5026/vector/tiles/{z}/{x}/{y}.pbf',
+          'http://localhost:8080/data/Countries/{z}/{x}/{y}.pbf',
         ],
         // Optimization: Only request tiles where you know you have data
-        // minzoom: 3,
-        // maxzoom: 14
+        minzoom: 6,
+        maxzoom: 16
+      });
+
+      this.map.addSource('organisations-source', {
+        type: 'vector',
+        tiles: [
+          'http://localhost:8080/data/Organisation/{z}/{x}/{y}.pbf',
+        ],
+        // Optimization: Only request tiles where you know you have data
+        minzoom: 6,
+        maxzoom: 16
       });
 
       // 2. ADD THE LAYER
-      this.map.addLayer({
-        id: 'flood_layer',
-        type: 'fill',
-        source: 'flood_layer-source',
-        'source-layer': 'flood_layer', // CRITICAL: This must match C# layer.Name
-        'paint': {
-          'fill-color': '#ff0000',
-          'fill-opacity': 0.7,
-          'fill-outline-color': '#000000'
-        }
-      });
 
       this.map.addLayer({
-        id: 'flood_layer-line',
-        type: 'line', // Lines ignore winding order!
-        source: 'flood_layer-source',
-        'source-layer': 'flood_layer',
+        id: 'organisations-layer',
+        type: 'circle',
+        source: 'organisations-source',
+        'source-layer': 'Organisation',
         'paint': {
-          'line-color': '#00ffff',
-          'line-width': 2
+          'circle-color': '#ff0000',
+          'circle-opacity': 0.5,
+          'circle-stroke-color': '#000000'
         }
       });
+      // this.map.addLayer({
+      //   id: 'countries-layer',
+      //   type: 'fill',
+      //   source: 'countries-source',
+      //   'source-layer': 'Countries',
+      //   'paint': {
+      //     'fill-color': '#ff0000',
+      //     'fill-opacity': 0.5,
+      //     'fill-outline-color': '#000000'
+      //   }
+      // });
 
       // 3. DEBUGGING: Check what's actually rendered
       this.map.on('sourcedata', (e) => {
         if (e.sourceId === 'flood_layer-source' && e.isSourceLoaded) {
           const features = this.map.querySourceFeatures('flood_layer-source', {
-            sourceLayer: 'flood_layer'
+            sourceLayer: 'Countries'
           });
           console.log(`Features currently in view: ${features.length}`);
         }
@@ -93,7 +104,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           const props = e.features[0].properties;
           new maplibregl.Popup()
             .setLngLat(e.lngLat)
-            .setHTML(`<b>FID:</b> ${props['fid']}<br><b>DN:</b> ${props['dn']}`)
+            .setHTML(`<b>Name:</b> ${props['Name']}`)
             .addTo(this.map);
         }
       });
@@ -106,7 +117,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map.on('sourcedata', (e) => {
       if (e.sourceId === 'flood_layer-source' && e.isSourceLoaded) {
         const features = this.map.querySourceFeatures('flood_layer-source', {
-          sourceLayer: 'flood_layer'
+          sourceLayer: 'Countries'
         });
         if (features.length > 0) {
           console.log('Feature Sample:', features[0]);
