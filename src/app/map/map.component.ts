@@ -46,10 +46,32 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.map.addSource('flood_layer-source', {
         type: 'vector',
         tiles: [
-          'http://localhost:8080/data/floods_level_5/{z}/{x}/{y}.pbf',
+          'http://localhost:8080/data/Flood_Level_1/{z}/{x}/{y}.pbf',
         ],
         minzoom: 12,
         maxzoom: 18
+      });
+
+      this.map.addSource('postcodes-source', {
+        type: 'vector',
+        tiles: [
+          'http://localhost:8080/data/PostCodes/{z}/{x}/{y}.pbf'
+        ],
+        minzoom: 6,
+        maxzoom: 18
+       });
+       this.map.addLayer({
+        id: 'postcodes_layer',
+        type: 'circle',
+        source: 'postcodes-source',
+        'source-layer': 'PostCodes',
+        'paint': {
+          'circle-radius': 5,
+          'circle-color': '#ff00d9',
+          'circle-opacity': 0.8,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffffff'
+        }
       });
 
       // 2. ADD THE LAYER
@@ -57,7 +79,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         id: 'flood_layer',
         type: 'fill',
         source: 'flood_layer-source',
-        'source-layer': 'flood_polygons_level_5', // CRITICAL: This must match C# layer.Name
+        'source-layer': 'Flood_Level_1', // CRITICAL: This must match C# layer.Name
         'paint': {
           'fill-color': '#ff0000',
           'fill-opacity': 0.7,
@@ -69,7 +91,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         id: 'flood_layer-line',
         type: 'line', // Lines ignore winding order!
         source: 'flood_layer-source',
-        'source-layer': 'flood_polygons_level_5',
+        'source-layer': 'flood_polygons_level_1',
         'paint': {
           'line-color': '#00ffff',
           'line-width': .5
@@ -105,7 +127,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map.on('sourcedata', (e) => {
       if (e.sourceId === 'flood_layer-source' && e.isSourceLoaded) {
         const features = this.map.querySourceFeatures('flood_layer-source', {
-          sourceLayer: 'flood_layer'
+          sourceLayer: 'Flood_Level_1'
         });
         if (features.length > 0) {
           console.log('Feature Sample:', features[0]);
