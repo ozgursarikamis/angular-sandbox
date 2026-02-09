@@ -59,8 +59,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           'http://localhost:8080/data/Organisation/{z}/{x}/{y}.pbf',
         ],
         // Optimization: Only request tiles where you know you have data
-        minzoom: 6,
-        maxzoom: 16
+        minzoom: 0,
+        maxzoom: 20
       });
 
       // 2. ADD THE LAYERS
@@ -88,12 +88,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             'interpolate',
             ['linear'],
             ['heatmap-density'],
-            0, 'rgba(33,102,172,0)',
-            0.2, 'rgb(103,169,207)',
-            0.4, 'rgb(209,229,240)',
-            0.6, 'rgb(253,219,199)',
-            0.8, 'rgb(239,138,98)',
-            1, 'rgb(178,24,43)'
+            0, 'rgba(0, 0, 0, 0)',
+            0.2, '#35193E',
+            0.4, '#701F57',
+            0.6, '#AD1759',
+            0.8, '#E03442',
+            1, '#F6B48F'
           ],
           // Adjust the heatmap radius by zoom level
           'heatmap-radius': [
@@ -114,31 +114,33 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         }
       });
 
-      // this.map.addLayer({
-      //   id: 'organisations-layer',
-      //   type: 'circle',
-      //   source: 'organisations-source',
-      //   'source-layer': 'Organisation',
-      //   'paint': {
-      //     'circle-color': '#ff0000',
-      //     'circle-opacity': [
-      //       'interpolate',
-      //       ['linear'],
-      //       ['zoom'],
-      //       14, 0,
-      //       16, 0.8
-      //     ],
-      //     'circle-radius': [
-      //       'interpolate',
-      //       ['linear'],
-      //       ['zoom'],
-      //       14, 2,
-      //       16, 6
-      //     ],
-      //     'circle-stroke-color': '#ffffff',
-      //     'circle-stroke-width': 1
-      //   }
-      // });
+      this.map.addLayer({
+        id: 'organisations-layer',
+        type: 'circle',
+        source: 'organisations-source',
+        'source-layer': 'Organisation',
+        'paint': {
+          'circle-color': '#ff0000',
+          'circle-opacity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            14, 0,
+            16, 0.8
+          ],
+          'circle-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            14, 2,
+            16, 6
+          ],
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-width': 1
+        },
+        minzoom: 14,
+        maxzoom: 20
+      });
       // this.map.addLayer({
       //   id: 'countries-layer',
       //   type: 'fill',
