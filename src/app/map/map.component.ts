@@ -56,7 +56,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.map.addSource('organisations-source', {
         type: 'vector',
         tiles: [
-          'http://localhost:8080/data/Organisation/{z}/{x}/{y}.pbf',
+          'http://localhost:8080/data/Organisations/{z}/{x}/{y}.pbf',
         ],
         // Optimization: Only request tiles where you know you have data
         minzoom: 0,
@@ -64,12 +64,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       });
 
       // 2. ADD THE LAYERS
-      
+
       this.map.addLayer({
         id: 'organisations-heatmap',
         type: 'heatmap',
         source: 'organisations-source',
-        'source-layer': 'Organisation',
+        'source-layer': 'Organisations',
         paint: {
           // Increase the heatmap weight based on frequency and property magnitude
           'heatmap-weight': 1,
@@ -89,11 +89,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             ['linear'],
             ['heatmap-density'],
             0, 'rgba(0, 0, 0, 0)',
-            0.2, '#35193E',
-            0.4, '#701F57',
-            0.6, '#AD1759',
-            0.8, '#E03442',
-            1, '#F6B48F'
+            0.2, '#88C198',
+            0.4, '#E8E288',
+            0.6, '#D89B5F',
+            0.8, '#C76D6D',
+            1, '#945151'
           ],
           // Adjust the heatmap radius by zoom level
           'heatmap-radius': [
@@ -118,7 +118,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         id: 'organisations-layer',
         type: 'circle',
         source: 'organisations-source',
-        'source-layer': 'Organisation',
+        'source-layer': 'Organisations',
         'paint': {
           'circle-color': '#ff0000',
           'circle-opacity': [
@@ -141,23 +141,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         minzoom: 14,
         maxzoom: 20
       });
-      // this.map.addLayer({
-      //   id: 'countries-layer',
-      //   type: 'fill',
-      //   source: 'countries-source',
-      //   'source-layer': 'Countries',
-      //   'paint': {
-      //     'fill-color': '#ff0000',
-      //     'fill-opacity': 0.5,
-      //     'fill-outline-color': '#000000'
-      //   }
-      // });
 
       // 3. DEBUGGING: Check what's actually rendered
       this.map.on('sourcedata', (e) => {
         if (e.sourceId === 'organisations-source' && e.isSourceLoaded) {
           const features = this.map.querySourceFeatures('organisations-source', {
-            sourceLayer: 'Organisation'
+            sourceLayer: 'Organisations'
           });
           console.log(`Organisations currently in view: ${features.length}`);
         }
@@ -167,9 +156,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.map.on('click', 'organisations-layer', (e) => {
         if (e.features && e.features.length > 0) {
           const props = e.features[0].properties;
-          new maplibregl.Popup()
+          new maplibregl.Popup({ closeButton: false, closeOnClick: true })
             .setLngLat(e.lngLat)
-            .setHTML(`<b>Name:</b> ${props['Name'] || 'N/A'}`)
+            .setHTML(`${props['Name'] || 'N/A'}`)
             .addTo(this.map);
         }
       });
@@ -182,10 +171,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.map.on('sourcedata', (e) => {
       if (e.sourceId === 'organisations-source' && e.isSourceLoaded) {
         const features = this.map.querySourceFeatures('organisations-source', {
-          sourceLayer: 'Organisation'
+          sourceLayer: 'Organisations'
         });
         if (features.length > 0) {
-          console.log('Organisation Feature Sample:', features[0]);
+          console.log('Organisations Feature Sample:', features[0]);
           console.log('Geometry Type:', features[0].geometry.type);
         }
       }
