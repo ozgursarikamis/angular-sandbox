@@ -53,10 +53,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         maxzoom: 16
       });
 
-      this.map.addSource('organisations-source', {
+      this.map.addSource('sponsors-source', {
         type: 'vector',
         tiles: [
-          'http://localhost:8080/data/Organisations/{z}/{x}/{y}.pbf',
+          'http://localhost:8080/data/Sponsors/{z}/{x}/{y}.pbf',
         ],
         // Optimization: Only request tiles where you know you have data
         minzoom: 0,
@@ -66,10 +66,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       // 2. ADD THE LAYERS
 
       this.map.addLayer({
-        id: 'organisations-heatmap',
+        id: 'sponsors-heatmap',
         type: 'heatmap',
-        source: 'organisations-source',
-        'source-layer': 'Organisations',
+        source: 'sponsors-source',
+        'source-layer': 'Sponsors',
         paint: {
           // Increase the heatmap weight based on frequency and property magnitude
           'heatmap-weight': 1,
@@ -144,16 +144,16 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       // 3. DEBUGGING: Check what's actually rendered
       this.map.on('sourcedata', (e) => {
-        if (e.sourceId === 'organisations-source' && e.isSourceLoaded) {
-          const features = this.map.querySourceFeatures('organisations-source', {
-            sourceLayer: 'Organisations'
+        if (e.sourceId === 'sponsors-source' && e.isSourceLoaded) {
+          const features = this.map.querySourceFeatures('sponsors-source', {
+            sourceLayer: 'Sponsors'
           });
           console.log(`Organisations currently in view: ${features.length}`);
         }
       });
 
       // 4. INTERACTIVITY
-      this.map.on('click', 'organisations-layer', (e) => {
+      this.map.on('click', 'sponsors-layer', (e) => {
         if (e.features && e.features.length > 0) {
           const props = e.features[0].properties;
           new maplibregl.Popup({ closeButton: false, closeOnClick: true })
@@ -164,17 +164,17 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       });
 
       // Change cursor on hover
-      this.map.on('mouseenter', 'organisations-layer', () => this.map.getCanvas().style.cursor = 'pointer');
-      this.map.on('mouseleave', 'organisations-layer', () => this.map.getCanvas().style.cursor = '');
+      this.map.on('mouseenter', 'sponsors-layer', () => this.map.getCanvas().style.cursor = 'pointer');
+      this.map.on('mouseleave', 'sponsors-layer', () => this.map.getCanvas().style.cursor = '');
     });
 
     this.map.on('sourcedata', (e) => {
-      if (e.sourceId === 'organisations-source' && e.isSourceLoaded) {
-        const features = this.map.querySourceFeatures('organisations-source', {
-          sourceLayer: 'Organisations'
+      if (e.sourceId === 'sponsors-source' && e.isSourceLoaded) {
+        const features = this.map.querySourceFeatures('sponsors-source', {
+          sourceLayer: 'Sponsors'
         });
         if (features.length > 0) {
-          console.log('Organisations Feature Sample:', features[0]);
+          console.log('Sponsors Feature Sample:', features[0]);
           console.log('Geometry Type:', features[0].geometry.type);
         }
       }
