@@ -1,4 +1,4 @@
-src/environments/*.ts
+src/environment/*.ts
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 

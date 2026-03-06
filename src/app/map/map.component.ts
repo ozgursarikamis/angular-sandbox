@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import {
-  GeolocateControl, LngLatLike, Map, MapOptions, NavigationControl, ProjectionSpecification,
+  GeolocateControl, LngLatLike, Map, NavigationControl, ProjectionSpecification,
   FullscreenControl
 } from 'mapbox-gl';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environment/environment';
 
 const CENTER_COORDINATES = [-2.40, 54.455] as LngLatLike
 
