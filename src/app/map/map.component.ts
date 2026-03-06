@@ -43,6 +43,25 @@ export class MapComponent implements AfterViewInit {
 
     this.map.on('style.load', () => {
       console.log('style loaded');
+
+      this.map.addSource('sponsor-source', {
+        type: 'vector',
+        tiles: [
+          'https://localhost:5001/api/points/dccedcab-5aae-4cbd-9eba-6a8fdfd4f4d6/{z}/{x}/{y}.pbf',
+        ],
+      });
+      this.map.addLayer({
+        id: 'sponsor-layer',
+        type: 'circle',
+        source: 'sponsor-source',
+        'source-layer': 'source_layer_sponsor',
+        'paint': {
+          'circle-color': '#00fbff',
+          'circle-radius': 10,
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-width': 1
+        },
+      });
     });
 
     return this.map;
