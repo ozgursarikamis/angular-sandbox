@@ -21,7 +21,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('mapContainer') mapContainer!: ElementRef;
   private map!: Map;
   public createdFeatures: Feature[] = [];
-  protected queryId: WritableSignal<string> = signal('03D81653703CE45840D73AE0A14E926A30E758B036C0E4F71C2EE005102202C1');
+  protected queryId: WritableSignal<string> = signal('6ACB77FCA0C5690804DA82180FD6CE589DBEDA1E6EF51B1272B851B3DAB72F82');
 
   constructor() {
     effect(() => {
