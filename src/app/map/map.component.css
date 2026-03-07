@@ -24,3 +24,10 @@
 .custom-control {
   border: 2px solid red;
 }
+
+input {
+  width: calc(5 0% - 3rem);
+  padding: 1rem;
+  border: 1px solid rgb(0, 234, 255);
+  margin: .5rem;
+}

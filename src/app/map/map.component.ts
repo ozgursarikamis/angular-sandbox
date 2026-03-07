@@ -1,18 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import maplibregl, { Map } from 'maplibre-gl';
+import { AfterViewInit, Component, effect, ElementRef, OnDestroy, signal, ViewChild, WritableSignal } from '@angular/core';
+import maplibregl, { Map, VectorTileSource } from 'maplibre-gl';
 
 import type { Feature } from 'geojson';
 
 import { CustomControl } from "../controls/CustomControl";
 import { environment } from 'src/environment/environment';
+import { FormsModule } from '@angular/forms';
 
 const MAPTILER_KEY = environment.mapTilerKey;
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
 })
@@ -20,6 +21,22 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('mapContainer') mapContainer!: ElementRef;
   private map!: Map;
   public createdFeatures: Feature[] = [];
+  protected queryId: WritableSignal<string> = signal('03D81653703CE45840D73AE0A14E926A30E758B036C0E4F71C2EE005102202C1');
+
+  constructor() {
+    effect(() => {
+      const newQueryId = this.queryId();
+
+      // The effect runs when `queryId` changes. We need to check if the map and
+      // the source have been initialized.
+      if (this.map?.getSource('sponsors-source')) {
+        const source = this.map.getSource('sponsors-source') as VectorTileSource;
+        source.setTiles([
+          `http://localhost:2643/get_tile_sponsors_geometries_m/{z}/{x}/{y}?query_id=${newQueryId}`,
+        ]);
+      }
+    });
+  }
 
   ngAfterViewInit(): void {
     this.map = new maplibregl.Map({
@@ -43,20 +60,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     this.map.on('load', () => {
       // 1. ADD THE SOURCE
-      this.map.addSource('countries-source', {
-        type: 'vector',
-        tiles: [
-          'http://localhost:8080/data/Countries/{z}/{x}/{y}.pbf',
-        ],
-        // Optimization: Only request tiles where you know you have data
-        minzoom: 6,
-        maxzoom: 16
-      });
 
       this.map.addSource('sponsors-source', {
         type: 'vector',
         tiles: [
-          'http://localhost:8080/data/Sponsors/{z}/{x}/{y}.pbf',
+          `http://localhost:2643/get_tile_sponsors_geometries_m/{z}/{x}/{y}?query_id=${this.queryId()}`,
         ],
         // Optimization: Only request tiles where you know you have data
         minzoom: 0,
@@ -69,7 +77,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         id: 'sponsors-heatmap',
         type: 'heatmap',
         source: 'sponsors-source',
-        'source-layer': 'Sponsors',
+        'source-layer': 'source_layer_listed_sponsors',
         paint: {
           // Increase the heatmap weight based on frequency and property magnitude
           'heatmap-weight': 1,
@@ -79,7 +87,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             ['linear'],
             ['zoom'],
             0, 1,
-            16, 3
+            16, 20
           ],
           // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
           // Begin color ramp at 0-stop with a 0-transparency color
@@ -115,10 +123,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       });
 
       this.map.addLayer({
-        id: 'organisations-layer',
+        id: 'sponsors-layer',
         type: 'circle',
-        source: 'organisations-source',
-        'source-layer': 'Organisations',
+        source: 'sponsors-source',
+        'source-layer': 'source_layer_listed_sponsors',
         'paint': {
           'circle-color': '#ff0000',
           'circle-opacity': [
