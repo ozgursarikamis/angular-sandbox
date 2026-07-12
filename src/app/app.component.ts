@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 
+import { bind, play } from "cuelume";
+
+type sound = "chime" | "sparkle" | "droplet" | "bloom" | "whisper" | "tick" | "press" | "release" | "toggle" | "success" | undefined;
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -7,5 +11,10 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class AppComponent {
-  title = undefined;
+  title = 'MapLibre';
+
+  sound(sound: sound) {
+    // bind();
+    play(sound);
+  }
 }

@@ -1,3 +1,16 @@
 <div class="title">
   Angular Sandbox {{ title ? " - " + title : "" }}
 </div>
+<div>
+  <!-- one attribute per behavior -->
+<button (click)="sound('droplet')">Droplet</button><br />
+<button (click)="sound('bloom')">Bloom</button><br />
+<button (click)="sound('whisper')">Whisper</button><br /> 
+<button (click)="sound('sparkle')">Sparkle</button><br /> 
+<button (click)="sound('tick')">Tick</button><br /> 
+<button (click)="sound('success')">Success</button><br /> 
+<button (click)="sound('toggle')">Toggle</button><br /> 
+<button (click)="sound('release')">Release</button><br />
+<button (click)="sound('press')">Press</button><br />
+<button (click)="sound('chime')">Chime</button><br />
+</div>
